@@ -3,14 +3,14 @@
 
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
-#define MajorVersion "6.1"
-#define MinorVersion "4"
-#define SubBuild "1"
+#define MajorVersion "6.2"
+#define MinorVersion "0"
+#define SubBuild "4"
 #define AppPublisher "Ozy de Jong"
 #define AppURL "http://www.netpower.fr"
 
 #define BaseDir "C:\PRJ\BTC\Smartmontools for Windows"
-#define SmartmonToolsDir "smartmontools-6.1-1.win32-setup"
+#define SmartmonToolsDir "smartmontools-6.2-1.win32-setup"
 #define SendmailDir "sendEmail-v156"
 #define GzipDir "gzip-1.3.12-1-bin"
 #define SmartServiceName "smartd"
@@ -42,6 +42,7 @@ CloseApplications=no
 Name: en; MessagesFile: "compiler:Default.isl"; InfoBeforeFile: "{#BaseDir}\README-EN.TXT";
 Name: fr; MessagesFile: "compiler:Languages\French.isl"; InfoBeforeFile: "{#BaseDir}\README-FR.TXT";
 Name: de; MessagesFile: "compiler:Languages\German.isl"; InfoBeforeFile: "{#BaseDir}\README-DE.TXT";
+Name: ru; MessagesFile: "compiler:Languages\Russian.isl"; InfoBeforeFile: "{#BaseDir}\README-RU.TXT";
 
 [CustomMessages]
 #include "smartmontools for windows strings.iss"
@@ -94,14 +95,15 @@ Source: "{#BaseDir}\README-EN.TXT"; DestDir: "{app}\doc\Smartmontools for Window
 Source: "{#BaseDir}\README-FR.TXT"; DestDir: "{app}\doc\Smartmontools for Windows installer"; Components: core;
 Source: "{#BaseDir}\README-DE.TXT"; DestDir: "{app}\doc\Smartmontools for Windows installer"; Components: core;
 Source: "{#BaseDir}\erroraction.cmd"; DestDir: "{app}\bin"; Components: core\service;
+Source: "{#BaseDir}\base64.exe"; DestDir: "{app}\bin"; Components: core;
 
 [Run]
 ;Filename: {sys}\sc.exe; Parameters: "create ""{#SmartServiceName}"" binPath= ""\""{app}\bin\smartd.exe\"" --service -c \""{app}\bin\smartd.conf\"""" start= auto DisplayName= ""S.M.A.R.T. Harddisk lifeguard for Windows service"""; Components: core\service; OnlyBelowVersion: 6.0; Flags: runhidden
 ;Filename: {sys}\sc.exe; Parameters: "create ""{#SmartServiceName}"" binPath= ""\""{app}\bin\smartd.exe\"" --service -c \""{app}\bin\smartd.conf\"""" start= delayed-auto DisplayName= ""S.M.A.R.T. Harddisk lifeguard for Windows service"""; Components: core\service; MinVersion: 6.0; Flags: runhidden
-Filename: {sys}\sc.exe; Parameters: "delete {#OldSmartServiceName}"; Components: core\service; Check: IsUpdateInstall(); Flags: runhidden waituntilterminated
-Filename: {sys}\sc.exe; Parameters: "delete {#SmartServiceName}"; Components: core\service; Check: IsUpdateInstall(); Flags: runhidden waituntilterminated
-Filename: {app}\bin\update-smart-drivedb.exe; Parameters: "/S"; Components: updatedb; Flags: waituntilterminated
-Filename: {app}\bin\smartd.exe; Parameters: "install -c ""{app}\bin\smartd.conf"""; Components: core\service; Flags: runhidden
+Filename: {sys}\sc.exe; Parameters: "delete {#OldSmartServiceName}"; Components: core\service; Check: IsUpdateInstall(); StatusMSG: "Removing any old smart service instance."; Flags: runhidden waituntilterminated
+Filename: {sys}\sc.exe; Parameters: "delete {#SmartServiceName}"; Components: core\service; Check: IsUpdateInstall(); StatusMSG: "Removing any old smart service instance."; Flags: runhidden waituntilterminated
+Filename: {app}\bin\update-smart-drivedb.exe; Parameters: "/S"; Components: updatedb; StatusMSG: "Updating drive database."; Flags: waituntilterminated
+Filename: {app}\bin\smartd.exe; Parameters: "install -c ""{app}\bin\smartd.conf"""; Components: core\service; StatusMSG: "Setting up smart service."; Flags: runhidden
 
 [Icons]
 Name: {group}\Visit NetPower.fr; Filename: http://www.netpower.fr; Components: links;
@@ -140,14 +142,16 @@ var
   autotestlongregex, autotestshortregex: String;   // autotest regex
   
   checkhealth, checkataerrors, reportselftesterrors, checkfailureusage: Boolean;
-  reportcurrentpendingsect, reportofflinependingsect, trackchangeusageprefail, ignoretemperature: Boolean;
+  reportcurrentpendingsect, reportofflineuncorrectsect, trackchangeusageprefail, ignoretemperature: Boolean;
   powermode, maxskiptests: String;
   
   //// alert parameters
   localmessages, keepfirstlog: Boolean;
   warningmessage: String;
-  sourcemail, destinationmail, smtpserver, tls, smtpserveruser, smtpserverpass: String;
+  sourcemail, destinationmail, smtpserver, tls, smtpserveruser, smtpserverpass, b64smtpserverpass: String;
   compresslogs, sendtestmessage: Boolean;
+
+  InitialLogFile: String;
   
   //// Gui-only smartd parameters
   guihddautodetection: TNewCheckListBox;
@@ -158,7 +162,7 @@ var
   guilongtesthour, guishorttesthour: TComboBox;
   
   guicheckhealth,  guicheckataerrors, guireportselftesterrors, guicheckfailureusage: TCheckBox;
-  guireportcurrentpendingsect, guireportofflinependingsect, guitrackchangesusageprefail, guiignoretemperature: TCheckbox;
+  guireportcurrentpendingsect, guireportofflineuncorrectsect, guitrackchangesusageprefail, guiignoretemperature: TCheckbox;
 
   guipowermode, guimaxskiptests: TComboBox;
   
@@ -171,6 +175,8 @@ var
   // guilocalmessage: TMemo;
   guicompresslogs: TCheckBox;
   guisendtestmessage: TButton;
+
+  pageid, newpageid: integer;
   
   //// Static texts
   statictext1, statictext2, statictext3, statictext4, statictext5, statictext6, statictext7, statictext8: TNewStaticText;
@@ -180,10 +186,23 @@ var
 
 //// Create a file called smart.(version).log including info about all disks
 function CreateInitialLog(): Boolean;
-var ResultCode: Integer;
+
+var ResultCode, count: Integer;
+
 begin
-  SaveStringToFile(ExpandConstant('{app}\smartmontools-install-{#MajorVersion}-{#MinorVersion}.log'), '# Smartmontools for Windows installed on ' + GetDateTimeString('dd mmm yyyy hh:nn:ss', #0, #0) + #13#10 + #13#10, False);
-  Exec(ExpandConstant('{cmd}') ,ExpandConstant('/c for /f "delims= " %i in (' + #39 + '"{app}\bin\smartctl" --scan' + #39 +') do "{app}\bin\smartctl.exe" -a %i >> "{app}\smartmontools-install-{#MajorVersion}-{#MinorVersion}.log"'), '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  count := 0;
+  SaveStringToFile(InitialLogFile, '# Smartmontools for Windows installed on ' + GetDateTimeString('dd mmm yyyy hh:nn:ss', #0, #0) + #13#10 + #13#10, False);
+  if (hddautodetection = true) then
+    Exec(ExpandConstant('{cmd}') ,ExpandConstant('/c for /f "delims= " %i in (' + #39 + '"{app}\bin\smartctl" --scan' + #39 +') do "{app}\bin\smartctl.exe" -a %i >> "' + InitialLogFile + '"'), '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
+  else
+  begin
+    while (count < GetArrayLength(hddlistexploded)) do
+    begin
+      SaveStringToFile(InitialLogFile, '---- ' + hddlistexploded[count] + #13#10, True);
+      Exec(ExpandConstant('{cmd}') ,ExpandConstant('/c ""{app}\bin\smartctl.exe" -a ' + hddlistexploded[count] + ' >> "' + InitialLogFile + '""'), '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+      count := count + 1;
+    end;
+  end;
 end;
 
 //// Get commandline arguments
@@ -245,10 +264,10 @@ begin
     reportcurrentpendingsect := false
   else
     reportcurrentpendingsect := true;
-  if (GetCommandlineParam('--reportofflinependingsect') = 'no') then
-    reportofflinependingsect := false
+  if (GetCommandlineParam('--reportofflineuncorrectsect') = 'no') then
+    reportofflineuncorrectsect := false
   else
-    reportofflinependingsect := true;
+    reportofflineuncorrectsect := true;
   if (GetCommandlineParam('--trackchangeusageprefail') = 'no') then
     trackchangeusageprefail := false
   else
@@ -292,12 +311,12 @@ begin
     sendtestmessage := false
   else
     sendtestmessage := true;
-  
+
   result := true;
 end;
 
-//// Import GUI config into CLI parameters
-function GetGuiConfig():Boolean;
+//// Import Smart GUI config into CLI parameters
+function GetSmartGuiConfig():Boolean;
 var autotestshortdays: String;
 var autotestlongdays: String;
 
@@ -331,27 +350,16 @@ begin
       reportcurrentpendingsect := true
     else
       reportcurrentpendingsect := false;
-    if guireportofflinependingsect.Checked = true then
-      reportofflinependingsect := true
+    if guireportofflineuncorrectsect.Checked = true then
+      reportofflineuncorrectsect := true
     else
-      reportofflinependingsect := false;
+      reportofflineuncorrectsect := false;
     if guiignoretemperature.Checked = true then
       ignoretemperature := true
     else
       ignoretemperature := false;
     powermode := guipowermode.Text;
     maxskiptests := guimaxskiptests.Text;
-    
-    sourcemail := guisourcemail.Text;
-    destinationmail := guidestinationmail.Text;
-    smtpserver := guismtpserver.Text;
-    smtpserveruser := guismtpserveruser.Text;
-    smtpserverpass := guismtpserverpass.Text;
-    tls := guitls.Text;
-    localmessages := guilocalmessages.Checked;
-    warningmessage := guiwarningmessage.Text;
-    compresslogs := guicompresslogs.Checked;
-    keepfirstlog := guikeepfirstlog.Checked;
 
     // Make accurate regex out of checkboxes, if not CLI defined
     // I admit it, it's horribily coded
@@ -455,6 +463,20 @@ begin
   end;
 end;
 
+function GetMailGuiConfig():Boolean;
+begin
+    sourcemail := guisourcemail.Text;
+    destinationmail := guidestinationmail.Text;
+    smtpserver := guismtpserver.Text;
+    smtpserveruser := guismtpserveruser.Text;
+    smtpserverpass := guismtpserverpass.Text;
+    tls := guitls.Text;
+    localmessages := guilocalmessages.Checked;
+    warningmessage := guiwarningmessage.Text;
+    compresslogs := guicompresslogs.Checked;
+    keepfirstlog := guikeepfirstlog.Checked;
+end;
+
 //// Write smartd.conf and erroraction.cmd files
 function WriteConfigFiles(): Boolean;
 var 
@@ -475,6 +497,10 @@ begin
       SaveStringToFile(ExpandConstant('{app}\bin\smartd.conf'), ' -l error', True);
     if (checkfailureusage) then
       SaveStringToFile(ExpandConstant('{app}\bin\smartd.conf'), ' -f', True);
+    if (reportcurrentpendingsect) then
+      SaveStringToFile(ExpandConstant('{app}\bin\smartd.conf'), ' -C 197+', True);
+    if (reportofflineuncorrectsect) then
+      SaveStringToFile(ExpandConstant('{app}\bin\smartd.conf'), ' -U 198+', True);
     if (trackchangeusageprefail) then
       SaveStringToFile(ExpandConstant('{app}\bin\smartd.conf'), ' -t', True); 
     if (reportselftesterrors) then
@@ -514,7 +540,7 @@ begin
     if (smtpserverpass <> '') then
     begin
       SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set SMTP_USER=' + smtpserveruser + #13#10, True);
-      SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set SMTP_PASSWORD=' + smtpserverpass + #13#10, True);
+      SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set SMTP_PASSWORD=' + b64smtpserverpass + #13#10, True);
     end;
     SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set TLS=' + tls + #13#10, True);
   end
@@ -542,24 +568,27 @@ begin
   SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), ExpandConstant('set PROGRAM_PATH={app}') + #13#10, True);
 end;
 
-Procedure UpdateReg();
-begin
-  RegWriteDwordValue(HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Services\Smartd', 'Type', 16);
-end;
-
 //// Send test mail
 Procedure SendTestMail(Sender: TObject);
 var
   resultcode: Integer;
   parameters: String;
 begin
-  GetGuiConfig();
-  Parameters := ExpandConstant('/c ' + '"{app}\bin\sendemail.exe"' + ' -f ' + sourcemail + ' -t ' + destinationmail + ' -u ' + 'Smartmontools for Windows setup test mail on %COMPUTERNAME%.%USERDOMAIN% (DNS: %USERDNSDOMAIN%)' + ' -m ' + ExpandConstant('{cm:testmessage}') + ' -s ' + smtpserver + ' -o tls=' + tls);
-  if (smtpserverpass <> '') then
+  GetMailGuiConfig();
+  Parameters := ExpandConstant('/c ' + '""{app}\bin\sendemail.exe"' + ' -f ' + sourcemail + ' -t ' + destinationmail + ' -u ' + 'Smartmontools for Windows setup test mail on %COMPUTERNAME%.%USERDOMAIN% (DNS: %USERDNSDOMAIN%) -m ' + ExpandConstant('{cm:testmessage}') + ' -s ' + smtpserver + ' -o tls=' + tls);
+  if (FileExists(InitialLogFile))
+  then
+    Parameters := Parameters + ' -a "' + InitialLogFile + '"';
+  if (smtpserverpass <> '')
+  then
     Parameters := Parameters + ' -o username=' + smtpserveruser + ' -o password=' + smtpserverpass;
   // Timeout 4 seconds
-  Parameters := Parameters + ExpandConstant(' & ping 127.0.0.1 > nul');
-  Exec(ExpandConstant('{cmd}'), parameters, '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+  Parameters := Parameters + ExpandConstant('" & ping 127.0.0.1 > nul');
+  if (Wizardsilent = true)
+  then
+    Exec(ExpandConstant('{cmd}'), parameters, '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
+  else
+    Exec(ExpandConstant('{cmd}'), parameters, '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
 end;
 
 #include "smartmontools for Windows smart gui.iss"
@@ -571,21 +600,17 @@ var Sender: TObject;
 begin
   if CurStep = ssPostInstall then
   begin
-    smartd_conf_CreatePage(wpInfoAfter);
-    mail_options_CreatePage(wpInfoAfter);  
+    pageid := smartd_conf_CreatePage(wpInfoAfter);
+    mail_options_CreatePage(pageid);
   end;
   if CurStep = ssDone then
   begin
-    GetGuiConfig();
+    GetMailGuiConfig();
+    b64smtpserverpass := Encode64(smtpserverpass);
     WriteConfigFiles();
-    if (keepfirstlog) then
-      CreateInitialLog();
     if ((sendtestmessage) and (Wizardsilent = true)) then
       SendTestMail(Sender);
-//// Update smartd service type before upstream fixes the glitch
-    UpdateReg();
-    LoadService('{#SmartServiceName}');
-    
+    LoadService('{#SmartServiceName}');    
   end;
 end;
 

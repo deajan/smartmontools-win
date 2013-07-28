@@ -1,10 +1,10 @@
-:: Smartmontools for Windows package v6.1-4 erroraction.cmd
+:: Smartmontools for Windows package v6.2-1 erroraction.cmd
 :: http://www.netpower.fr
 :: (CopyLeft) 2013 by Orsiris "Ozy" de Jong
 
 :: Config should be changed in erroraction_config.cmd and not here
 
-@echo off
+::@echo off
 setlocal enabledelayedexpansion
 
 :: Load autgenerated configuration
@@ -70,11 +70,16 @@ IF NOT "%USERDOMAIN%"=="" set COMPUTER_FQDN=%COMPUTERNAME%.%USERDOMAIN%
 IF NOT "%USERDNSDOMAIN%"=="" set COMPUTER_FQDN=%COMPUTERNAME%.%USERDNSDOMAIN%
 GOTO:EOF
 
+:GetPwd
+FOR /F %%i IN ('"echo %SMTP_PASSWORD% | base64 -d"') DO SET SMTP_PASSWORD=%%i
+GOTO:EOF
+
 :Mailer
 IF NOT "%MAIL_ALERT%"=="yes" GOTO:EOF
 set SUBJECT=Smart Error on %COMPUTER_FQDN%
 set MAIL_CONTENT=%DATE% - %WARNING_MESSAGE%
 call:CheckMailValues
+call:GetPwd
 IF "%MAILER%"=="blat" call:MailerBlat
 IF "%MAILER%"=="sendemail" call:MailerSendEmail
 GOTO:EOF

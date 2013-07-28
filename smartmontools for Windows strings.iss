@@ -1,4 +1,4 @@
-; String file for smartmontools for Windows installer v6.1-2
+// String file for smartmontools for Windows installer v6.1-2 to 6.2-1
 
 ; Installation dialog
 
@@ -88,25 +88,25 @@ en.checkhealth=Check SMART health
 fr.checkhealth=Vérifier l'état de santé SMART
 de.checkhealth=SMART status testen
 
-en.reportcurrentpendingsect=Report nonzero Current Pending Sect Ct
-fr.reportcurrentpendingsect=Rapporter Current Pending Sect Ct <> 0
-de.reportcurrentpendingsect=Current Pending Sect Ct anzeigen
+en.reportcurrentpendingsect=Report nonzero Current Pending Sect
+fr.reportcurrentpendingsect=Rapporter Current Pending Sect
+de.reportcurrentpendingsect=Erhöhung Current Pending Sect anzeigen
 
 en.checkataerrors=Report increases in ATA errors
-fr.checkataerrors=Rapporter augm. d'erreurs ATA
-de.checkataerrors=ATA Fehler anzeigen
+fr.checkataerrors=Rapporter augm. erreurs ATA
+de.checkataerrors=Erhöhung von ATA Fehler anzeigen
 
 en.reportselftesterrors=Report increases in selftest errors
-fr.reportselftesterrors=Rapporter augm. d'erreurs autotests
-de.reportselftesterrors=Selbsttest Fehler anzeigen
+fr.reportselftesterrors=Rapporter augm. erreurs autotests
+de.reportselftesterrors=Selbsttest Fehler Erhöhung anzeigen
 
 en.checkfailureusage=Check for failures in usage attribs
 fr.checkfailureusage=Tester erreurs attributs d'usage
 de.checkfailureusage=Betrieb Attibute Fehler anzeigen
 
-en.reportofflinependingsect=Report nonzero Offline Pending Sect Ct
-fr.reportofflinependingsect=Rapporter Offline Pending Sect Ct <> 0
-de.reportofflinependingsect=Offline Pending Sect Ct anzeigen
+en.reportofflineuncorrectsect=Report increase Offline Uncorrect Sect
+fr.reportofflineuncorrectsect=Rapporter augm. Uncorrectable Sect
+de.reportofflineuncorrectsect=Erhöhung Offline Uncorrect Sect anzeigen
 
 en.trackchangeusageprefail=Track changes in usage + prefail attribs
 fr.trackchangeusageprefail=Changements d'attributs usage / prefail
@@ -205,6 +205,6 @@ en.mail_optionsDescription=Do not forget to check your antispam
 fr.mail_optionsDescription=N'oubliez pas de régler votre antispam
 de.mail_optionsDescription=Vergessen sie nicht ihr Antispam einzustellen
 
-en.testmessage=This is a test message sent by Smartmontools for Windows setup to check whether the smart service will be able to send you information about your hard drive health.\nThere is no real alert, please do not respond.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Ozy de Jong.
-fr.testmessage=Ceci est un message de test envoyé par l'installeur Smartmontools for Windows afin de vérifier que le servie smart puisse vous contacter concernant l'état de santé de votre disque dur.\nIl n'y a aucune alerte réele, merci de ne pas repondre.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Ozy de Jong.
-de.testmessage='Dies ist eine Testnachricht die von Smartmontools for Windows Installer geschickt wurde.\n Es handelt sich nicht um einen Fehler, bitte nicht antworten.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Ozy de Jong.
+en.testmessage=This is a test message sent by Smartmontools for Windows setup to check whether the smart service will be able to send you information about your hard drive health.\nThere is no real alert, please do not respond.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris "Ozy" de Jong.
+fr.testmessage=Ceci est un message de test envoyé par l'installeur Smartmontools for Windows afin de vérifier que le service smart puisse vous contacter concernant l'état de santé de votre disque dur.\nIl n'y a aucune alerte réele, merci de ne pas repondre.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris "Ozy" de Jong.
+de.testmessage=Dies ist eine Testnachricht die von Smartmontools for Windows Installer geschickt wurde.\n Es handelt sich nicht um einen Fehler, bitte nicht antworten.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris "Ozy" de Jong.

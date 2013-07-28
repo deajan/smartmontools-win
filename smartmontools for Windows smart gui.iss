@@ -1,4 +1,4 @@
-// GUI configuration page for smart options v6.1-2
+// GUI configuration page for smart options for v6.2-1
 
 [code]
 procedure smartd_conf_Activate(Page: TWizardPage);
@@ -17,6 +17,12 @@ end;
   
 function smartd_conf_NextButtonClick(Page: TWizardPage): Boolean;
 begin
+    GetSmartGuiConfig();
+    if (keepfirstlog) then
+    begin
+      InitialLogFile := ExpandConstant('{app}\smartmontools-install-{#MajorVersion}-{#MinorVersion}.log');
+      CreateInitialLog();
+    end; 
   Result := True;
 end;
   
@@ -380,17 +386,17 @@ begin
     TabOrder := 22;
   end;
 
-  { guireportofflinependingsect }
-  guireportofflinependingsect := TCheckBox.Create(Page);
-  with guireportofflinependingsect do
+  { guireportofflineuncorrectsect }
+  guireportofflineuncorrectsect := TCheckBox.Create(Page);
+  with guireportofflineuncorrectsect do
   begin
     Parent := Page.Surface;
     Left := ScaleX(192);
     Top := ScaleY(144);
     Width := ScaleX(217);
     Height := ScaleY(17);
-    Caption := ExpandConstant('{cm:reportofflinependingsect}');
-    Checked := reportofflinependingsect;
+    Caption := ExpandConstant('{cm:reportofflineuncorrectsect}');
+    Checked := reportofflineuncorrectsect;
     TabOrder := 23;
   end;
     

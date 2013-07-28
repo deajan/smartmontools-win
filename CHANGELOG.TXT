@@ -1,0 +1,88 @@
+Smartmontools for Windows package
+---------------------------------
+
+Known issues
+
+- When defining scheduled tests via CLI without using unattended setup, GUI parameters aren't updated accordingly (anyway, why would one do this ?)
+
+Changelog
+---------
+
+[v6.2-1] from 27/07/2013
+
+- Updated to upstream release v6.2-1
+- Removed interactive service fix (upstream fixed it)
+- Fixed a bug with silent mail parameters (thanks to Matthäus Banach for pointing that out)
+- Added the intial log to the test mail as attachment (Feature asked by Ilya Kisleyko)
+- Added Russian translation (thanks to Ilya Kisleyko)
+- Improved intial log creation
+- Changed execution order so initial log file can use manual drive list
+- Added (very) basic password obfuscation in configuration file
+- Suppress test mail status window if /silent or /verysilent parameter supplied
+- Fixed some typos and missing stuff in documentation
+- Fixed two missing parameters (thanks to Ilya Kiskeyk for pointing that out)
+
+[v6.1-4] from 20/06/2013
+
+- Fixed a typo that prevented smtp authentication in erroraction script (thanks to Boi Feddern at c't Magazin fuer Computertechnik for pointing that out)
+
+[v6.1-3] from 12/06/2013
+
+- Fixed a bug where erroraction script writes empty smart log files
+
+[v6.1-2] from 20/05/2013
+
+- Upgrades should generally work cleaner and handle previous service uninstallation
+- Upgrades on Windows XP should now work without need to stop the smart service manually
+- Updated installer logic (cannot install warning support without selection service installation)
+- Updated documentation --warningmessage
+- Service installation now uses upstream setup (which also installs smartd as delayed start service in NT6x)
+	- Restart Manager disabled because upstream's service event log integration needed to restart a lot of stuff while upgrading (trying to keep anything upgradable without reboot required)
+	- Upstream service type is changed to "Non interactive" to prevent errors in event log
+- Updated Inno Setup building tools to v 5.5.3
+- Minor bugfixes
+
+[v6.1-1] from 02/03/2013 (non public release, too much beta stuff for production)
+
+- Updated upstream release to version 6.1
+- As upstream started using erroraction like scripting, i updated mine accordingly.
+- Local personalized messages supported via Christian Franke's very nice wtssendmessage.exe tool (ohh Yeah)
+
+[v6.0-7] from 13/03/2013
+
+- Update log format: Insert version in head. Insert spacer after log so next log is visually more separated from last one
+
+[v6.0-6] from 27/02/2013
+
+- No binary updates, only documentation fixes, therefore version number stays the same
+- Updated documentation and translations (special thanks to Titus for the German translation that was desperately needed)
+
+[v6.0-6] from 18/02/2013
+
+- Fixed some typos in the documentation and in the program
+- The first smartmontools run is saved in a file containing smartmontools version
+- Changed the default behavior (no local alert messages). This can be overriden by checking GUI entry or CLI parameter
+
+[v6.0-5] from 03/02/2013
+
+- Made the test message more explicit so general antispam filters (tested with Exchange integrated filter) won't mark them as spam
+- Fixed an issue with smartd.conf file generation for scheduled tests (thanks to Bill Day for pointing that out)
+- Fixed some GUI glitches, cleaned up the GUI code
+- Corrected a naming Typo (6.01 didn't exist, it was 6.0-1 only for windows installer)
+
+[v6.0-4]
+
+- Fixed a problem with overwrite confirmation of smartd.conf.example of a previous installation in silent mode 
+- Fixed a minor issue in the start menu smartd.conf link (thanks to Willem Pauw for pointing that out)
+- Have a longer and nicer test message that won't be caught by standard antispam (hopefully... it worked on mine)
+- Cosmetic fixes: truncated messages depending on language
+
+[v6.0-3]
+
+- Initial public release
+- Updated upstream source
+- Temporary removed WTSSendMessage tools, using integrated support from smart deamon
+
+[v5.43-x]
+
+- Private beta testing
