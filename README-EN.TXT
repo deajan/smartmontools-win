@@ -36,14 +36,14 @@ smartmontools-win-6.2-1.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddl
 --long=L/../../5/12 Regular expression that determines when to run long selftest, set to friday at 13AM if not defined (see below or smartd.conf manual for details)
 --hddlist="/dev/pd0;/dev/pd1;/dev/sdc" Device list separated by semicolons. If not defined, hdds will be autodetected.
 Example: --hddlist="/dev/csmi0,0;/dev/csmi0,1" for an Intel RAID of two disks (intel raid autodetection does not always work, this does)
---checkhealth=(yes|no) is activated by default
---checkataerrors=(yes|no) is activated by default
---checkfailureusage=(yes|no) is activated by default
---reportselftesterrors=(yes|no) is activated by default
---reportcurrentpendingsect=(yes|no) is activated by default
+--checkhealth=(yes|no) is activated by default, Check SMART health
+--checkataerrors=(yes|no) is activated by default, Report increases in ATA errors
+--checkfailureusage=(yes|no) is activated by default, Check for failures in usage attribs
+--reportselftesterrors=(yes|no) is activated by default, Report increases in selftest errors
+--reportcurrentpendingsect=(yes|no) is activated by default, Report nonzero Current Pending Sect
 --reportofflinependingsect=(yes|no) is activated by default
---trackchangeusageprefail=(yes|no) is activated by default
---ignoretemperature=(yes|no) is activated by default
+--trackchangeusageprefail=(yes|no) is activated by default, Track changes in usage + prefail attribs
+--ignoretemperature=(yes|no) is activated by default, Ignore temperatures changes
 --powermode=(never|sleep|standby|idle) Determines in which minimal powermode is required for selftests to be run. Is set to sleep if not defined
 --maxskips=N Maximum number of tests to skip because of the powermode before a test is forced. Is set to 7 by default
 

@@ -30,7 +30,7 @@ Smartmontools для Windows это альтернативная сборка пакета smartmontools (создан
 Параметры командной строки 
 -----------------------
 
-smartmontools-win-6.1-4.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflinependingsect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [-u smtpuser] [-p smtppassword] [--tls=no]] [--localmessages=(yes|no)] [--warningmessage="Your custom alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [/silent]
+smartmontools-win-6.1-4.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflineuncorrectsect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [-u smtpuser] [-p smtppassword] [--tls=no]] [--localmessages=(yes|no)] [--warningmessage="Your custom alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [/silent]
 
 --short=S/../.././13 Регулярное выражение, определяющее расписание запуска краткого(базового) теста самопроверки диска, по умолчанию - каждый день в 8:00 (подробнее см. ниже или руководство по smartd.conf)
 --long=L/../../5/12 Регулярное выражение, определяющее расписание запуска полного(расширенного) теста самопроверки диска, по умолчанию - в пятницу в 8:00 (подробнее см. ниже или руководство по smartd.conf)
@@ -40,8 +40,8 @@ smartmontools-win-6.1-4.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddl
 --checkataerrors=(yes|no) Сообщать о росте количества ошибок в журнале SMART «ошибки», по умолчанию включено
 --checkfailureusage=(yes|no) Наблюдение за отказами в любых значениях "Usage" атрибутов. Это не-критичные атрибуты (температура, число запусков и т.п.) изменение которых не свидетельствует о скором отказе диска, но говорит о не оптимальном режиме работы диска, что может вызвать сокращение его срока службы. По умолчанию включено
 --reportselftesterrors=(yes|no) Сообщать о росте количества ошибок в журнале SMART «самопроверка», по умолчанию включено
---reportcurrentpendingsect=(yes|no) по умолчанию включено
---reportofflinependingsect=(yes|no) по умолчанию включено
+--reportcurrentpendingsect=(yes|no) Сообщать о появлении секторов, являющихся кандидатами на замену, по умолчанию включено
+--reportofflineuncorrectsect=(yes|no) Сообщать о появлении некорректируемых (средствами диска) секторов, по умолчанию включено
 --trackchangeusageprefail=(yes|no) Сообщать если значения атрибутов групп "Prefailure" (критичных) или "Usage"(использования) изменились со времени прошлой проверки, по умолчанию включено
 --ignoretemperature=(yes|no) Не отслеживать изменения температуры, по умолчанию включено
 --powermode=(never|sleep|standby|idle) = В каком состоянии энергосбережения должен находиться диск для запуска тестов. По умолчанию диск проверяется, если он не в спящем режиме.
