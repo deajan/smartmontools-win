@@ -1,21 +1,21 @@
-Smartmontools for Windows ï¿½crit par Orsiris "Ozy" de Jong
+Smartmontools for Windows écrit par Orsiris "Ozy" de Jong
 Doc Rev 1.4 (C) 2012-2013          http://www.netpower.fr
 ---------------------------------------------------------
 
 Pour l'utilisation en ligne de commandes, voir plus bas
 
-Smartmontools for Windows est un package alternatif  pour smartmontools de Bruce Allen et Christian Franke et a ï¿½tï¿½ crï¿½e afin de pouvoir installer rapidement smartmontools en tant que service, utiliser le support d'alertes mail et locales et prï¿½configurer les options de monitoring S.M.A.R.T.
-L'installation peut se faire en ligne de commandes pour un dï¿½ploiement massif ou en graphique pour un utilisateur classique.
+Smartmontools for Windows est un package alternatif  pour smartmontools de Bruce Allen et Christian Franke et a été crée afin de pouvoir installer rapidement smartmontools en tant que service, utiliser le support d'alertes mail et locales et préconfigurer les options de monitoring S.M.A.R.T.
+L'installation peut se faire en ligne de commandes pour un déploiement massif ou en graphique pour un utilisateur classique.
 
-Les fichiers de configuration sont gï¿½nï¿½rï¿½s automatiqueement pour plus de facilitï¿½ (cela ï¿½tant, vous pouvez toujours les ï¿½diter ï¿½ la main au besoin).
+Les fichiers de configuration sont générés automatiqueement pour plus de facilité (cela étant, vous pouvez toujours les éditer à la main au besoin).
 
-Un service nommï¿½ "SmartD" est crï¿½e et lancï¿½ aux dï¿½marrage du systï¿½me. Celui-ci ï¿½numï¿½re les disques que smartmontools peut surveiller et envoi un email ou affiche un message en cas d'erreur.
-Un fichier nommï¿½ smart.log est alors crï¿½e incluant toutes les informations des disques, et envoyï¿½ par mail. Un log des actions d'erreurs  est crï¿½e en tant que erroraction.log.
+Un service nommé "SmartD" est crée et lancé aux démarrage du système. Celui-ci énumére les disques que smartmontools peut surveiller et envoi un email ou affiche un message en cas d'erreur.
+Un fichier nommé smart.log est alors crée incluant toutes les informations des disques, et envoyé par mail. Un log des actions d'erreurs  est crée en tant que erroraction.log.
 
-Ce logiciel et les logiciels qu'il installe sont sous licence GPL. Aucune responsabilitï¿½ ne pourra ï¿½tre engagï¿½e cas de problï¿½mes ou dysfonctionnements dus ï¿½ l'usage de ce logiciel.
+Ce logiciel et les logiciels qu'il installe sont sous licence GPL. Aucune responsabilité ne pourra être engagée cas de problèmes ou dysfonctionnements dus à l'usage de ce logiciel.
 
-Neanmoins, vous pouvez ï¿½crire un email ï¿½ ozy [at] netpower.fr pour un obtenir un support limitï¿½ durant mon temps libre.
-Si vous aimez ce produit ou l'utilisez de maniï¿½re profesionnelle, vous pouvez sponsoriser le projet sur mon site, 99% des bï¿½nï¿½fices seront reversï¿½s dans la machine ï¿½ cafï¿½ :)
+Neanmoins, vous pouvez écrire un email à ozy [at] netpower.fr pour un obtenir un support limité durant mon temps libre.
+Si vous aimez ce produit ou l'utilisez de manière profesionnelle, vous pouvez sponsoriser le projet sur mon site, 99% des bénéfices seront reversés dans la machine à café :)
 
 Cet installeur utilise les logiciels suivants:
 
@@ -23,66 +23,66 @@ Cet installeur utilise les logiciels suivants:
 - sendemail by Brandon Zehm, http://caspian.dotconf.net
 - Inno Setup by Jordan Russel, http://www.jrsoftware.org
 - Gzip by Free Software Foundation, Inc. Copyright (C) 1992, 1993 Jean-loup Gailly, http://gnuwin32.sourceforge.net/
-- Base64 by Matthias Gï¿½rtner, http://www.rtner.de/software/base64.html
+- Base64 by Matthias Gärtner, http://www.rtner.de/software/base64.html
 
 Utilisation sous forme de script
 --------------------------------
 
-smartmontools-win-6.2-1.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflinependingsect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [-u smtpuser] [-p smtppassword] [--tls=no]] [--localmessages=(yes|no)] [--warningmessage="Your personnal alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [/silent]
+smartmontools-win-6.2-1.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflineofflinesect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [-u smtpuser] [-p smtppassword] [--tls=no]] [--localmessages=(yes|no)] [--warningmessage="Your personnal alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [/silent]
 
 
---short Expression rï¿½guliï¿½re qui planifie l'exï¿½cution des autotests cours, par dï¿½faut tous les jours ï¿½ 8h (voir plus bas ou voir le manuel du fichier smartd.conf)
---long Expression rï¿½guliï¿½re qui planifie l'exï¿½cution des autotests longs, par dï¿½faut tous les vendredis ï¿½ 12h (voir plus bas ou voir le manuel du fichier smartd.conf)
---hddlist="/dev/pd0;/dev/pd1;/dev/sdc" Liste manuelle des disques durs sï¿½parï¿½s par un point virgule, si ce paramï¿½tre est omis, smartd essayera de dï¿½tecter automatiquement vos disques.
-Exemple: Pour un ensemble RAID intel de deux disques: --hddlist="/dev/csmi0,0;/dev/csmi0,1" (L'autodï¿½tection intel raid ne fonctionne pas toujours bien, la liste manuelle fonctionne toujours)
---checkhealth=(yes|no) est activï¿½ par dï¿½faut
---checkataerrors=(yes|no) est activï¿½ par dï¿½faut
---checkfailureusage=(yes|no) est activï¿½ par dï¿½faut
---reportselftesterrors=(yes|no) est activï¿½ par dï¿½faut
---reportcurrentpendingsect=(yes|no) est activï¿½ par dï¿½faut
---reportofflineuncorrectsect=(yes|no) est activï¿½ par dï¿½faut
---trackchangeusageprefail=(yes|no) est activï¿½ par dï¿½faut
---ignoretemperature=(yes|no) est activï¿½ par dï¿½faut
---powermode=(never|sleep|standby|idle) Determine le mode d'ï¿½conomie d'ï¿½nergie minimal pour ï¿½ffectuer les autotests. Par dï¿½faut, cette valeur est sleep
---maxskips=N Nombre maximal d'autotests ï¿½ ne pas ï¿½ffecteur selon le mode d'ï¿½conomie d'energie. Par dï¿½faut, ce nombre est 7.
+--short Expression régulière qui planifie l'exécution des autotests cours, par défaut tous les jours à 8h (voir plus bas ou voir le manuel du fichier smartd.conf)
+--long Expression régulière qui planifie l'exécution des autotests longs, par défaut tous les vendredis à 12h (voir plus bas ou voir le manuel du fichier smartd.conf)
+--hddlist="/dev/pd0;/dev/pd1;/dev/sdc" Liste manuelle des disques durs séparés par un point virgule, si ce paramètre est omis, smartd essayera de détecter automatiquement vos disques.
+Exemple: Pour un ensemble RAID intel de deux disques: --hddlist="/dev/csmi0,0;/dev/csmi0,1" (L'autodétection intel raid ne fonctionne pas toujours bien, la liste manuelle fonctionne toujours)
+--checkhealth=(yes|no) est activé par défaut
+--checkataerrors=(yes|no) est activé par défaut
+--checkfailureusage=(yes|no) est activé par défaut
+--reportselftesterrors=(yes|no) est activé par défaut
+--reportcurrentpendingsect=(yes|no) est activé par défaut
+--reportofflineuncorrectsect=(yes|no) est activé par défaut
+--trackchangeusageprefail=(yes|no) est activé par défaut
+--ignoretemperature=(yes|no) est activé par défaut
+--powermode=(never|sleep|standby|idle) Determine le mode d'économie d'énergie minimal pour éffectuer les autotests. Par défaut, cette valeur est sleep
+--maxskips=N Nombre maximal d'autotests à ne pas éffecteur selon le mode d'économie d'energie. Par défaut, ce nombre est 7.
 
 -f Adresse email source de l'alerte
 -t Adresse email de destination pour l'alerte
 -s Votre serveur smtp
 -u Nom d'utilisateur du serveur smtp (non obligatoire)
 -p Mot de passe du serveur smtp (non obligatoire)
---tls (no|auto|yes) Utilisation de la sï¿½curitï¿½ TLS, dï¿½sactivï¿½e par dï¿½faut
---localmessages (no|yes) Affichage de messages d'alertes locaux, dï¿½sactivï¿½ par dï¿½faut
---warningmessage="Votre message d'avertissement personnalisï¿½". Si laissï¿½ vide, le message d'avertissement par dï¿½faut sera utilisï¿½.
---compresslogs=(yes|no) Active ou dï¿½sactive la compression des logs, cette option est activï¿½e par dï¿½faut
---keepfirstlog=(yes|no) Conserve le premier journal smart. Par dï¿½faut, ce paramï¿½tre est activï¿½.
---sendtestmessage=(yes|no) Active ou dï¿½sactive l'envoi d'un email de test. Ce paramï¿½tre est activï¿½ par dï¿½faut.
-/silent ou /verysilent sont les paramï¿½tres permettant une installation silencieuse. Attention ï¿½ spï¿½cifier ce paremï¿½tre avec le slash plutï¿½t que des tirets car il s'agit d'un paramï¿½tre de Inno Setup lui mï¿½me.
+--tls (no|auto|yes) Utilisation de la sécurité TLS, désactivée par défaut
+--localmessages (no|yes) Affichage de messages d'alertes locaux, désactivé par défaut
+--warningmessage="Votre message d'avertissement personnalisé". Si laissé vide, le message d'avertissement par défaut sera utilisé.
+--compresslogs=(yes|no) Active ou désactive la compression des logs, cette option est activée par défaut
+--keepfirstlog=(yes|no) Conserve le premier journal smart. Par défaut, ce paramètre est activé.
+--sendtestmessage=(yes|no) Active ou désactive l'envoi d'un email de test. Ce paramètre est activé par défaut.
+/silent ou /verysilent sont les paramètres permettant une installation silencieuse. Attention à spécifier ce paremètre avec le slash plutôt que des tirets car il s'agit d'un paramètre de Inno Setup lui même.
 
-Expressions rï¿½gulieres des autotests
+Expressions régulieres des autotests
 ------------------------------------
 
-Les expressions rï¿½guliï¿½res sont au format T/MM/DD/d/HH oï¿½
+Les expressions régulières sont au format T/MM/DD/d/HH où
 T = le type de test (S=court, L=long)
-MM = le mois (Janvier = 01, Dï¿½cembre = 12)
+MM = le mois (Janvier = 01, Décembre = 12)
 DD = le jour du mois (01...31)
 d = le jour de la semaine (Lundi = 1, Dimanche = 7)
 HH = L'heure au format 24H
 
-Ces valeurs peuvent ï¿½tre remplacï¿½s par des points qui sont des jokers. L'expression rï¿½guliere suivante planifie un test long tous les mardis et vendredis ï¿½ 02h:
+Ces valeurs peuvent être remplacés par des points qui sont des jokers. L'expression réguliere suivante planifie un test long tous les mardis et vendredis à 02h:
 
 L/../../[2,5]/02
 
 Exemples
 --------
 
-Installation automatisï¿½e basique:
+Installation automatisée basique:
 
 smartmontools-win-6.2-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com /silent
 
-Cette ligne installe smartmontools avec le support des alertes par mail, l'autodï¿½tection des disques, l'utilisation de tous les paramï¿½tres de monitoring, et planifie l'exï¿½cution d'un autotest court tous les jours ï¿½ 8h du matin et un autotest long tous les vendredis ï¿½ midi.
+Cette ligne installe smartmontools avec le support des alertes par mail, l'autodétection des disques, l'utilisation de tous les paramètres de monitoring, et planifie l'exécution d'un autotest court tous les jours à 8h du matin et un autotest long tous les vendredis à midi.
 
-Cet autre exemple utilise tls pour les emails, l'authentification du serveur SMTP, affiche ï¿½galement un message d'erreur local, monitore aussi les changements de tempï¿½rature, planifie un autotest court tous les jours ï¿½ 9h et un autotest long tous les mardis et dimanches ï¿½ 2h du matin pour les disques /dev/pd0 et /dev/csmi0,1
+Cet autre exemple utilise tls pour les emails, l'authentification du serveur SMTP, affiche également un message d'erreur local, monitore aussi les changements de température, planifie un autotest court tous les jours à 9h et un autotest long tous les mardis et dimanches à 2h du matin pour les disques /dev/pd0 et /dev/csmi0,1
 
 smartmontools-win-6.2-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com -u username@smtp.server.tld -p pA55W0RD --tls=yes --ignoretemperature=no --hddlist=/dev/pd0;/dev/csmi0,1 --short=S/../.././09 --long=L/../../[2,7]/02 --localmessages=yes /silent
 
