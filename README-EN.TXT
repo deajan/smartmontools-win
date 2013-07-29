@@ -25,7 +25,7 @@ This installer uses the following software
 - sendemail by Brandon Zehm, http://caspian.dotconf.net
 - Inno Setup by Jordan Russel, http://www.jrsoftware.org
 - Gzip by Free Software Foundation, Inc. Copyright (C) 1992, 1993 Jean-loup Gailly, http://gnuwin32.sourceforge.net/
-- Base64 by Matthias Gärtner, http://www.rtner.de/software/base64.htm
+- Base64 by Matthias Gï¿½rtner, http://www.rtner.de/software/base64.htm
 
 Command line parameters
 -----------------------
@@ -41,7 +41,7 @@ Example: --hddlist="/dev/csmi0,0;/dev/csmi0,1" for an Intel RAID of two disks (i
 --checkfailureusage=(yes|no) is activated by default
 --reportselftesterrors=(yes|no) is activated by default
 --reportcurrentpendingsect=(yes|no) is activated by default
---reportofflinependingsect=(yes|no) is activated by default
+--reportofflineuncorrectsect=(yes|no) is activated by default
 --trackchangeusageprefail=(yes|no) is activated by default
 --ignoretemperature=(yes|no) is activated by default
 --powermode=(never|sleep|standby|idle) Determines in which minimal powermode is required for selftests to be run. Is set to sleep if not defined
@@ -52,7 +52,7 @@ Example: --hddlist="/dev/csmi0,0;/dev/csmi0,1" for an Intel RAID of two disks (i
 -s your smtp server
 -u your smtp server username (not mandatory)
 -p your smtp server password (not mandatory)
---tls (no|auto|yes) Use of TLS sécurity, is no if not defined
+--tls (no|auto|yes) Use of TLS sï¿½curity, is no if not defined
 --localmessages=(no|yes) Display local warning messages on errors, is set to no if not defined
 --warningmessage="Your custom warning message", if not set, the default warning message will be used
 --compresslogs=(yes|no) is activated if not defined
