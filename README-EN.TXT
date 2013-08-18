@@ -25,7 +25,7 @@ This installer uses the following software
 - sendemail by Brandon Zehm, http://caspian.dotconf.net
 - Inno Setup by Jordan Russel, http://www.jrsoftware.org
 - Gzip by Free Software Foundation, Inc. Copyright (C) 1992, 1993 Jean-loup Gailly, http://gnuwin32.sourceforge.net/
-- Base64 by Matthias Gï¿½rtner, http://www.rtner.de/software/base64.htm
+- Base64 by Matthias Gärtner, http://www.rtner.de/software/base64.htm
 
 Command line parameters
 -----------------------
@@ -36,7 +36,6 @@ smartmontools-win-6.2-1.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddl
 --long=L/../../5/12 Regular expression that determines when to run long selftest, set to friday at 13AM if not defined (see below or smartd.conf manual for details)
 --hddlist="/dev/pd0;/dev/pd1;/dev/sdc" Device list separated by semicolons. If not defined, hdds will be autodetected.
 Example: --hddlist="/dev/csmi0,0;/dev/csmi0,1" for an Intel RAID of two disks (intel raid autodetection does not always work, this does)
-<<<<<<< HEAD
 --checkhealth=(yes|no) is activated by default
 --checkataerrors=(yes|no) is activated by default
 --checkfailureusage=(yes|no) is activated by default
@@ -45,16 +44,6 @@ Example: --hddlist="/dev/csmi0,0;/dev/csmi0,1" for an Intel RAID of two disks (i
 --reportofflineuncorrectsect=(yes|no) is activated by default
 --trackchangeusageprefail=(yes|no) is activated by default
 --ignoretemperature=(yes|no) is activated by default
-=======
---checkhealth=(yes|no) is activated by default, Check SMART health
---checkataerrors=(yes|no) is activated by default, Report increases in ATA errors
---checkfailureusage=(yes|no) is activated by default, Check for failures in usage attribs
---reportselftesterrors=(yes|no) is activated by default, Report increases in selftest errors
---reportcurrentpendingsect=(yes|no) is activated by default, Report nonzero Current Pending Sect
---reportofflinependingsect=(yes|no) is activated by default
---trackchangeusageprefail=(yes|no) is activated by default, Track changes in usage + prefail attribs
---ignoretemperature=(yes|no) is activated by default, Ignore temperatures changes
->>>>>>> 54f6c0a8eaa190802f112fd51cccd34f2bcbea75
 --powermode=(never|sleep|standby|idle) Determines in which minimal powermode is required for selftests to be run. Is set to sleep if not defined
 --maxskips=N Maximum number of tests to skip because of the powermode before a test is forced. Is set to 7 by default
 
@@ -63,7 +52,7 @@ Example: --hddlist="/dev/csmi0,0;/dev/csmi0,1" for an Intel RAID of two disks (i
 -s your smtp server
 -u your smtp server username (not mandatory)
 -p your smtp server password (not mandatory)
---tls (no|auto|yes) Use of TLS sï¿½curity, is no if not defined
+--tls (no|auto|yes) Use of TLS sécurity, is no if not defined
 --localmessages=(no|yes) Display local warning messages on errors, is set to no if not defined
 --warningmessage="Your custom warning message", if not set, the default warning message will be used
 --compresslogs=(yes|no) is activated if not defined

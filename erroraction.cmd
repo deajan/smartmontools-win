@@ -4,7 +4,7 @@
 
 :: Config should be changed in erroraction_config.cmd and not here
 
-::@echo off
+@echo off
 setlocal enabledelayedexpansion
 
 :: Load autgenerated configuration

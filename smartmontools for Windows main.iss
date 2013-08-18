@@ -4,8 +4,8 @@
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.2"
-#define MinorVersion "0"
-#define SubBuild "4"
+#define MinorVersion "1"
+#define SubBuild "1"
 #define AppPublisher "Ozy de Jong"
 #define AppURL "http://www.netpower.fr"
 
@@ -42,7 +42,7 @@ CloseApplications=no
 Name: en; MessagesFile: "compiler:Default.isl"; InfoBeforeFile: "{#BaseDir}\README-EN.TXT";
 Name: fr; MessagesFile: "compiler:Languages\French.isl"; InfoBeforeFile: "{#BaseDir}\README-FR.TXT";
 Name: de; MessagesFile: "compiler:Languages\German.isl"; InfoBeforeFile: "{#BaseDir}\README-DE.TXT";
-Name: ru; MessagesFile: "compiler:Languages\Russian.isl"; InfoBeforeFile: "{#BaseDir}\README-RU.TXT";
+Name: ru; MessagesFile: "compiler:Languages\Russian.isl"; InfoBeforeFile: "{#BaseDir}\README-EN.TXT";
 
 [CustomMessages]
 #include "smartmontools for windows strings.iss"
@@ -176,11 +176,11 @@ var
   guicompresslogs: TCheckBox;
   guisendtestmessage: TButton;
 
-  pageid, newpageid: integer;
+  pageid: integer;
   
   //// Static texts
-  statictext1, statictext2, statictext3, statictext4, statictext5, statictext6, statictext7, statictext8: TNewStaticText;
-  statictext100, statictext101, statictext102, statictext103, statictext104, statictext105, statictext106, statictext107: TNewStaticText;
+  statictext1, statictext2, statictext3, statictext4, statictext5, statictext6, statictext7: TNewStaticText;
+  statictext101, statictext102, statictext103, statictext104, statictext105, statictext106, statictext107: TNewStaticText;
 
 #include "smartmontools for Windows includes.iss"
 
