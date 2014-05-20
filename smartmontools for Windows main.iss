@@ -4,8 +4,8 @@
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.2"
-#define MinorVersion "1"
-#define SubBuild "1"
+#define MinorVersion "2"
+#define SubBuild "2"
 #define AppPublisher "Ozy de Jong"
 #define AppURL "http://www.netpower.fr"
 
@@ -13,6 +13,7 @@
 #define SmartmonToolsDir "smartmontools-6.2-1.win32-setup"
 #define SendmailDir "sendEmail-v156"
 #define GzipDir "gzip-1.3.12-1-bin"
+#define ddDir "dd-0.6beta3"
 #define SmartServiceName "smartd"
 #define OldSmartServiceName "SmartHDDLifeGuard"
 #define AppGUID "{487E2D86-AB76-467B-8EC0-0AF89EC38F5C}"
@@ -57,6 +58,7 @@ Name: core\64bits; Description: "{cm:core64bits}"; Types: custom;
 Name: core\service; Description: "{cm:coreservice}"; Types: full custom;
 Name: core\service\mailsupport; Description: "{cm:mailsupport}"; Types: full custom;
 Name: core\service\localsupport; Description: "{cm:localsupport}"; Types: custom;
+Name: fixbadsecttools; Description: "{cm:fixbadsecttools}"; Types: full custom;
 Name: regext; Description: "{cm:regext}"; Types: full custom;
 Name: regext\info; Description: "{cm:smartinfo}"; Types: Full custom;
 Name: regext\tests; Description: "{cm:smarttests}"; Types: Full custom;
@@ -91,6 +93,10 @@ Source: "{#BaseDir}\{#SendmailDir}\sendEmail.exe"; DestDir: "{app}\bin"; Compone
 Source: "{#BaseDir}\{#SendmailDir}\sendEmail.pl"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
 Source: "{#BaseDir}\{#GzipDir}\bin\gzip.exe"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
 Source: "{#BaseDir}\{#GzipDir}\man\cat1\gzip.1.txt"; DestDir: "{app}\doc\gzip"; Components: core\service\mailsupport;
+Source: "{#BaseDir}\{#ddDir}\dd.exe"; DestDir: "{app}\bin"; Components: fixbadsecttools;
+Source: "{#BaseDir}\{#ddDir}\Copying.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
+Source: "{#BaseDir}\{#ddDir}\ddchanges.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
+Source: "{#BaseDir}\fix_badsectors.cmd"; DestDir: "{app}\bin"; Components: fixbadsecttools;
 Source: "{#BaseDir}\README-EN.TXT"; DestDir: "{app}\doc\Smartmontools for Windows installer"; Components: core;
 Source: "{#BaseDir}\README-FR.TXT"; DestDir: "{app}\doc\Smartmontools for Windows installer"; Components: core;
 Source: "{#BaseDir}\README-DE.TXT"; DestDir: "{app}\doc\Smartmontools for Windows installer"; Components: core;
@@ -109,15 +115,16 @@ Filename: {app}\bin\smartd.exe; Parameters: "install -c ""{app}\bin\smartd.conf"
 Name: {group}\Visit NetPower.fr; Filename: http://www.netpower.fr; Components: links;
 Name: {group}\Visit smartmontools Site; Filename: http://smartmontools.sourceforge.net; Components: links;
 Name: {group}\Manually configure Smart options; Filename: "{win}\notepad.exe"; Parameters: """{app}\bin\smartd.conf"""; Components: core;
+Name: {group}\Fix Bad sectors (use at own risk!); Filename: "{app}\bin\fix_badsectors.cmd"; Components: fixbadsecttools
 Name: "{group}\{cm:UninstallProgram, {#=AppName}}"; Filename: {uninstallexe}; 
 
 [Registry]
 Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlinfo\; ValueType: String; ValueData: {cm:smartinfo}; Components: regext\info; Flags: uninsdeletekey
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlinfo\command; ValueType: String; ValueData: """{pf32}\smartmontools for Windows\bin\runcmda.exe"" ""{pf32}\smartmontools for Windows\bin\smartctl.exe"" -a %L"; Components: regext\info; Flags: uninsdeletevalue
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlinfo\command; ValueType: String; ValueData: """{pf32}\smartmontools for Windows\bin\runcmda.exe"" ""{pf32}\smartmontools for Windows\bin\smartctl.exe"" -d auto -a %L"; Components: regext\info; Flags: uninsdeletevalue
 Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlshorttest\; ValueType: String; ValueData: {cm:smarttestshort}; Components: regext\tests; Flags: uninsdeletekey
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlshorttest\command; ValueType: String; ValueData: """{pf32}\smartmontools for Windows\bin\runcmda.exe"" ""{pf32}\smartmontools for Windows\bin\smartctl.exe"" -t short %L"; Components: regext\tests; Flags: uninsdeletevalue
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlshorttest\command; ValueType: String; ValueData: """{pf32}\smartmontools for Windows\bin\runcmda.exe"" ""{pf32}\smartmontools for Windows\bin\smartctl.exe"" -d auto -t short %L"; Components: regext\tests; Flags: uninsdeletevalue
 Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctllongtest\; ValueType: String; ValueData: {cm:smarttestlong}; Components: regext\tests; Flags: uninsdeletekey
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctllongtest\command; ValueType: String; ValueData: """{pf32}\smartmontools for Windows\bin\runcmda.exe"" ""{pf32}\smartmontools for Windows\bin\smartctl.exe"" -t long %L"; Components: regext\tests; Flags: uninsdeletevalue
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctllongtest\command; ValueType: String; ValueData: """{pf32}\smartmontools for Windows\bin\runcmda.exe"" ""{pf32}\smartmontools for Windows\bin\smartctl.exe"" -d auto -t long %L"; Components: regext\tests; Flags: uninsdeletevalue
 
 [UninstallRun]
 Filename: {sys}\sc.exe; Parameters: "delete ""{#SmartServiceName}"""; Components: core\service; Flags: runhidden

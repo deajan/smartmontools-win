@@ -29,6 +29,10 @@ en.localsupport=Show local messages on errors
 fr.localsupport=Afficher messages locaux en cas d'erreurs
 de.localsupport=Lokale Nachricht anzeigen falls Fehler auftreten
 
+en.fixbadsecttools=Fix bad sector script
+fr.fixbadsecttools=Script de réparation secteurs défectueux
+de.fixbadsecttools=Défekt Sektor reparatur Script
+
 en.regext=Context menus for drvies
 fr.regext=Menus contextuels des lecteurs
 de.regext=Kontextmenü für Laufwerke
@@ -205,6 +209,6 @@ en.mail_optionsDescription=Do not forget to check your antispam
 fr.mail_optionsDescription=N'oubliez pas de régler votre antispam
 de.mail_optionsDescription=Vergessen sie nicht ihr Antispam einzustellen
 
-en.testmessage=This is a test message sent by Smartmontools for Windows setup to check whether the smart service will be able to send you information about your hard drive health.\nThere is no real alert, please do not respond.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris "Ozy" de Jong.
-fr.testmessage=Ceci est un message de test envoyé par l'installeur Smartmontools for Windows afin de vérifier que le service smart puisse vous contacter concernant l'état de santé de votre disque dur.\nIl n'y a aucune alerte réele, merci de ne pas repondre.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris "Ozy" de Jong.
-de.testmessage=Dies ist eine Testnachricht die von Smartmontools for Windows Installer geschickt wurde.\n Es handelt sich nicht um einen Fehler, bitte nicht antworten.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris "Ozy" de Jong.
+en.testmessage=This is a test message sent by Smartmontools for Windows setup to check whether the smart service will be able to send you information about your hard drive health.\nThere is no real alert, please do not respond.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris `Ozy` de Jong.
+fr.testmessage=Ceci est un message de test envoyé par l'installeur Smartmontools for Windows afin de vérifier que le service smart puisse vous contacter concernant l'état de santé de votre disque dur.\nIl n'y a aucune alerte réele, merci de ne pas repondre.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris `Ozy` de Jong.
+de.testmessage=Dies ist eine Testnachricht die von Smartmontools for Windows Installer geschickt wurde.\n Es handelt sich nicht um einen Fehler, bitte nicht antworten.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris `Ozy` de Jong.

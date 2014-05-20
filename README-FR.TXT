@@ -24,6 +24,7 @@ Cet installeur utilise les logiciels suivants:
 - Inno Setup by Jordan Russel, http://www.jrsoftware.org
 - Gzip by Free Software Foundation, Inc. Copyright (C) 1992, 1993 Jean-loup Gailly, http://gnuwin32.sourceforge.net/
 - Base64 by Matthias Gärtner, http://www.rtner.de/software/base64.html
+- dd by Chrysocome and John Newbigin, http://www.chrysocome.net/dd
 
 Utilisation sous forme de script
 --------------------------------

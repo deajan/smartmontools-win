@@ -26,6 +26,7 @@ Smartmontools для Windows это альтернативная сборка пакета smartmontools (создан
 - Inno Setup by Jordan Russel, http://www.jrsoftware.org
 - Gzip by Free Software Foundation, Inc. Copyright (C) 1992, 1993 Jean-loup Gailly, http://gnuwin32.sourceforge.net/
 - Base64 by Matthias Gдrtner, http://www.rtner.de/software/base64.htm
+- dd by Chrysocome and John Newbigin, http://www.chrysocome.net/dd
 
 Параметры командной строки 
 -----------------------

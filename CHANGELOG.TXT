@@ -8,6 +8,13 @@ Known issues
 Changelog
 ---------
 
+[v6.2-2] from 20/05/2014
+
+- Improved computer name detection (thanks to tristangrimaux)
+- Added a basic (and use at your own risk) script that handles bad sectors
+- Updated Inno Setup to 5.5.4
+- Fixed and error with smtp password on silent installs
+
 [v6.2-1] from 27/07/2013
 
 - Updated to upstream release v6.2-1

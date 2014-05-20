@@ -1,4 +1,4 @@
-// GUI configuration page for alert options for v6.1-2 to 6.2-1
+// GUI configuration page for alert options for v6.1-2 to 6.2-2
 
 [code]
 procedure mail_options_Activate(Page: TWizardPage);
@@ -150,6 +150,7 @@ begin
     Width := ScaleX(169);
     Height := ScaleY(21);
     TabOrder := 7;
+    Text := smtpserveruser;
     Enabled := IsComponentSelected('core\service\mailsupport');
   end;
   
@@ -163,6 +164,7 @@ begin
     Width := ScaleX(169);
     Height := ScaleY(21);
     TabOrder := 8;
+    Text := smtpserverpass;
     Enabled := IsComponentSelected('core\service\mailsupport');
   end;
   
