@@ -1,8 +1,6 @@
 Smartmontools for Windows écrit par Orsiris "Ozy" de Jong
-Doc Rev 1.4 (C) 2012-2013          http://www.netpower.fr
----------------------------------------------------------
+Doc Rev 1.5 (L) 2012-2013          http://www.netpower.fr
 
-Pour l'utilisation en ligne de commandes, voir plus bas
 
 Smartmontools for Windows est un package alternatif  pour smartmontools de Bruce Allen et Christian Franke et a été crée afin de pouvoir installer rapidement smartmontools en tant que service, utiliser le support d'alertes mail et locales et préconfigurer les options de monitoring S.M.A.R.T.
 L'installation peut se faire en ligne de commandes pour un déploiement massif ou en graphique pour un utilisateur classique.
@@ -15,12 +13,12 @@ Un fichier nommé smart.log est alors crée incluant toutes les informations des d
 Ce logiciel et les logiciels qu'il installe sont sous licence GPL. Aucune responsabilité ne pourra être engagée cas de problèmes ou dysfonctionnements dus à l'usage de ce logiciel.
 
 Neanmoins, vous pouvez écrire un email à ozy [at] netpower.fr pour un obtenir un support limité durant mon temps libre.
-Si vous aimez ce produit ou l'utilisez de manière profesionnelle, vous pouvez sponsoriser le projet sur mon site, 99% des bénéfices seront reversés dans la machine à café :)
 
 Cet installeur utilise les logiciels suivants:
 
 - smartmontools by Bruce Allen, http://smartmontools.sourceforge.net
 - sendemail by Brandon Zehm, http://caspian.dotconf.net
+- Mailsend by Muhammad Muquit, http://www.muquit.com
 - Inno Setup by Jordan Russel, http://www.jrsoftware.org
 - Gzip by Free Software Foundation, Inc. Copyright (C) 1992, 1993 Jean-loup Gailly, http://gnuwin32.sourceforge.net/
 - Base64 by Matthias Gärtner, http://www.rtner.de/software/base64.html
@@ -29,7 +27,7 @@ Cet installeur utilise les logiciels suivants:
 Utilisation sous forme de script
 --------------------------------
 
-smartmontools-win-6.2-1.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflineofflinesect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [-u smtpuser] [-p smtppassword] [--tls=no]] [--localmessages=(yes|no)] [--warningmessage="Your personnal alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [/silent]
+smartmontools-win-6.3-1.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflinependingsect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [--port=25] [-u smtpuser] [-p smtppassword] [--security=(none|tls|ssl)]] [--localmessages=(yes|no)] [--warningmessage="Your custom alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [--mailer=(mailsend|sendemail)] [/silent]
 
 
 --short Expression régulière qui planifie l'exécution des autotests cours, par défaut tous les jours à 8h (voir plus bas ou voir le manuel du fichier smartd.conf)
@@ -50,6 +48,7 @@ Exemple: Pour un ensemble RAID intel de deux disques: --hddlist="/dev/csmi0,0;/d
 -f Adresse email source de l'alerte
 -t Adresse email de destination pour l'alerte
 -s Votre serveur smtp
+--port=Votre port smtp (par défaut 25)
 -u Nom d'utilisateur du serveur smtp (non obligatoire)
 -p Mot de passe du serveur smtp (non obligatoire)
 --tls (no|auto|yes) Utilisation de la sécurité TLS, désactivée par défaut
@@ -58,6 +57,7 @@ Exemple: Pour un ensemble RAID intel de deux disques: --hddlist="/dev/csmi0,0;/d
 --compresslogs=(yes|no) Active ou désactive la compression des logs, cette option est activée par défaut
 --keepfirstlog=(yes|no) Conserve le premier journal smart. Par défaut, ce paramètre est activé.
 --sendtestmessage=(yes|no) Active ou désactive l'envoi d'un email de test. Ce paramètre est activé par défaut.
+--mailer=(mailsend|sendemail) Il est possible d'utiliser un mailer alternatif (mailsend est le mailer par défaut)
 /silent ou /verysilent sont les paramètres permettant une installation silencieuse. Attention à spécifier ce paremètre avec le slash plutôt que des tirets car il s'agit d'un paramètre de Inno Setup lui même.
 
 Expressions régulieres des autotests
@@ -85,7 +85,11 @@ Cette ligne installe smartmontools avec le support des alertes par mail, l'autod
 
 Cet autre exemple utilise tls pour les emails, l'authentification du serveur SMTP, affiche également un message d'erreur local, monitore aussi les changements de température, planifie un autotest court tous les jours à 9h et un autotest long tous les mardis et dimanches à 2h du matin pour les disques /dev/pd0 et /dev/csmi0,1
 
-smartmontools-win-6.2-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com -u username@smtp.server.tld -p pA55W0RD --tls=yes --ignoretemperature=no --hddlist=/dev/pd0;/dev/csmi0,1 --short=S/../.././09 --long=L/../../[2,7]/02 --localmessages=yes /silent
+smartmontools-win-6.3-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com --port 587 -u username@smtp.server.tld -p pA55W0RD --tls=yes --ignoretemperature=no --hddlist=/dev/pd0;/dev/csmi0,1 --short=S/../.././09 --long=L/../../[2,7]/02 --localmessages=yes --mailer=sendemail /silent
 
+Gmail issues
+------------
 
+Si vous utilisez gmail, utilisez les paramètres --security=ssl et --port=465
+L'utilisation de --security=tls bloquera mailsend.
 --------------------------------------------------------------

@@ -1,4 +1,4 @@
-// String file for smartmontools for Windows installer v6.1-2 to 6.2-1
+// String file for smartmontools for Windows installer v6.3-1
 
 ; Installation dialog
 
@@ -130,9 +130,15 @@ de.sourcemailaddress=Quelle mail addresse
 en.destinationmailaddress=Destination address
 fr.destinationmailaddress=Addresse de destination
 de.destinationmailaddress=Zur email Addresse
-en.smtpserver=SMTP server[:port]
-fr.smtpserver=Serveur SMTP[:port]
-de.smtpserver=STMP Server[:port]
+en.smtpserver=SMTP server
+fr.smtpserver=Serveur SMTP
+de.smtpserver=STMP Server
+en.smtpport=Port
+fr.smtpport=Port
+de.smtpport=Port
+en.security=Security
+fr.security=Sécurité
+de.security=Sicherheit
 en.smtpserveruser=SMTP username (can be left blank)
 fr.smtpserveruser=Utilisateur STMP (peut être vide)
 de.smtpserveruser=SMTP Benutzername (kann leer sein)
@@ -144,17 +150,17 @@ en.localalertmessage=Local alert message
 fr.localalertmessage=Message d'alerte local
 de.localalertmessage=Lokaler Warnungstext
 
-en.compresslogs=Log compression before sending
-fr.compresslogs=Compression des logs avant envoi
-de.compresslogs=Log Komprimierung befor Sendung
+en.compresslogs=Log compression
+fr.compresslogs=Compression logs
+de.compresslogs=Log Komprimierung
 
 en.keepfirstlog=Archive first logfile
 fr.keepfirstlog=Archiver le premier fichier journal
 de.keepfirstlog=Erste Logdatei behalten
 
-en.sendtestmessage=>> Send test message
-fr.sendtestmessage=>> Envoyer mail de test
-de.sendtestmessage=>> Test Mail senden
+en.sendtestmessage=>> Send test
+fr.sendtestmessage=>> Envoyer test
+de.sendtestmessage=>> Test senden
 
 en.localmessages=Enable local messages popups
 fr.localmessages=Activer l'affichage de messages locaux
@@ -210,5 +216,5 @@ fr.mail_optionsDescription=N'oubliez pas de régler votre antispam
 de.mail_optionsDescription=Vergessen sie nicht ihr Antispam einzustellen
 
 en.testmessage=This is a test message sent by Smartmontools for Windows setup to check whether the smart service will be able to send you information about your hard drive health.\nThere is no real alert, please do not respond.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris `Ozy` de Jong.
-fr.testmessage=Ceci est un message de test envoyé par l'installeur Smartmontools for Windows afin de vérifier que le service smart puisse vous contacter concernant l'état de santé de votre disque dur.\nIl n'y a aucune alerte réele, merci de ne pas repondre.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris `Ozy` de Jong.
+fr.testmessage=Ceci est un message de test envoye par l'installeur Smartmontools for Windows afin de verifier que le service smart puisse vous contacter concernant l'etat de sante de votre disque dur.\nIl n'y a aucune alerte reele, merci de ne pas repondre.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris `Ozy` de Jong.
 de.testmessage=Dies ist eine Testnachricht die von Smartmontools for Windows Installer geschickt wurde.\n Es handelt sich nicht um einen Fehler, bitte nicht antworten.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris `Ozy` de Jong.

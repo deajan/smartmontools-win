@@ -3,10 +3,26 @@ Smartmontools for Windows package
 
 Known issues
 
-- When defining scheduled tests via CLI without using unattended setup, GUI parameters aren't updated accordingly (anyway, why would one do this ?)
+- Parameters from command line are ignored in GUI when not in silent mode (anyway, seems unnecessary)
+- Mailsend does not support multibyte chars when sending emails, so no accents and special chars can be printed in email.
 
 Changelog
 ---------
+
+[v6.3-1] from 13/08/2014
+
+- Updated to upstream release v6.3-1
+- Improved email sending (fixes gmail issues, see README)
+	- ATTENTION: command line parameters have changed
+	- Added new commandline mailer from https://github.com/muquit/mailsend
+	- SendEmail remains as alternative mailer
+	- Blat supported only stays in erroraction script
+- Fixed registry entries path for contextual menu on drives (thanks to Martin Hecklinger)
+- Updated Inno Setup building tools to v5.5.5
+
+[v6.2-3] from 27/05/2014
+
+- Improved sendemail syntax
 
 [v6.2-2] from 20/05/2014
 

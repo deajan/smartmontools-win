@@ -1,8 +1,8 @@
-:: Smartmontools for Windows package v6.2-1 erroraction.cmd
+:: Smartmontools for Windows package v6.3-1 erroraction.cmd
 :: http://www.netpower.fr
-:: (CopyLeft) 2013 by Orsiris "Ozy" de Jong
+:: (L) 2013-2014 by Orsiris "Ozy" de Jong
 
-:: Config should be changed in erroraction_config.cmd and not here
+:: Config can be changed in erroraction_config.cmd
 
 @echo off
 setlocal enabledelayedexpansion
@@ -83,6 +83,32 @@ call:CheckMailValues
 call:GetPwd
 IF "%MAILER%"=="blat" call:MailerBlat
 IF "%MAILER%"=="sendemail" call:MailerSendEmail
+IF "%MAILER%"=="mailsend" call:MailerMailSend
+GOTO:EOF
+
+:MailerMailSend
+set attachment=
+IF "%COMPRESS_LOGS%"=="yes" (
+	"%PROGRAM_PATH%\bin\gzip" -c "%SMART_LOG_FILE%" > "%SMART_LOG_FILE%.gz"
+	set attachment=-attach "%SMART_LOG_FILE%.gz"
+) ELSE (
+	set attachment=-attach "%SMART_LOG_FILE%"
+)
+
+IF "%SECURITY%"=="tls" set %encryption%=-starttls
+IF "%SECURITY%"=="ssl" set %encryption%=-ssl
+
+IF NOT "%SMTP_USER%"=="" set smtpuser=-auth -user %SMTP_USER%
+IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-pass %SMTP_PASSWORD%
+IF %DRY%==1 (
+	echo "%PROGRAM_PATH%\bin\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encrypt%
+) ELSE (
+	"%PROGRAM_PATH%\bin\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encrypt%
+)
+	IF NOT %ERRORLEVEL%==0 (
+	set SCRIPT_ERROR=1
+	Call:Log "Sending mail using mailsend failed."
+)
 GOTO:EOF
 
 :MailerSendEmail
@@ -93,12 +119,16 @@ IF "%COMPRESS_LOGS%"=="yes" (
 ) ELSE (
 	set attachment=-a "%SMART_LOG_FILE%"
 )
-IF NOT "%SMTP_USER%"=="" set smtpuser=-o username=%SMTP_USER%
-IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-o password=%SMTP_PASSWORD%
+
+IF "%SECURITY%"=="tls" set %encryption%=-o tls=yes
+IF "%SECURITY%"=="ssl" set %encryption%=-o tls=auto
+
+IF NOT "%SMTP_USER%"=="" set smtpuser=-xu %SMTP_USER%
+IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-xp %SMTP_PASSWORD%
 IF %DRY%==1 (
-	echo "%PROGRAM_PATH%\bin\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s "%SMTP_SERVER%" -o tls=%TLS% %smtpuser% %smtppassword%
+	echo "%PROGRAM_PATH%\bin\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
 ) ELSE (
-	"%PROGRAM_PATH%\bin\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s "%SMTP_SERVER%" -o tls=%TLS% %smtpuser% %smtppassword% >> "%ERROR_LOG_FILE%"
+	"%PROGRAM_PATH%\bin\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword% >> "%ERROR_LOG_FILE%"
 )
 	IF NOT %ERRORLEVEL%==0 (
 	set SCRIPT_ERROR=1
@@ -106,6 +136,7 @@ IF %DRY%==1 (
 )
 GOTO:EOF
 
+:: Blat support needs blat mail parameters already in registry
 :MailerBlat
 IF %DRY%==1 (
 	echo blat - -q -subject "%SUBJECT%" -to "%DESTINATION_MAIL%" < "%MAIL_CONTENT%"

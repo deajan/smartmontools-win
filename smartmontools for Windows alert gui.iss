@@ -1,4 +1,4 @@
-// GUI configuration page for alert options for v6.1-2 to 6.2-2
+// GUI configuration page for alert options for v6.3-1
 
 [code]
 procedure mail_options_Activate(Page: TWizardPage);
@@ -116,27 +116,41 @@ begin
     Parent := Page.Surface;
     Left := ScaleX(24);
     Top := ScaleY(184);
-    Width := ScaleX(169);
+    Width := ScaleX(129);
     Height := ScaleY(21);
     TabOrder := 5;
     Text := smtpserver;
     Enabled := IsComponentSelected('core\service\mailsupport');
   end;
 
-  { guitls }
-  guitls := TComboBox.Create(Page);
-  with guitls do
+  { guismtpport }
+  guismtpport := TEdit.Create(Page);
+  with guismtpport do
+  begin
+    Parent := Page.Surface;
+    Left := ScaleX(155);
+    Top := ScaleY(184);
+    Width := ScaleX(38);
+    Height := ScaleY(21);
+    TabOrder := 6;
+    Text := smtpport;
+    Enabled := IsComponentSelected('core\service\mailsupport');
+  end;
+
+  { guisecurity }
+  guisecurity := TComboBox.Create(Page);
+  with guisecurity do
   begin
     Parent := Page.Surface;
     Left := ScaleX(224);
     Top := ScaleY(104);
     Width := ScaleX(169);
     Height := ScaleY(21);
-    TabOrder := 6;
-    Text := tls;
-    Items.Add('no');
-    Items.Add('auto');
-    Items.Add('yes');
+    TabOrder := 7;
+    Text := security;
+    Items.Add('none');
+    Items.Add('tls');
+    Items.Add('ssl');
     Enabled := IsComponentSelected('core\service\mailsupport');
   end;
   
@@ -149,7 +163,7 @@ begin
     Top := ScaleY(144);
     Width := ScaleX(169);
     Height := ScaleY(21);
-    TabOrder := 7;
+    TabOrder := 8;
     Text := smtpserveruser;
     Enabled := IsComponentSelected('core\service\mailsupport');
   end;
@@ -163,7 +177,7 @@ begin
     Top := ScaleY(184);
     Width := ScaleX(169);
     Height := ScaleY(21);
-    TabOrder := 8;
+    TabOrder := 9;
     Text := smtpserverpass;
     Enabled := IsComponentSelected('core\service\mailsupport');
   end;
@@ -179,7 +193,23 @@ begin
     Height := ScaleY(17);
     Caption := ExpandConstant('{cm:compresslogs}');
     Checked := compresslogs;
-    TabOrder := 9;
+    TabOrder := 10;
+    Enabled := IsComponentSelected('core\service\mailsupport');
+  end;
+  
+  { guiselectmailer }
+  guiselectmailer := TComboBox.Create(Page);
+  with guiselectmailer do
+  begin
+    Parent := Page.Surface;
+    Left := ScaleX(200);
+    Top := ScaleY(209);
+    Width := ScaleX(70);
+    Height := ScaleY(21);
+    TabOrder := 7;
+    Text := mailer;
+    Items.Add('mailsend');
+    Items.Add('sendemail');
     Enabled := IsComponentSelected('core\service\mailsupport');
   end;
       
@@ -188,13 +218,13 @@ begin
   with guisendtestmessage do
   begin
     Parent := Page.Surface;
-    Left := ScaleX(224);
+    Left := ScaleX(274);
     Top := ScaleY(208);
-    Width := ScaleX(171);
+    Width := ScaleX(120);
     Height := ScaleY(23);
     Caption := ExpandConstant('{cm:sendtestmessage}');
-    TabOrder := 10;
-    OnClick := @SendTestMail;
+    TabOrder := 11;
+    OnClick := @SendTest;
     Enabled := IsComponentSelected('core\service\mailsupport');
   end;
 
@@ -259,9 +289,22 @@ begin
     Parent := Page.Surface;
     Left := ScaleX(24);
     Top := ScaleY(168);
-    Width := ScaleX(62);
+    Width := ScaleX(40);
     Height := ScaleY(14);
     Caption := ExpandConstant('{cm:smtpserver}');
+    Enabled := IsComponentSelected('core\service\mailsupport');
+  end;
+
+  { statictextport }
+  statictextport := TNewStaticText.Create(Page);
+  with statictextport do
+  begin
+    Parent := Page.Surface;
+    Left := ScaleX(155);
+    Top := ScaleY(168);
+    Width := ScaleX(40);
+    Height := ScaleY(14);
+    Caption := ExpandConstant('{cm:smtpport}');
     Enabled := IsComponentSelected('core\service\mailsupport');
   end;
     
@@ -277,6 +320,19 @@ begin
     Caption := ExpandConstant('{cm:destinationmailaddress}');
     Enabled := IsComponentSelected('core\service\mailsupport');
   end;
+  
+  { statictextmailer }
+  statictextmailer := TNewStaticText.Create(Page);
+  with statictextmailer do
+  begin
+    Parent := Page.Surface;
+    Left := ScaleX(166);
+    Top := ScaleY(212);
+    Width := ScaleX(123);
+    Height := ScaleY(14);
+    Caption := 'Mailer';
+    Enabled := IsComponentSelected('core\service\mailsupport');
+  end;
     
   { statictext104 }
   statictext104 := TNewStaticText.Create(Page);
@@ -287,11 +343,11 @@ begin
     Top := ScaleY(88);
     Width := ScaleX(18);
     Height := ScaleY(14);
-    Caption := 'TLS';
-    Font.Color := -16777208;
-    Font.Height := ScaleY(-11);
-    Font.Name := 'Tahoma';
-    ParentFont := False;
+    Caption := ExpandConstant('{cm:security}');;
+    //Font.Color := -16777208;
+    //Font.Height := ScaleY(-11);
+    //Font.Name := 'Tahoma';
+    //ParentFont := False;
     Enabled := IsComponentSelected('core\service\mailsupport');
   end;
 

@@ -3,15 +3,16 @@
 
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
-#define MajorVersion "6.2"
-#define MinorVersion "2"
-#define SubBuild "2"
+#define MajorVersion "6.3"
+#define MinorVersion "1"
+#define SubBuild "3"
 #define AppPublisher "Ozy de Jong"
 #define AppURL "http://www.netpower.fr"
 
-#define BaseDir "C:\PRJ\BTC\Smartmontools for Windows"
-#define SmartmonToolsDir "smartmontools-6.2-1.win32-setup"
-#define SendmailDir "sendEmail-v156"
+#define BaseDir "C:\ODJ\BTC\Smartmontools for Windows"
+#define SmartmonToolsDir "smartmontools-6.3-1.win32-setup"
+#define SendEmailDir "sendEmail-v156"
+#define MailsendDir "mailsend1.17b15"
 #define GzipDir "gzip-1.3.12-1-bin"
 #define ddDir "dd-0.6beta3"
 #define SmartServiceName "smartd"
@@ -85,12 +86,14 @@ Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartctl-nc.exe"; DestDir: "{app}\
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartd.exe"; DestDir: "{app}\bin"; Components: core\64bits; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\wtssendmsg.exe"; DestDir: "{app}\bin"; Components: core\64bits; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\doc\*"; DestDir: "{app}\doc\smartmontools"; Components: core; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#BaseDir}\{#SendmailDir}\README.TXT"; DestDir: "{app}\doc\sendmail"; Components: core\service\mailsupport;
-Source: "{#BaseDir}\{#SendmailDir}\README-BR.TXT"; DestDir: "{app}\doc\sendmail"; Components: core\service\mailsupport;
-Source: "{#BaseDir}\{#SendmailDir}\CHANGELOG.TXT"; DestDir: "{app}\doc\sendmail"; Components: core\service\mailsupport;
-Source: "{#BaseDir}\{#SendmailDir}\TODO.TXT"; DestDir: "{app}\doc\sendmail"; Components: core\service\mailsupport;
-Source: "{#BaseDir}\{#SendmailDir}\sendEmail.exe"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
-Source: "{#BaseDir}\{#SendmailDir}\sendEmail.pl"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
+Source: "{#BaseDir}\{#SendEmailDir}\README.TXT"; DestDir: "{app}\doc\sendemail"; Components: core\service\mailsupport;
+Source: "{#BaseDir}\{#SendEmailDir}\README-BR.TXT"; DestDir: "{app}\doc\sendemail"; Components: core\service\mailsupport;
+Source: "{#BaseDir}\{#SendEmailDir}\CHANGELOG.TXT"; DestDir: "{app}\doc\sendemail"; Components: core\service\mailsupport;
+Source: "{#BaseDir}\{#SendEmailDir}\TODO.TXT"; DestDir: "{app}\doc\sendemail"; Components: core\service\mailsupport;
+Source: "{#BaseDir}\{#SendEmailDir}\sendEmail.exe"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
+Source: "{#BaseDir}\{#SendEmailDir}\sendEmail.pl"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
+Source: "{#BaseDir}\{#MailSendDir}\mailsend.exe"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
+Source: "{#BaseDir}\{#MailSendDir}\LICENSE.TXT"; DestDir: "{app}\doc\mailsend"; Components: core\service\mailsupport;
 Source: "{#BaseDir}\{#GzipDir}\bin\gzip.exe"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
 Source: "{#BaseDir}\{#GzipDir}\man\cat1\gzip.1.txt"; DestDir: "{app}\doc\gzip"; Components: core\service\mailsupport;
 Source: "{#BaseDir}\{#ddDir}\dd.exe"; DestDir: "{app}\bin"; Components: fixbadsecttools;
@@ -120,11 +123,11 @@ Name: "{group}\{cm:UninstallProgram, {#=AppName}}"; Filename: {uninstallexe};
 
 [Registry]
 Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlinfo\; ValueType: String; ValueData: {cm:smartinfo}; Components: regext\info; Flags: uninsdeletekey
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlinfo\command; ValueType: String; ValueData: """{pf32}\smartmontools for Windows\bin\runcmda.exe"" ""{pf32}\smartmontools for Windows\bin\smartctl.exe"" -d auto -a %L"; Components: regext\info; Flags: uninsdeletevalue
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlinfo\command; ValueType: String; ValueData: """{app}\bin\runcmda.exe"" ""{app}\bin\smartctl.exe"" -d auto -a %L"; Components: regext\info; Flags: uninsdeletevalue
 Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlshorttest\; ValueType: String; ValueData: {cm:smarttestshort}; Components: regext\tests; Flags: uninsdeletekey
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlshorttest\command; ValueType: String; ValueData: """{pf32}\smartmontools for Windows\bin\runcmda.exe"" ""{pf32}\smartmontools for Windows\bin\smartctl.exe"" -d auto -t short %L"; Components: regext\tests; Flags: uninsdeletevalue
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlshorttest\command; ValueType: String; ValueData: """{app}\bin\runcmda.exe"" ""{app}\bin\smartctl.exe"" -d auto -t short %L"; Components: regext\tests; Flags: uninsdeletevalue
 Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctllongtest\; ValueType: String; ValueData: {cm:smarttestlong}; Components: regext\tests; Flags: uninsdeletekey
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctllongtest\command; ValueType: String; ValueData: """{pf32}\smartmontools for Windows\bin\runcmda.exe"" ""{pf32}\smartmontools for Windows\bin\smartctl.exe"" -d auto -t long %L"; Components: regext\tests; Flags: uninsdeletevalue
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctllongtest\command; ValueType: String; ValueData: """{app}\bin\runcmda.exe"" ""{app}\bin\smartctl.exe"" -d auto -t long %L"; Components: regext\tests; Flags: uninsdeletevalue
 
 [UninstallRun]
 Filename: {sys}\sc.exe; Parameters: "delete ""{#SmartServiceName}"""; Components: core\service; Flags: runhidden
@@ -155,7 +158,7 @@ var
   //// alert parameters
   localmessages, keepfirstlog: Boolean;
   warningmessage: String;
-  sourcemail, destinationmail, smtpserver, tls, smtpserveruser, smtpserverpass, b64smtpserverpass: String;
+  mailer, sourcemail, destinationmail, smtpserver, smtpport, security, smtpserveruser, smtpserverpass, b64smtpserverpass: String;
   compresslogs, sendtestmessage: Boolean;
 
   InitialLogFile: String;
@@ -176,9 +179,10 @@ var
   //// Gui-only alert parameters
   guilocalmessages, guikeepfirstlog: TCheckBox;
   guiwarningmessage: Tmemo;
-  guisourcemail, guidestinationmail, guismtpserver, guismtpserveruser: TEdit;
+  guisourcemail, guidestinationmail, guismtpserver, guismtpport, guismtpserveruser: TEdit;
   guismtpserverpass: TPasswordEdit;
-  guitls: TComboBox;
+  guisecurity: TComboBox;
+  guiselectmailer: TComboBox;
   // guilocalmessage: TMemo;
   guicompresslogs: TCheckBox;
   guisendtestmessage: TButton;
@@ -187,7 +191,7 @@ var
   
   //// Static texts
   statictext1, statictext2, statictext3, statictext4, statictext5, statictext6, statictext7: TNewStaticText;
-  statictext101, statictext102, statictext103, statictext104, statictext105, statictext106, statictext107: TNewStaticText;
+  statictext101, statictext102, statictext103, statictextport, statictext104, statictext105, statictext106, statictextmailer, statictext107: TNewStaticText;
 
 #include "smartmontools for Windows includes.iss"
 
@@ -291,14 +295,20 @@ begin
     maxskiptests := '7';
   
   // Get local & mail messages parameters from commandline
+  mailer := GetCommandlineParam('--mailer');
+  if (mailer = '') then
+    mailer := 'mailsend';
   sourcemail := GetCommandlineParam('-f');
   destinationmail := GetCommandlineParam('-t');
   smtpserver := GetCommandlineParam('-s');
+  smtpport := GetCommandlineParam('--port');
+  if (smtpport = '') then
+    smtpport := '25';
   smtpserveruser := GetCommandlineParam('-u');
   smtpserverpass := GetCommandlineParam('-p');
-  tls := GetCommandlineParam('--tls');
-  if (tls = '') then
-    tls := 'no';
+  security := GetCommandlineParam('--security');
+  if (security = '') then
+    security := 'none';
   if (GetCommandlineParam('--localmessages') = 'yes') then
     localmessages := true
   else
@@ -475,9 +485,11 @@ begin
     sourcemail := guisourcemail.Text;
     destinationmail := guidestinationmail.Text;
     smtpserver := guismtpserver.Text;
+    smtpport := guismtpport.Text;
     smtpserveruser := guismtpserveruser.Text;
     smtpserverpass := guismtpserverpass.Text;
-    tls := guitls.Text;
+    security := guisecurity.Text;
+    mailer := guiselectmailer.Text;
     localmessages := guilocalmessages.Checked;
     warningmessage := guiwarningmessage.Text;
     compresslogs := guicompresslogs.Checked;
@@ -540,16 +552,17 @@ begin
   if (smtpserver <> '') and IsComponentSelected('core\service\mailsupport') then
   begin
     SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set MAIL_ALERT=yes' + #13#10, True); 
-    SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set MAILER=sendemail' + #13#10, True);
+    SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set MAILER=' + mailer + #13#10, True);
     SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set SOURCE_MAIL=' + sourcemail + #13#10, True);
     SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set DESTINATION_MAIL=' + destinationmail + #13#10, True);
     SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set SMTP_SERVER=' + smtpserver + #13#10, True);
+    SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set SMTP_PORT=' + smtpport + #13#10, True);
     if (smtpserverpass <> '') then
     begin
       SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set SMTP_USER=' + smtpserveruser + #13#10, True);
       SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set SMTP_PASSWORD=' + b64smtpserverpass + #13#10, True);
     end;
-    SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set TLS=' + tls + #13#10, True);
+    SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set SECURITY=' + security + #13#10, True);
   end
   else
     SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'set MAIL_ALERT=no' + #13#10, True);
@@ -575,20 +588,49 @@ begin
   SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), ExpandConstant('set PROGRAM_PATH={app}') + #13#10, True);
 end;
 
-//// Send test mail
-Procedure SendTestMail(Sender: TObject);
+//// Send test mail using mailsend
+Procedure MailSendTest(Sender: TObject);
 var
   resultcode: Integer;
   parameters: String;
 begin
   GetMailGuiConfig();
-  Parameters := ExpandConstant('/c ' + '""{app}\bin\sendemail.exe"' + ' -f ' + sourcemail + ' -t ' + destinationmail + ' -u ' + 'Smartmontools for Windows setup test mail on %COMPUTERNAME%.%USERDOMAIN% (DNS: %USERDNSDOMAIN%) -m ' + ExpandConstant('{cm:testmessage}') + ' -s ' + smtpserver + ' -o tls=' + tls);
+  Parameters := ExpandConstant('/c ' + '""{app}\bin\mailsend.exe"' + ' -f ' + sourcemail + ' -t ' + destinationmail + ' -sub "Smartmontools for Windows setup test mail on %COMPUTERNAME%.%USERDOMAIN% (DNS: %USERDNSDOMAIN%)" -M "' + ExpandConstant('{cm:testmessage}') + '" -smtp ' + smtpserver + ' -port ' + smtpport);
+  if (FileExists(InitialLogFile))
+  then
+    Parameters := Parameters + ' -attach "' + InitialLogFile + '"';
+  if (smtpserverpass <> '')
+  then
+    Parameters := Parameters + ' -auth -user ' + smtpserveruser + ' -pass ' + smtpserverpass;
+  if (security = 'tls') then
+    Parameters := Parameters + ' -starttls';
+  if (security = 'ssl') then
+    Parameters := Parameters + ' -ssl';
+  Parameters := Parameters + ExpandConstant('" & ping 127.0.0.1 > nul');
+  if (Wizardsilent = true)
+  then
+    Exec(ExpandConstant('{cmd}'), parameters, '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
+  else
+    Exec(ExpandConstant('{cmd}'), parameters, '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+end;
+
+//// Send test mail using sendemail
+Procedure SendEmailTest(Sender: TObject);
+var
+  resultcode: Integer;
+  parameters: String;
+begin
+  GetMailGuiConfig();
+  Parameters := ExpandConstant('/c ' + '""{app}\bin\sendemail.exe"' + ' -f ' + sourcemail + ' -t ' + destinationmail + ' -u ' + 'Smartmontools for Windows setup test mail on %COMPUTERNAME%.%USERDOMAIN% (DNS: %USERDNSDOMAIN%) -m ' + ExpandConstant('{cm:testmessage}') + ' -s ' + smtpserver + ':' + smtpport);
   if (FileExists(InitialLogFile))
   then
     Parameters := Parameters + ' -a "' + InitialLogFile + '"';
   if (smtpserverpass <> '')
   then
     Parameters := Parameters + ' -o username=' + smtpserveruser + ' -o password=' + smtpserverpass;
+  if (security <> 'none')
+  then
+    Parameters := Parameters + ' -o tls=auto';
   // Timeout 4 seconds
   Parameters := Parameters + ExpandConstant('" & ping 127.0.0.1 > nul');
   if (Wizardsilent = true)
@@ -596,6 +638,14 @@ begin
     Exec(ExpandConstant('{cmd}'), parameters, '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
   else
     Exec(ExpandConstant('{cmd}'), parameters, '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+end;
+
+Procedure SendTest(Sender: TObject);
+begin
+  if (guiselectmailer.Text = 'sendemail') then
+    SendEmailTest(Sender)
+  else
+    MailSendTest(Sender);
 end;
 
 #include "smartmontools for Windows smart gui.iss"
@@ -612,11 +662,12 @@ begin
   end;
   if CurStep = ssDone then
   begin
-    GetMailGuiConfig();
+    if (Wizardsilent <> true) then
+      GetMailGuiConfig();
     b64smtpserverpass := Encode64(smtpserverpass);
     WriteConfigFiles();
     if ((sendtestmessage) and (Wizardsilent = true)) then
-      SendTestMail(Sender);
+      SendTest(Sender);
     LoadService('{#SmartServiceName}');    
   end;
 end;
