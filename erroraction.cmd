@@ -95,8 +95,8 @@ IF "%COMPRESS_LOGS%"=="yes" (
 	set attachment=-attach "%SMART_LOG_FILE%"
 )
 
-IF "%SECURITY%"=="tls" set %encryption%=-starttls
-IF "%SECURITY%"=="ssl" set %encryption%=-ssl
+IF "%SECURITY%"=="tls" set encryption=-starttls
+IF "%SECURITY%"=="ssl" set encryption=-ssl
 
 IF NOT "%SMTP_USER%"=="" set smtpuser=-auth -user %SMTP_USER%
 IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-pass %SMTP_PASSWORD%
@@ -120,8 +120,8 @@ IF "%COMPRESS_LOGS%"=="yes" (
 	set attachment=-a "%SMART_LOG_FILE%"
 )
 
-IF "%SECURITY%"=="tls" set %encryption%=-o tls=yes
-IF "%SECURITY%"=="ssl" set %encryption%=-o tls=auto
+IF "%SECURITY%"=="tls" set encryption=-o tls=yes
+IF "%SECURITY%"=="ssl" set encryption=-o tls=auto
 
 IF NOT "%SMTP_USER%"=="" set smtpuser=-xu %SMTP_USER%
 IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-xp %SMTP_PASSWORD%
