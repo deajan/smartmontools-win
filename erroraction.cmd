@@ -98,8 +98,8 @@ IF "%COMPRESS_LOGS%"=="yes" (
 IF "%SECURITY%"=="tls" set encryption=-starttls
 IF "%SECURITY%"=="ssl" set encryption=-ssl
 
-IF NOT "%SMTP_USER%"=="" set smtpuser=-auth -user %SMTP_USER%
-IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-pass %SMTP_PASSWORD%
+IF NOT "%SMTP_USER%"=="" set smtpuser=-auth -user "%SMTP_USER%"
+IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-pass "%SMTP_PASSWORD%"
 IF %DRY%==1 (
 	echo "%PROGRAM_PATH%\bin\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encrypt%
 ) ELSE (
@@ -123,8 +123,8 @@ IF "%COMPRESS_LOGS%"=="yes" (
 IF "%SECURITY%"=="tls" set encryption=-o tls=yes
 IF "%SECURITY%"=="ssl" set encryption=-o tls=auto
 
-IF NOT "%SMTP_USER%"=="" set smtpuser=-xu %SMTP_USER%
-IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-xp %SMTP_PASSWORD%
+IF NOT "%SMTP_USER%"=="" set smtpuser=-xu "%SMTP_USER%"
+IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-xp "%SMTP_PASSWORD%"
 IF %DRY%==1 (
 	echo "%PROGRAM_PATH%\bin\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
 ) ELSE (
