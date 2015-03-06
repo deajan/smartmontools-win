@@ -1,4 +1,4 @@
-:: Smartmontools for Windows package v6.3-1 erroraction.cmd
+:: Smartmontools for Windows package v6.3-2 erroraction.cmd
 :: http://www.netpower.fr
 :: (L) 2013-2014 by Orsiris "Ozy" de Jong
 

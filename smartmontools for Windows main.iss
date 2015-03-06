@@ -4,8 +4,8 @@
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.3"
-#define MinorVersion "1"
-#define SubBuild "3"
+#define MinorVersion "2"
+#define SubBuild "1"
 #define AppPublisher "Ozy de Jong"
 #define AppURL "http://www.netpower.fr"
 
