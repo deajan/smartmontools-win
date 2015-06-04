@@ -4,8 +4,8 @@
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.4"
-#define MinorVersion "1"
-#define SubBuild "2"
+#define MinorVersion "2"
+#define SubBuild "1"
 #define AppPublisher "Ozy de Jong"
 #define AppURL "http://www.netpower.fr"
 
@@ -246,7 +246,7 @@ begin
     autotestlong := false
   else
   begin
-    autotestlongregex := 'L/../../5/12';
+    autotestlongregex := 'L/../../5/13';
     autotestlong := true;
   end;
   hddlist := GetCommandlineParam('--hddlist');
