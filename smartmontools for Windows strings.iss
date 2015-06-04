@@ -215,6 +215,6 @@ en.mail_optionsDescription=Do not forget to check your antispam
 fr.mail_optionsDescription=N'oubliez pas de régler votre antispam
 de.mail_optionsDescription=Vergessen sie nicht ihr Antispam einzustellen
 
-en.testmessage=This is a test message sent by Smartmontools for Windows setup to check whether the smart service will be able to send you information about your hard drive health.\nThere is no real alert, please do not respond.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris `Ozy` de Jong.
-fr.testmessage=Ceci est un message de test envoye par l'installeur Smartmontools for Windows afin de verifier que le service smart puisse vous contacter concernant l'etat de sante de votre disque dur.\nIl n'y a aucune alerte reele, merci de ne pas repondre.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris `Ozy` de Jong.
-de.testmessage=Dies ist eine Testnachricht, die vom Smartmontools for Windows Installer geschickt wurde.\n Es handelt sich nicht um einen Fehler, bitte nicht antworten.\nSmartmontools for Windows {#MajorVersion}-{#MinorVersion} by Orsiris `Ozy` de Jong.
+en.testmessage=This is a test message sent by Smartmontools for Windows setup to check whether the smart service will be able to send you information about your hard drive health. There is no real alert, please do not respond. Smartmontools for Windows {#MajorVersion}-{#MinorVersion}.
+fr.testmessage=Ceci est un message de test envoye par l'installeur Smartmontools for Windows afin de verifier que le service smart puisse vous contacter concernant l'etat de sante de votre disque dur. Il n'y a aucune alerte reele, merci de ne pas repondre. Smartmontools for Windows {#MajorVersion}-{#MinorVersion}.
+de.testmessage=Dies ist eine Testnachricht, die vom Smartmontools for Windows Installer geschickt wurde.  Es handelt sich nicht um einen Fehler, bitte nicht antworten. Smartmontools for Windows {#MajorVersion}-{#MinorVersion}.

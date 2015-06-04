@@ -3,6 +3,8 @@ Smartmontools для Windows,    автор Orsiris "Ozy" de Jong
 Перевод на русский Кислейко Илья, osterik@gmail.com. Пожалуйста, напишите мне, если заметите ошибку в переводе.
 ---------------------------------------------------------
 
+[EDIT] Newer translation needed here, this document is out of date.
+
 Параметры командной строки см. ниже
 
 Smartmontools для Windows это альтернативная сборка пакета smartmontools (созданного Bruce Allen и Christian Franke), которая была сделана, чтоб иметь возможность быстрой и удобной установки smartmontools как сервиса, с поддержкой уведомлений на электронную почту и всплывающими окнами, с заранее настроенными политиками наблюдения за параметрами S.M.A.R.T.
@@ -34,7 +36,9 @@ Smartmontools для Windows это альтернативная сборка пакета smartmontools (создан
 smartmontools-win-6.1-4.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflinependingsect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [-u smtpuser] [-p smtppassword] [--tls=no]] [--localmessages=(yes|no)] [--warningmessage="Your custom alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [/silent]
 
 --short=S/../.././13 Регулярное выражение, определяющее расписание запуска краткого(базового) теста самопроверки диска, по умолчанию - каждый день в 8:00 (подробнее см. ниже или руководство по smartd.conf)
+	You may also set this parameter to no if you don't want to run short selftests
 --long=L/../../5/12 Регулярное выражение, определяющее расписание запуска полного(расширенного) теста самопроверки диска, по умолчанию - в пятницу в 8:00 (подробнее см. ниже или руководство по smartd.conf)
+	You may also set this parameter to no if you don't want to run long selftests
 --hddlist="/dev/pd0;/dev/pd1;/dev/sdc" Список дисков, разделённый двоеточиями. Если не указан - диски будут определены автоматически.
 Пример: --hddlist="/dev/csmi0,0;/dev/csmi0,1" для Intel RAID из двух дисков (Т.к. автоматическое определение не всегда срабатывает с Intel RAID) 
 --checkhealth=(yes|no) Наблюдать за статусом SMART, сообщать о возникших проблемах, по умолчанию включено

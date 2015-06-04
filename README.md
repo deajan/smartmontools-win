@@ -1,5 +1,5 @@
 Smartmontools for Windows written by Orsiris "Ozy" de Jong
-Doc Rev 1.5 (L) 2012-2014           http://www.netpower.fr
+Doc Rev 1.6 (L) 2012-2015           http://www.netpower.fr
 
 Smartmontools For Windows is an alternate package for smartmontools by Bruce Allen and Christian Franke, and has been created to quickly install smartmontools as service, support mail or local alerts, and preconfigure smart monitor options.
 Installation can be run silently with command line parameters for massive deployments, or graphically for standard users.
@@ -27,10 +27,15 @@ This installer uses the following software
 Command line parameters
 -----------------------
 
-smartmontools-win-6.3-1.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflinependingsect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [--port=25] [-u smtpuser] [-p smtppassword] [--security=(none|tls|ssl)]] [--localmessages=(yes|no)] [--warningmessage="Your custom alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [--mailer=(mailsend|sendemail)] [/silent]
+smartmontools-win-6.4-1.exe [--short=S/../.././10] [--long=L/../../5/13] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflinependingsect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [--port=25] [-u smtpuser] [-p smtppassword] [--security=(none|tls|ssl)]] [--localmessages=(yes|no)] [--warningmessage="Your custom alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [--mailer=(mailsend|sendemail)] [/silent]
 
---short=S/../.././13 Regular expression that determines when to run short selftest, set to everyday ay 08AM if not defined (see below or smartd.conf manual for details)
---long=L/../../5/12 Regular expression that determines when to run long selftest, set to friday at 13AM if not defined (see below or smartd.conf manual for details)
+--short=S/MM/DD/d/HH Regular expression that determines when to run short selftest, set to everyday day 10AM if not defined
+	You can disable short autotests by specifying --short=no
+	(see below or smartd.conf manual for details about the regular expressions used)
+	You may also set this parameter to no if you don't want to run short selftests
+--long=L/MM/DD/d/HH Regular expression that determines when to run long selftest, set to every friday at 13AM if not defined
+	You can disable long autotests by specifying --long=no
+	(see below or smartd.conf manual for details about the regular expressions used)
 --hddlist="/dev/pd0;/dev/pd1;/dev/sdc" Device list separated by semicolons. If not defined, hdds will be autodetected.
 Example: --hddlist="/dev/csmi0,0;/dev/csmi0,1" for an Intel RAID of two disks (intel raid autodetection does not always work, this does)
 --checkhealth=(yes|no) is activated by default
@@ -80,19 +85,10 @@ Examples
 
 A basic installation script:
 
-smartmontools-win-6.3-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com /silent
+smartmontools-win-6.4-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com /silent
 
 This line would silently install smartmontools mail alerts, autodetection of hdds, using all monitor parameters, and schedule a short selftest every day at 08AM and a long selftest every friday at 12AM.
 
-An other example would be that would use tls for mails, authentificate on your ISP's SMTP server, never ignore temperature changes, show local warning messages and have a short selftest every day at 09AM and a long selftest every tuesday and sunday at 02PM for the drives /dev/pd0 and /dev/csmi0,1 would look like
+An other example would be that would use tls for mails, authentificate on your ISP's SMTP server, never ignore temperature changes, show local warning messages, disables short tests and schedules a long selftest every tuesday and sunday at 02PM for the drives /dev/pd0 and /dev/csmi0,1 would look like
 
-smartmontools-win-6.3-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com --port 587 -u username@smtp.server.tld -p pA55W0RD --tls=yes --ignoretemperature=no --hddlist=/dev/pd0;/dev/csmi0,1 --short=S/../.././09 --long=L/../../[2,7]/02 --localmessages=yes --mailer=sendemail /silent
-
-Gmail issues
-------------
-
-When using gmail, please use --security=ssl and --port=465
-Using --security=tls will block mailsend.
-
---------------------------------------------------------------
-
+smartmontools-win-6.4-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com --port 587 -u username@smtp.server.tld -p pA55W0RD --tls=yes --ignoretemperature=no --hddlist=/dev/pd0;/dev/csmi0,1 --short=no --long=L/../../[2,7]/02 --localmessages=yes /silent

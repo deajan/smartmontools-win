@@ -3,14 +3,14 @@
 
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
-#define MajorVersion "6.3"
-#define MinorVersion "2"
+#define MajorVersion "6.4"
+#define MinorVersion "1"
 #define SubBuild "1"
 #define AppPublisher "Ozy de Jong"
 #define AppURL "http://www.netpower.fr"
 
 #define BaseDir "C:\ODJ\BTC\Smartmontools for Windows"
-#define SmartmonToolsDir "smartmontools-6.3-1.win32-setup"
+#define SmartmonToolsDir "smartmontools-6.4-1.win32-setup"
 #define SendEmailDir "sendEmail-v156"
 #define MailsendDir "mailsend1.17b15"
 #define GzipDir "gzip-1.3.12-1-bin"

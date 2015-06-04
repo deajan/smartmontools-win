@@ -9,6 +9,12 @@ Known issues
 Changelog
 ---------
 
+[v6.4-1] from 04/06/2015
+
+- Updated to upstream release v6.4-1
+- Updated german translation strings, thanks to Wieland Hoffmann (https://github.com/mineo)
+- Updated test email strings
+
 [v6.3-2] from 06/03/2015
 
 - Fixed some typos with SSL/TLS mail encryption preventing message sending (Thanks to spacekpe, https://github.com/spacekpe)

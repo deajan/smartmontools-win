@@ -1,5 +1,5 @@
 Smartmontools for Windows von Orsiris "Ozy" de Jong
-Doc Rev 1.5 (L) 2012-2013    http://www.netpower.fr
+Doc Rev 1.6 (L) 2012-2015    http://www.netpower.fr
 
 Smartmontools for Windows ist ein alternatives Package für "Smartmontools" von Bruce Allen und Christian Franke.
 Er wurde programmiert, um smartmontools als Dienst zu installieren, Warnungen per email versenden zu können oder Lokal anzeigen, und um die S.M.A.R.T-Überwachung zu konfigurieren.
@@ -29,10 +29,14 @@ Die folgende Software wird von diesen Program benutzt:
 Kommandozeilenparameter
 -----------------------
 
-smartmontools-win-6.3-1.exe [--short=S/../.././08] [--long=L/../../5/12] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflinependingsect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [--port=25] [-u smtpuser] [-p smtppassword] [--security=(none|tls|ssl)]] [--localmessages=(yes|no)] [--warningmessage="Your custom alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [--mailer=(mailsend|sendemail)] [/silent]
+smartmontools-win-6.4-1.exe [--short=S/../.././10] [--long=L/../../5/13] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflinependingsect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [--port=25] [-u smtpuser] [-p smtppassword] [--security=(none|tls|ssl)]] [--localmessages=(yes|no)] [--warningmessage="Your custom alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [--mailer=(mailsend|sendemail)] [/silent]
 
---short=S/../.././08 Regulärer Ausdruck mit Startzeit des kurzen Selbsttests. Wenn nicht angegeben: Jeden Tag 08:00 (siehe unten oder in der Manual-Seite zu smartd.conf)
---long=L/../../5/12  Regulärer Ausdruck mit Startzeit des langen Selbsttests.  Wenn nicht angegeben: Jeden Freitag um 12:00 (siehe unten oder in der Manual-Seite zu smartd.conf)
+--short=S/MM/DD/d/HH Regulärer Ausdruck mit Startzeit des kurzen Selbsttests. Wenn nicht angegeben: Jeden Tag 10:00
+	Sie können kurz Selbsttests auschalten mit --short=no
+	(Siehe weiter unten oder in der Manual-Seite zu smartd.conf für Erklärungen uber den Regulär Ausdruk)
+--long=L/MM/DD/d/HH  Regulärer Ausdruck mit Startzeit des langen Selbsttests.  Wenn nicht angegeben: Jeden Freitag um 13:00
+	Sie können lange Selbsttests auschalten mit --long=no
+	(Siehe weiter unten oder in der Manual-Seite zu smartd.conf für Erklärungen uber den Regulär Ausdruk)
 --hddlist="/dev/pd0;/dev/pd1;/dev/sdc" Liste mit durch Semikola getrennten Festplattengerätenamen. Wenn nicht angegeben, werden die Festplatten gesucht.
 Beispiel: Für ein Intel-RAID mit 2 Festplatten --hddlist="/dev/csmi0,0;/dev/csmi0,1" (Ein Intel-Raid wird nicht immer richtig automatisch gefunden. Diese manuelle Version funktioniert immer).
 --checkhealth=(yes|no) ist standardmäßig aktiviert
@@ -83,7 +87,7 @@ Beispiele
 
 Einfache automatische Installation:
 
-smartmontools-win-6.2-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com /silent
+smartmontools-win-6.4-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com /silent
 
 Diese Kommandozeile würde smartmontools mit per email verschickten Warnmeldungen installieren,
 Festplatten würden dabei automatisch erkannt werden, alle Überwachungsparameter würden verwendet werden,
@@ -92,15 +96,8 @@ Die Installation würde keine Meldungen ausgeben.
 
 
 Folgendes weitere Beispiel würde TLS für SMTP und Benutzerauthentifizierung auf dem SMTP-Server verwenden,
-keine Änderungen der Laufwerkstemperatur ignorieren, zeigt ebenfalls Lokale Warnungsmeldungen an und einen kurzen Selbsttest jeden Tag um 09:00
+keine Änderungen der Laufwerkstemperatur ignorieren, zeigt ebenfalls Lokale Warnungsmeldungen keine kurzen Selbsttests
 und einen langen Selbsttest jeden Dienstag und Sonntag um 02 Uhr morgens auf den Laufwerken /dev/pd0 und /dev/csmi0,1 ausführen:
 
-smartmontools-win-6.3-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com --port 587 -u username@smtp.server.tld -p pA55W0RD --tls=yes --ignoretemperature=no --hddlist=/dev/pd0;/dev/csmi0,1 --short=S/../.././09 --long=L/../../[2,7]/02 --localmessages=yes --mailer=sendemail /silent
+smartmontools-win-6.4-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com --port 587 -u username@smtp.server.tld -p pA55W0RD --tls=yes --ignoretemperature=no --hddlist=/dev/pd0;/dev/csmi0,1 --short=no --long=L/../../[2,7]/02 --localmessages=yes /silent
 
-Gmail issues
-------------
-
-Wenn sie gmail benützen, benützen sie die Parameter --security=ssl und --port=465
-Der Parameter --security=tls wird mailsend blockieren.
-
---------------------------------------------------------------
