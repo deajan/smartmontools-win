@@ -12,6 +12,7 @@ Changelog
 [v6.4-1] from 04/06/2015
 
 - Updated to upstream release v6.4-1
+- Fixed a bug where selftests syntax gets incorrect if command line regex is empty
 - Updated german translation strings, thanks to Wieland Hoffmann (https://github.com/mineo)
 - Updated test email strings
 

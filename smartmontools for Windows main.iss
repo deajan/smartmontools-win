@@ -5,7 +5,7 @@
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.4"
 #define MinorVersion "1"
-#define SubBuild "1"
+#define SubBuild "2"
 #define AppPublisher "Ozy de Jong"
 #define AppURL "http://www.netpower.fr"
 
@@ -41,10 +41,10 @@ MinVersion=0,5.0
 CloseApplications=no
 
 [Languages]
-Name: en; MessagesFile: "compiler:Default.isl"; InfoBeforeFile: "{#BaseDir}\README-EN.TXT";
+Name: en; MessagesFile: "compiler:Default.isl"; InfoBeforeFile: "{#BaseDir}\README.md";
 Name: fr; MessagesFile: "compiler:Languages\French.isl"; InfoBeforeFile: "{#BaseDir}\README-FR.TXT";
 Name: de; MessagesFile: "compiler:Languages\German.isl"; InfoBeforeFile: "{#BaseDir}\README-DE.TXT";
-Name: ru; MessagesFile: "compiler:Languages\Russian.isl"; InfoBeforeFile: "{#BaseDir}\README-EN.TXT";
+Name: ru; MessagesFile: "compiler:Languages\Russian.isl"; InfoBeforeFile: "{#BaseDir}\README-RU.TXT";
 
 [CustomMessages]
 #include "smartmontools for windows strings.iss"
@@ -100,7 +100,8 @@ Source: "{#BaseDir}\{#ddDir}\dd.exe"; DestDir: "{app}\bin"; Components: fixbadse
 Source: "{#BaseDir}\{#ddDir}\Copying.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
 Source: "{#BaseDir}\{#ddDir}\ddchanges.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
 Source: "{#BaseDir}\fix_badsectors.cmd"; DestDir: "{app}\bin"; Components: fixbadsecttools;
-Source: "{#BaseDir}\README-EN.TXT"; DestDir: "{app}\doc\Smartmontools for Windows installer"; Components: core;
+Source: "{#BaseDir}\README.md"; DestDir: "{app}\doc\Smartmontools for Windows installer"; Components: core;
+Source: "{#BaseDir}\README-RU.TXT"; DestDir: "{app}\doc\Smartmontools for Windows installer"; Components: core;
 Source: "{#BaseDir}\README-FR.TXT"; DestDir: "{app}\doc\Smartmontools for Windows installer"; Components: core;
 Source: "{#BaseDir}\README-DE.TXT"; DestDir: "{app}\doc\Smartmontools for Windows installer"; Components: core;
 Source: "{#BaseDir}\erroraction.cmd"; DestDir: "{app}\bin"; Components: core\service;
@@ -229,19 +230,19 @@ begin
 
   // Get smartd parameters from commandline
   autotestshortregex := GetCommandlineParam('--short');
-  if (Length(autotestshortregex) > 2) then
+  if (Length(autotestshortregex) > 2) and (autotestshortregex <> 'yes' ) then
     autotestshort := True
   else if (autotestshortregex = 'no') then
     autotestshort := false
   else
   begin
-    autotestshortregex := 'S/../.././08';
+    autotestshortregex := 'S/../.././10';
     autotestshort := true;
   end;
   autotestlongregex := GetCommandlineParam('--long');
-  if (Length(autotestlongregex) > 2) then
+  if (Length(autotestlongregex) > 2) and (autotestlongregex <> 'yes' ) then
     autotestlong := True
-  else if (autotestshortregex = 'no') then
+  else if (autotestlongregex = 'no') then
     autotestlong := false
   else
   begin
