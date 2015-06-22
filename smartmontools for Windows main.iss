@@ -4,7 +4,7 @@
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.4"
-#define MinorVersion "2"
+#define MinorVersion "3"
 #define SubBuild "1"
 #define AppPublisher "Ozy de Jong"
 #define AppURL "http://www.netpower.fr"
@@ -106,6 +106,7 @@ Source: "{#BaseDir}\README-FR.TXT"; DestDir: "{app}\doc\Smartmontools for Window
 Source: "{#BaseDir}\README-DE.TXT"; DestDir: "{app}\doc\Smartmontools for Windows installer"; Components: core;
 Source: "{#BaseDir}\erroraction.cmd"; DestDir: "{app}\bin"; Components: core\service;
 Source: "{#BaseDir}\base64.exe"; DestDir: "{app}\bin"; Components: core;
+Source: "{#BaseDir}\ScheduledTask.xml"; DestDir: "{app}\bin"; Components: core\service;
 
 [Run]
 ;Filename: {sys}\sc.exe; Parameters: "create ""{#SmartServiceName}"" binPath= ""\""{app}\bin\smartd.exe\"" --service -c \""{app}\bin\smartd.conf\"""" start= auto DisplayName= ""S.M.A.R.T. Harddisk lifeguard for Windows service"""; Components: core\service; OnlyBelowVersion: 6.0; Flags: runhidden
@@ -160,7 +161,7 @@ var
   localmessages, keepfirstlog: Boolean;
   warningmessage: String;
   mailer, sourcemail, destinationmail, smtpserver, smtpport, security, smtpserveruser, smtpserverpass, b64smtpserverpass: String;
-  compresslogs, sendtestmessage: Boolean;
+  compresslogs, sendtestmessage, scheduledsend: Boolean;
 
   InitialLogFile: String;
   
@@ -329,7 +330,6 @@ begin
     sendtestmessage := false
   else
     sendtestmessage := true;
-
   result := true;
 end;
 
@@ -587,6 +587,16 @@ begin
   SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), ExpandConstant('set SMART_LOG_FILE={app}\smart.log') + #13#10, True);
   SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), ExpandConstant('set ERROR_LOG_FILE={app}\erroraction.log') + #13#10, True);
   SaveStringToFile(ExpandConstant('{app}\bin\erroraction_config.cmd'), ExpandConstant('set PROGRAM_PATH={app}') + #13#10, True);
+  
+  //// Create scheduled tasks configuration file
+  SaveStringToFile(ExpandConstant('{app}\bin\scheduled_send.cmd'), ':: This file was generated on ' + GetDateTimeString('dd mmm yyyy', #0, #0) + ' by smartmontools for Windows package' + #13#10, False);
+  SaveStringToFile(ExpandConstant('{app}\bin\scheduled_send.cmd'), ':: http://www.netpower.fr' + #13#10#13#10, True);
+  SaveStringToFile(ExpandConstant('{app}\bin\scheduled_send.cmd'), '@echo off' + #13#10, True);
+  SaveStringToFile(ExpandConstant('{app}\bin\scheduled_send.cmd'), ':: Attention: schtasks cannot set Run if missed' + #13#10, True);
+  SaveStringToFile(ExpandConstant('{app}\bin\scheduled_send.cmd'), ExpandConstant('schtasks /CREATE /TN "Smartmontools for Windows Test" /XML "{app}\bin\ScheduledTask.xml" /RU System /F') + #13#10, True);
+
+  //// Modify Scheduled task file with app path
+  FileReplaceString(ExpandConstant('{app}\bin\ScheduledTask.xml'), '[PATH]', ExpandConstant('{app}\bin'));
 end;
 
 //// Send test mail using mailsend

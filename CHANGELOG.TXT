@@ -9,6 +9,11 @@ Known issues
 Changelog
 ---------
 
+[v6.4-3] from 22/06/2015
+
+- Added scheduled_send.cmd file (arbitrary file to schedule a erroraction.cmd --test) with ScheduledTask.xml file
+- Added --test option to erroraction.cmd to check if service is running and send an email / display local message depending on config
+
 [v6.4-2] from 04/06/2015
 
 - Updated the long tests default execution hour accordingly with the new documentation

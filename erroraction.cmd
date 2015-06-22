@@ -1,11 +1,19 @@
-:: Smartmontools for Windows package v6.3-2 erroraction.cmd
+:: Smartmontools for Windows package v6.4-3 erroraction.cmd
 :: http://www.netpower.fr
-:: (L) 2013-2014 by Orsiris "Ozy" de Jong
+:: (L) 2013-2015 by Orsiris "Ozy" de Jong
 
 :: Config can be changed in erroraction_config.cmd
 
 @echo off
 setlocal enabledelayedexpansion
+
+:: Get currentdir
+:: Get Script working dir if erroraction.cmd is launched as scheduled task
+set curdir=%~dp0
+set curdir=%curdir:~0,-1%
+
+:: Load autgenerated configuration
+call "%curdir%\erroraction_config.cmd"
 
 :: Load autgenerated configuration
 call "erroraction_config.cmd"
@@ -19,6 +27,7 @@ set newline=^
 
 
 IF "%1"=="--dryrun" ( set DRY=1 ) ELSE ( set DRY=0 )
+IF "%1"=="--test" ( call:Tests ) ELSE ( set TEST=0 )
 
 call:GetComputerName
 call:CreateSmartOutput
@@ -30,6 +39,18 @@ GOTO END
 :Log
 echo %~1 >> "%ERROR_LOG_FILE%"
 IF "%DEBUG%"=="yes" echo %~1
+GOTO:EOF
+
+:Tests
+set TEST=1
+SC QUERY smartd | FINDSTR "RUNNING" > nul
+IF "%ERRORLEVEL%"=="0" (
+set SERVICE_RUNS=1
+set WARNING_MESSAGE=Smartmontools for Windows test: Service runinng
+) ELSE (
+set SERVICE_RUNS=0
+set WARNING_MESSAGE=Smartmontools for Windows test: Service not running
+)
 GOTO:EOF
 
 :CheckMailValues
@@ -77,8 +98,13 @@ GOTO:EOF
 
 :Mailer
 IF NOT "%MAIL_ALERT%"=="yes" GOTO:EOF
+IF "!TEST!"=="1" (
+set SUBJECT=Smart test on %COMPUTER_FQDN%
+) ELSE (
 set SUBJECT=Smart Error on %COMPUTER_FQDN%
+)
 set MAIL_CONTENT=%DATE% - %WARNING_MESSAGE%
+
 call:CheckMailValues
 call:GetPwd
 IF "%MAILER%"=="blat" call:MailerBlat

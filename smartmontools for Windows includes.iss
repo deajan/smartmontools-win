@@ -1,4 +1,4 @@
-//// General purpose functions (2707201302)
+//// General purpose functions (2206201501)
 
 [code]
 //// Check if 64bit installation is not selected
@@ -184,4 +184,31 @@ begin
 	else
 		Exit; // finish at unknown
 	end;
+end;
+
+function FileReplaceString(const FileName, SearchString, ReplaceString: string):boolean;
+var
+  MyFile : TStrings;
+  MyText : string;
+begin
+  MyFile := TStringList.Create;
+
+  try
+    result := true;
+
+    try
+      MyFile.LoadFromFile(FileName);
+      MyText := MyFile.Text;
+
+      if StringChangeEx(MyText, SearchString, ReplaceString, True) > 0 then //Only save if text has been changed.
+      begin;
+        MyFile.Text := MyText;
+        MyFile.SaveToFile(FileName);
+      end;
+    except
+      result := false;
+    end;
+  finally
+    MyFile.Free;
+  end;
 end;
