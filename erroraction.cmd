@@ -93,7 +93,7 @@ IF NOT "%USERDNSDOMAIN%"=="" set COMPUTER_FQDN=%COMPUTERNAME%.%USERDNSDOMAIN%
 GOTO:EOF
 
 :GetPwd
-FOR /F %%i IN ('"echo %SMTP_PASSWORD% | base64 -d"') DO SET SMTP_PASSWORD=%%i
+FOR /F "delims=" %%i IN ('"echo %SMTP_PASSWORD% | base64 -d"') DO SET SMTP_PASSWORD=%%i
 GOTO:EOF
 
 :Mailer
@@ -154,7 +154,7 @@ IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-xp "%SMTP_PASSWORD%"
 IF %DRY%==1 (
 	echo "%PROGRAM_PATH%\bin\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
 ) ELSE (
-	"%PROGRAM_PATH%\bin\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword% >> "%ERROR_LOG_FILE%"
+	"%PROGRAM_PATH%\bin\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
 )
 	IF NOT %ERRORLEVEL%==0 (
 	set SCRIPT_ERROR=1

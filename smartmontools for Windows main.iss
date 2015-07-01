@@ -5,7 +5,8 @@
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.4"
 #define MinorVersion "3"
-#define SubBuild "1"
+#define SubBuild "2"
+#define BuildType "-testing"
 #define AppPublisher "Ozy de Jong"
 #define AppURL "http://www.netpower.fr"
 
@@ -32,7 +33,7 @@ DefaultDirName={pf32}\{#AppName}
 DefaultGroupName=smartmontools for Windows
 LicenseFile={#BaseDir}\{#SmartmonToolsDir}\doc\COPYING.txt
 OutputDir={#BaseDir}
-OutputBaseFilename={#AppShortName}-{#MajorVersion}-{#MinorVersion}
+OutputBaseFilename={#AppShortName}-{#MajorVersion}-{#MinorVersion}{#BuildType}
 Compression=lzma2/max
 SolidCompression=yes
 VersionInfoCopyright=Written in 2012-2013 by Orsiris "Ozy" de Jong http://www.netpower.fr
@@ -612,7 +613,7 @@ begin
     Parameters := Parameters + ' -attach "' + InitialLogFile + '"';
   if (smtpserverpass <> '')
   then
-    Parameters := Parameters + ' -auth -user ' + smtpserveruser + ' -pass ' + smtpserverpass;
+    Parameters := Parameters + ' -auth -user "' + smtpserveruser + '" -pass "' + smtpserverpass + '"';
   if (security = 'tls') then
     Parameters := Parameters + ' -starttls';
   if (security = 'ssl') then
@@ -638,7 +639,7 @@ begin
     Parameters := Parameters + ' -a "' + InitialLogFile + '"';
   if (smtpserverpass <> '')
   then
-    Parameters := Parameters + ' -o username=' + smtpserveruser + ' -o password=' + smtpserverpass;
+    Parameters := Parameters + ' -o username="' + smtpserveruser + '" -o password="' + smtpserverpass + '"';
   if (security <> 'none')
   then
     Parameters := Parameters + ' -o tls=auto';

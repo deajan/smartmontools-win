@@ -83,7 +83,7 @@ begin
     Width := ScaleX(41);
     Height := ScaleY(21);
     TabOrder := 2;
-    Text := '12';
+    Text := '13';
     Items.Add('00');      Items.Add('01');      Items.Add('02');      Items.Add('03');
     Items.Add('04');      Items.Add('05');      Items.Add('06');      Items.Add('07');
     Items.Add('08');      Items.Add('09');      Items.Add('10');      Items.Add('11');
@@ -202,7 +202,7 @@ begin
     Width := ScaleX(41);
     Height := ScaleY(21);
     TabOrder := 10;
-    Text := '08';
+    Text := '10';
     Items.Add('00');      Items.Add('01');      Items.Add('02');      Items.Add('03');
     Items.Add('04');      Items.Add('05');      Items.Add('06');      Items.Add('07');
     Items.Add('08');      Items.Add('09');      Items.Add('10');      Items.Add('11');
