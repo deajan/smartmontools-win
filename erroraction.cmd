@@ -127,9 +127,9 @@ IF "%SECURITY%"=="ssl" set encryption=-ssl
 IF NOT "%SMTP_USER%"=="" set smtpuser=-auth -user "%SMTP_USER%"
 IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-pass "%SMTP_PASSWORD%"
 IF %DRY%==1 (
-	echo "%PROGRAM_PATH%\bin\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encrypt%
+	echo "%PROGRAM_PATH%\bin\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encryption%
 ) ELSE (
-	"%PROGRAM_PATH%\bin\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encrypt%
+	"%PROGRAM_PATH%\bin\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encryption%
 )
 	IF NOT %ERRORLEVEL%==0 (
 	set SCRIPT_ERROR=1
