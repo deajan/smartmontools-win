@@ -9,8 +9,9 @@ Known issues
 Changelog
 ---------
 
-[v6.4-3] from 01/07/2015
+[v6.4-3] from 14/07/2015
 
+- Fixed mail attachment mimetype using mailsend (Thanks to Georges M. Zwingelstein, https://github.com/GMZwinge)
 - Fixed mail passwords containing spaces didn't work
 - Fixed sendemail didn't work properly
 - Added scheduled_send.cmd file (arbitrary file to schedule a erroraction.cmd --test) with ScheduledTask.xml file
@@ -58,7 +59,7 @@ Changelog
 
 - Updated to upstream release v6.2-1
 - Removed interactive service fix (upstream fixed it)
-- Fixed a bug with silent mail parameters (thanks to Matth‰us Banach for pointing that out)
+- Fixed a bug with silent mail parameters (thanks to Matth√§us Banach for pointing that out)
 - Added the intial log to the test mail as attachment (Feature asked by Ilya Kisleyko)
 - Added Russian translation (thanks to Ilya Kisleyko)
 - Improved intial log creation
