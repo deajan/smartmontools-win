@@ -116,7 +116,7 @@ GOTO:EOF
 set attachment=
 IF "%COMPRESS_LOGS%"=="yes" (
 	"%PROGRAM_PATH%\bin\gzip" -c "%SMART_LOG_FILE%" > "%SMART_LOG_FILE%.gz"
-	set attachment=-attach "%SMART_LOG_FILE%.gz"
+	set attachment=-attach "%SMART_LOG_FILE%.gz,application/gzip,a"
 ) ELSE (
 	set attachment=-attach "%SMART_LOG_FILE%"
 )
