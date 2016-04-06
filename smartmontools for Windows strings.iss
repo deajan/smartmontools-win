@@ -23,7 +23,7 @@ de.coreservice=smartmontools Service
 
 en.mailsupport=Send mails on errors
 fr.mailsupport=Envoi d'emails en cas d'erreurs
-de.mailsupport=Email senden falls Fehler auftreten
+de.mailsupport=E-Mail senden falls Fehler auftreten
 
 en.localsupport=Show local messages on errors
 fr.localsupport=Afficher messages locaux en cas d'erreurs
@@ -43,7 +43,7 @@ de.updatedb=Laufwerk-Datenbank erneuern
 
 en.authorlinks=Author's website ins starmenu
 fr.authorlinks=Lien vers le site de l'auteur dans le menu démarrer
-de.authorlinks=Link zur Webeite des Autors
+de.authorlinks=Link zur Webseite des Autors
 
 ; Registry entries
 en.smartinfo=Disk SMART info
@@ -51,13 +51,13 @@ fr.smartinfo=Informations SMART du disque
 de.smartinfo=SMART-Laufwerk-Infos
 en.smarttests=SMART tests
 fr.smarttests=Tests SMART
-de.smarttests=SMART Tests
+de.smarttests=SMART-Tests
 en.smarttestshort=Execute short SMART test
 fr.smarttestshort=Exécuter un test rapide SMART
-de.smarttestshort=SMART-Schelltest durchführen
+de.smarttestshort=SMART-Schnelltest durchführen
 en.smarttestlong=Execute long SMART test
 fr.smarttestlong=Exécuter un test long SMART
-de.smarttestlong=Langen SMART test durchführen
+de.smarttestlong=Langen SMART-Test durchführen
 
 ; GUI Static texts
 en.hddautodetection=Auto detect disks
@@ -106,7 +106,7 @@ de.reportselftesterrors=Selbsttest-Fehler-Erhöhung anzeigen
 
 en.checkfailureusage=Check for failures in usage attribs
 fr.checkfailureusage=Tester erreurs attributs d'usage
-de.checkfailureusage=Betrieb Attibute Fehler anzeigen
+de.checkfailureusage=Betriebsattibut-Fehler anzeigen
 
 en.reportofflineuncorrectsect=Report increase Offline Uncorrect Sect
 fr.reportofflineuncorrectsect=Rapporter augm. Uncorrectable Sect
@@ -126,13 +126,13 @@ de.skippedtests=Ignorierte Tests
 
 en.sourcemailaddress=Source email address
 fr.sourcemailaddress=Adresse email source
-de.sourcemailaddress=Quell-Email-Addresse
+de.sourcemailaddress=Quell-E-Mail-Adresse
 en.destinationmailaddress=Destination address
 fr.destinationmailaddress=Addresse de destination
-de.destinationmailaddress=Ziel-Email-Addresse
+de.destinationmailaddress=Ziel-E-Mail-Adresse
 en.smtpserver=SMTP server
 fr.smtpserver=Serveur SMTP
-de.smtpserver=STMP-Server
+de.smtpserver=SMTP-Server
 en.smtpport=Port
 fr.smtpport=Port
 de.smtpport=Port
@@ -194,27 +194,27 @@ de.warningmessagecustom=Warnmeldungstext
 
 en.warningmessage=WARNING: One of your hard disks has SMART errors. Please write down this message and contact your technical support as soon as possible.
 fr.warningmessage=ATTENTION: Un de vos disques durs rencontre des erreurs SMART. Merci de bien vouloir noter ce message et contacter votre support technique aussi rapidement que possible.
-de.warningmessage=WARNUNG: Eine ihrer Festplatten hat SMART-Fehler. Bitte schreiben sie diese Nachricht auf und kontaktieren sie ihren technischen Support so schnell wie möglich.
+de.warningmessage=WARNUNG: Eine Ihrer Festplatten hat SMART-Fehler. Bitte schreiben Sie diese Nachricht auf und kontaktieren Sie Ihren technischen Support so schnell wie möglich.
 
 en.smartmailerrormessage=WARNING: One of your hard disks has reported SMART errors.
 fr.smartmailerrormessage=ATTENTION: L'un de vos disques durs a rapporte des erreurs SMART.
-de.smartmailerrormessage=WARNUNG: Eine ihrer Festplatten hat SMART-Fehler gemeldet.
+de.smartmailerrormessage=WARNUNG: Eine Ihrer Festplatten hat SMART-Fehler gemeldet.
 
 en.smartd_confCaption=Custom S.M.A.R.T. service options
 fr.smartd_confCaption=Options du service S.M.A.R.T.
 de.smartd_confCaption=S.M.A.R.T.-Service-Einstellungen
 en.smartd_confDescription=You can change standard configuration here
 fr.smartd_confDescription=Vous pouvez personnaliser votre configuration ici
-de.smartd_confDescription=Sie können ihre Einstellungen hier ändern
+de.smartd_confDescription=Sie können Ihre Einstellungen hier ändern
 
 
 en.mail_optionsCaption=Log and mail sending options
 fr.mail_optionsCaption=Configuration des journaux et d'envoi de mails 
-de.mail_optionsCaption=Log- und Email-Einstellungen
+de.mail_optionsCaption=Log- und E-Mail-Einstellungen
 en.mail_optionsDescription=Do not forget to check your antispam
 fr.mail_optionsDescription=N'oubliez pas de régler votre antispam
-de.mail_optionsDescription=Vergessen sie nicht ihr Antispam einzustellen
+de.mail_optionsDescription=Vergessen Sie nicht, Ihren Antispam zu prüfen
 
 en.testmessage=This is a test message sent by Smartmontools for Windows setup to check whether the smart service will be able to send you information about your hard drive health. There is no real alert, please do not respond. Smartmontools for Windows {#MajorVersion}-{#MinorVersion}.
 fr.testmessage=Ceci est un message de test envoye par l'installeur Smartmontools for Windows afin de verifier que le service smart puisse vous contacter concernant l'etat de sante de votre disque dur. Il n'y a aucune alerte reele, merci de ne pas repondre. Smartmontools for Windows {#MajorVersion}-{#MinorVersion}.
-de.testmessage=Dies ist eine Testnachricht, die vom Smartmontools for Windows Installer geschickt wurde.  Es handelt sich nicht um einen Fehler, bitte nicht antworten. Smartmontools for Windows {#MajorVersion}-{#MinorVersion}.
+de.testmessage=Dies ist eine Testnachricht, die vom Smartmontools for Windows Installer geschickt wurde. Es handelt sich nicht um einen Fehler, bitte nicht antworten. Smartmontools for Windows {#MajorVersion}-{#MinorVersion}.
