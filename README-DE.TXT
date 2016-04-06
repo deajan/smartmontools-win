@@ -1,20 +1,20 @@
-Smartmontools for Windows von Orsiris "Ozy" de Jong
-Doc Rev 1.6 (L) 2012-2015    http://www.netpower.fr
+ï»¿Smartmontools for Windows Package
+(C) 2012-2016 Orsiris de Jong - http://www.netpower.fr
 
-Smartmontools for Windows ist ein alternatives Package für "Smartmontools" von Bruce Allen und Christian Franke.
-Er wurde programmiert, um smartmontools als Dienst zu installieren, Warnungen per email versenden zu können oder Lokal anzeigen, und um die S.M.A.R.T-Überwachung zu konfigurieren.
-Das Installationsprogramm kann skriptbasiert per Kommandozeile oder graphisch für eine normale Einzelplatzinstallation benutzt werden.
+Smartmontools for Windows ist ein alternatives Package fÃ¼r "Smartmontools" von Bruce Allen und Christian Franke.
+Er wurde programmiert, um smartmontools als Dienst zu installieren, Warnungen per email versenden zu kÃ¶nnen oder Lokal anzeigen, und um die S.M.A.R.T-Ãœberwachung zu konfigurieren.
+Das Installationsprogramm kann skriptbasiert per Kommandozeile oder graphisch fÃ¼r eine normale Einzelplatzinstallation benutzt werden.
 
-Die Konfigurationsdateien werden automatisch geschrieben (können aber trozdem per Hand geändert werden).
+Die Konfigurationsdateien werden automatisch geschrieben (kÃ¶nnen aber trozdem per Hand geÃ¤ndert werden).
 
-Ein Dienst "SmartD" wird installiert und für automatischen Start konfiguriert.
-Dieser Dienst sucht nach allen Laufwerken, die smartmontools überwachen kann und schickt eine email, wenn ein Fehler auftritt.
-Eine Logdatei "smart.log" wird angelegt mit allen Laufwerksinformationen, die auch per email geschickt werden. Eine Logdatei "erroraction.log" wird ebenfalls angelegt und enthält alle email Sendedaten und lokale Fehlermeldungen.
+Ein Dienst "SmartD" wird installiert und fÃ¼r automatischen Start konfiguriert.
+Dieser Dienst sucht nach allen Laufwerken, die smartmontools Ã¼berwachen kann und schickt eine email, wenn ein Fehler auftritt.
+Eine Logdatei "smart.log" wird angelegt mit allen Laufwerksinformationen, die auch per email geschickt werden. Eine Logdatei "erroraction.log" wird ebenfalls angelegt und enthÃ¤lt alle email Sendedaten und lokale Fehlermeldungen.
 
 Diese Software und die Software, die installiert wird, wird unter der GPL-Lizenz verteilt.
-Es wird keine Haftung für eventuelle Probleme oder Störungen übernommen, die durch den Einsatz dieser Software verursacht werden.
+Es wird keine Haftung fÃ¼r eventuelle Probleme oder StÃ¶rungen Ã¼bernommen, die durch den Einsatz dieser Software verursacht werden.
 
-Dennoch können sie gerne eine email an ozy [at] netpower.fr schreiben für eingeschränkte Unterstüzung in meiner Freizeit.
+Dennoch kÃ¶nnen sie gerne eine email an ozy [at] netpower.fr schreiben fÃ¼r eingeschrÃ¤nkte UnterstÃ¼zung in meiner Freizeit.
 
 Die folgende Software wird von diesen Program benutzt:
 
@@ -23,62 +23,68 @@ Die folgende Software wird von diesen Program benutzt:
 - Mailsend by Muhammad Muquit, http://www.muquit.com
 - Inno Setup by Jordan Russel, http://www.jrsoftware.org
 - Gzip by Free Software Foundation, Inc. Copyright (C) 1992, 1993 Jean-loup Gailly, http://gnuwin32.sourceforge.net/
-- Base64 by Matthias Gärtner, http://www.rtner.de/software/base64.htm
+- Base64 by Matthias GÃ¤rtner, http://www.rtner.de/software/base64.htm
 - dd by Chrysocome and John Newbigin, http://www.chrysocome.net/dd
+
+BinÃ¤rdatein
+-----------
+
+Sie kÃ¶nnen die letzten BinÃ¤rdatein runterladen bei http://www.netpower.fr/smartmontools-win
+Sie kÃ¶nnen ebenfalls selbst Kompilieren mit Inno Setup und die oben gennanten Tools.
 
 Kommandozeilenparameter
 -----------------------
 
-smartmontools-win-6.4-1.exe [--short=S/../.././10] [--long=L/../../5/13] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflinependingsect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [--port=25] [-u smtpuser] [-p smtppassword] [--security=(none|tls|ssl)]] [--localmessages=(yes|no)] [--warningmessage="Your custom alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [--mailer=(mailsend|sendemail)] [/silent]
+smartmontools-win-6.4-4.exe [--short=S/../.././10] [--long=L/../../5/13] [--hddlist="/dev/pd0;/dev/csmi0,1"] [--checkhealth=(yes|no)] [--checkataerrors=(yes|no)] [--checkfailureusae=(yes|no)] [--reportselftesterrors=(yes|no] [--reportcurrentpendingsect=(yes|no)] [--reportofflinependingsect=(yes|no)] [--trackchangeusageprefail=(yes|no)] [--ignoretemperature=(yes|no)] [--powermode=(never|sleep|standby|idle)] [--maxskips=7] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld [--port=25] [-u smtpuser] [-p smtppassword] [--security=(none|tls|ssl)]] [--localmessages=(yes|no)] [--warningmessage="Your custom alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [--mailer=(mailsend|sendemail)] [/silent]
 
---short=S/MM/DD/d/HH Regulärer Ausdruck mit Startzeit des kurzen Selbsttests. Wenn nicht angegeben: Jeden Tag 10:00
-	Sie können kurz Selbsttests auschalten mit --short=no
-	(Siehe weiter unten oder in der Manual-Seite zu smartd.conf für Erklärungen uber den Regulär Ausdruk)
---long=L/MM/DD/d/HH  Regulärer Ausdruck mit Startzeit des langen Selbsttests.  Wenn nicht angegeben: Jeden Freitag um 13:00
-	Sie können lange Selbsttests auschalten mit --long=no
-	(Siehe weiter unten oder in der Manual-Seite zu smartd.conf für Erklärungen uber den Regulär Ausdruk)
---hddlist="/dev/pd0;/dev/pd1;/dev/sdc" Liste mit durch Semikola getrennten Festplattengerätenamen. Wenn nicht angegeben, werden die Festplatten gesucht.
-Beispiel: Für ein Intel-RAID mit 2 Festplatten --hddlist="/dev/csmi0,0;/dev/csmi0,1" (Ein Intel-Raid wird nicht immer richtig automatisch gefunden. Diese manuelle Version funktioniert immer).
---checkhealth=(yes|no) ist standardmäßig aktiviert
---checkataerrors=(yes|no) ist standardmäßig aktiviert
---checkfailureusage=(yes|no) ist standardmäßig aktiviert
---reportselftesterrors=(yes|no) ist standardmäßig aktiviert
---reportcurrentpendingsect=(yes|no) ist standardmäßig aktiviert
---reportofflineuncorrectsect=(yes|no) ist standardmäßig aktiviert
---trackchangeusageprefail=(yes|no) ist standardmäßig aktiviert
---ignoretemperature=(yes|no) ist standardmäßig aktiviert
---powermode=(never|sleep|standby|idle) Legt den minimalen Energiesparmodus fest, in dem die Selbsttests ausgeführt werden. Wenn nicht angegeben, wird "sleep" verwendet.
+--short=S/MM/DD/d/HH RegulÃ¤rer Ausdruck mit Startzeit des kurzen Selbsttests. Wenn nicht angegeben: Jeden Tag 10:00
+	Sie kÃ¶nnen kurz Selbsttests auschalten mit --short=no
+	(Siehe weiter unten oder in der Manual-Seite zu smartd.conf fÃ¼r ErklÃ¤rungen uber den RegulÃ¤r Ausdruk)
+--long=L/MM/DD/d/HH  RegulÃ¤rer Ausdruck mit Startzeit des langen Selbsttests.  Wenn nicht angegeben: Jeden Freitag um 13:00
+	Sie kÃ¶nnen lange Selbsttests auschalten mit --long=no
+	(Siehe weiter unten oder in der Manual-Seite zu smartd.conf fÃ¼r ErklÃ¤rungen uber den RegulÃ¤r Ausdruk)
+--hddlist="/dev/pd0;/dev/pd1;/dev/sdc" Liste mit durch Semikola getrennten FestplattengerÃ¤tenamen. Wenn nicht angegeben, werden die Festplatten gesucht.
+Beispiel: FÃ¼r ein Intel-RAID mit 2 Festplatten --hddlist="/dev/csmi0,0;/dev/csmi0,1" (Ein Intel-Raid wird nicht immer richtig automatisch gefunden. Diese manuelle Version funktioniert immer).
+--checkhealth=(yes|no) ist standardmÃ¤ÃŸig aktiviert
+--checkataerrors=(yes|no) ist standardmÃ¤ÃŸig aktiviert
+--checkfailureusage=(yes|no) ist standardmÃ¤ÃŸig aktiviert
+--reportselftesterrors=(yes|no) ist standardmÃ¤ÃŸig aktiviert
+--reportcurrentpendingsect=(yes|no) ist standardmÃ¤ÃŸig aktiviert
+--reportofflineuncorrectsect=(yes|no) ist standardmÃ¤ÃŸig aktiviert
+--trackchangeusageprefail=(yes|no) ist standardmÃ¤ÃŸig aktiviert
+--ignoretemperature=(yes|no) ist standardmÃ¤ÃŸig aktiviert
+--powermode=(never|sleep|standby|idle) Legt den minimalen Energiesparmodus fest, in dem die Selbsttests ausgefÃ¼hrt werden. Wenn nicht angegeben, wird "sleep" verwendet.
 --maxskips=N Maximale Anzahl wegen des Energiesparmodus ausgelassener Tests bevor ein Test erzwungen wird. wenn nicht angegeben: 7
 
--f Absenderadresse für Warnungsemails
--t Zieladresse für Warnungsemails
--s SMTP-Server für Warnungsemails
+-f Absenderadresse fÃ¼r Warnungsemails
+-t Zieladresse fÃ¼r Warnungsemails
+-s SMTP-Server fÃ¼r Warnungsemails
 --port=SMTP-Server Port (standard ist 25)
--u Benutzername für den SMTP-Server (optional)
--p Passwort für den SMTP-Server (optional)
---tls (no|auto|yes) TLS für SMTP benutzen, "no", wenn nicht angegeben
+-u Benutzername fÃ¼r den SMTP-Server (optional)
+-p Passwort fÃ¼r den SMTP-Server (optional)
+--tls (no|auto|yes) TLS fÃ¼r SMTP benutzen, "no", wenn nicht angegeben
 --localmessages (no|yes) Lokale Meldungen bei Fehlern anzeigen, "no" wenn nicht angegeben
---warningmessage="Ihre Persönliche Warnung Meldung", wenn nicht angegeben wird die Standard Meldung benutzt.
+--warningmessage="Ihre PersÃ¶nliche Warnung Meldung", wenn nicht angegeben wird die Standard Meldung benutzt.
 --compresslogs=(yes|no) Logdateien komprimieren, "yes": standard, wenn nicht angegeben oder nicht "no".
 --keepfirstlog=(yes|no) Erste Logdatei behalten, "yes": standard, wenn nicht angegeben oder nicht "no".
 --sendtestmessage=(yes|no) Testmail schicken, "yes": standard, wenn nicht angegeben oder nicht "no".
---mailer=(mailsend|sendemail) Mann kann einen Alternativen mailer benützen (mailsend ist standard)
+--mailer=(mailsend|sendemail) Mann kann einen Alternativen mailer benÃ¼tzen (mailsend ist standard)
 /silent oder /verysilent: Keine Meldungen zur Installation ausgeben. Bitte beachten sie das dies die einzigen Parameter sind der mit Slash geschireben wird, da es sich um interne Inno Setup Paremeter handelt.
 
 Siehe auch die Beispiele weiter unten.
 
-Erklärung zu den regulären Ausdrücken für die Startzeit des Selbsttests:
+ErklÃ¤rung zu den regulÃ¤ren AusdrÃ¼cken fÃ¼r die Startzeit des Selbsttests:
 ----------------------------
 
-Der reguläre Ausdruck hat die Form T/MM/DD/d/HH wobei:
+Der regulÃ¤re Ausdruck hat die Form T/MM/DD/d/HH wobei:
 T = Testtyp (S=kurz, L=lang)
 MM = Monat (Januar = 01, Dezember = 12)
 DD = Tag (01...31)
 d = Wochentag (Montag = 1, Sonntag = 7)
 HH = Stunde im 24h-Format
 
-Jede der Zeitangaben kann durch Punkte ersetzt werden, die als Platzhalter für einen beliebigen Wert dienen.
-Der folgende reguläre Ausdruck legt als Startzeit für einen langen Selbsttest jeden Dienstag und Freitag um 2 Uhr morgens fest:
+Jede der Zeitangaben kann durch Punkte ersetzt werden, die als Platzhalter fÃ¼r einen beliebigen Wert dienen.
+Der folgende regulÃ¤re Ausdruck legt als Startzeit fÃ¼r einen langen Selbsttest jeden Dienstag und Freitag um 2 Uhr morgens fest:
 
 L/../../[2,5]/02
 
@@ -87,17 +93,17 @@ Beispiele
 
 Einfache automatische Installation:
 
-smartmontools-win-6.4-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com /silent
+smartmontools-win-6.4-4.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com /silent
 
-Diese Kommandozeile würde smartmontools mit per email verschickten Warnmeldungen installieren,
-Festplatten würden dabei automatisch erkannt werden, alle Überwachungsparameter würden verwendet werden,
-und ein kurzer Selbsttest würde jeden Tag um 08:00, ein langer Selbsttest jeden Freitag um 12:00 ausgeführt werden.
-Die Installation würde keine Meldungen ausgeben.
+Diese Kommandozeile wÃ¼rde smartmontools mit per email verschickten Warnmeldungen installieren,
+Festplatten wÃ¼rden dabei automatisch erkannt werden, alle Ãœberwachungsparameter wÃ¼rden verwendet werden,
+und ein kurzer Selbsttest wÃ¼rde jeden Tag um 08:00, ein langer Selbsttest jeden Freitag um 12:00 ausgefÃ¼hrt werden.
+Die Installation wÃ¼rde keine Meldungen ausgeben.
 
 
-Folgendes weitere Beispiel würde TLS für SMTP und Benutzerauthentifizierung auf dem SMTP-Server verwenden,
-keine Änderungen der Laufwerkstemperatur ignorieren, zeigt ebenfalls Lokale Warnungsmeldungen keine kurzen Selbsttests
-und einen langen Selbsttest jeden Dienstag und Sonntag um 02 Uhr morgens auf den Laufwerken /dev/pd0 und /dev/csmi0,1 ausführen:
+Folgendes weitere Beispiel wÃ¼rde TLS fÃ¼r SMTP und Benutzerauthentifizierung auf dem SMTP-Server verwenden,
+keine Ã„nderungen der Laufwerkstemperatur ignorieren, zeigt ebenfalls Lokale Warnungsmeldungen keine kurzen Selbsttests
+und einen langen Selbsttest jeden Dienstag und Sonntag um 02 Uhr morgens auf den Laufwerken /dev/pd0 und /dev/csmi0,1 ausfÃ¼hren:
 
-smartmontools-win-6.4-1.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com --port 587 -u username@smtp.server.tld -p pA55W0RD --tls=yes --ignoretemperature=no --hddlist=/dev/pd0;/dev/csmi0,1 --short=no --long=L/../../[2,7]/02 --localmessages=yes /silent
+smartmontools-win-6.4-4.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com --port 587 -u username@smtp.server.tld -p pA55W0RD --tls=yes --ignoretemperature=no --hddlist=/dev/pd0;/dev/csmi0,1 --short=no --long=L/../../[2,7]/02 --localmessages=yes /silent
 
