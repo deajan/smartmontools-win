@@ -1,4 +1,4 @@
-// GUI configuration page for smart options for v6.2-1 to v6.3-1
+﻿// GUI configuration page for smart options for v6.4
 
 [code]
 procedure smartd_conf_Activate(Page: TWizardPage);

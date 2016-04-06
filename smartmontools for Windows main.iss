@@ -1,11 +1,11 @@
-; Quick and dirty installer for smartmontools for Windows
+﻿; Quick and dirty installer for smartmontools for Windows
 ; This stuff is licensed under GPLv2.
 
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.4"
-#define MinorVersion "3"
-#define SubBuild "3"
+#define MinorVersion "4"
+#define SubBuild "1"
 ; Define build type -testing -beta -rc for WIP
 #define BuildType ""
 #define AppPublisher "Ozy de Jong"

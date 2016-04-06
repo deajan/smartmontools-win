@@ -1,4 +1,4 @@
-// GUI configuration page for alert options for v6.3-1
+﻿// GUI configuration page for alert options for v6.4
 
 [code]
 procedure mail_options_Activate(Page: TWizardPage);

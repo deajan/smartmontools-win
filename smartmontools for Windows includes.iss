@@ -1,4 +1,4 @@
-//// General purpose functions (2206201501)
+﻿//// General purpose functions (2206201501)
 
 [code]
 //// Check if 64bit installation is not selected
