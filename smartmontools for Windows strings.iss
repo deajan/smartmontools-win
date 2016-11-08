@@ -1,4 +1,4 @@
-﻿// String file for smartmontools for Windows installer v6.4
+// String file for smartmontools for Windows installer v6.4
 
 ; Installation dialog
 
@@ -21,9 +21,17 @@ en.coreservice=smartmontools as service
 fr.coreservice=service smartmontools
 de.coreservice=smartmontools Service
 
+en.servicegui=Graphical user interface
+fr.servicegui=Interface graphique
+de.servicegui=Grafische Benutzeroberfläche
+
 en.mailsupport=Send mails on errors
 fr.mailsupport=Envoi d'emails en cas d'erreurs
 de.mailsupport=E-Mail senden falls Fehler auftreten
+
+en.scheduledtest=Schedule a test alert every month
+fr.scheduledtest=Planifier une alerte de test chaque mois
+de.scheduledTest=Jeden Monat ein test Alarm planifizieren
 
 en.localsupport=Show local messages on errors
 fr.localsupport=Afficher messages locaux en cas d'erreurs

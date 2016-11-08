@@ -1,6 +1,6 @@
-:: Smartmontools for Windows package v6.4-3 erroraction.cmd
+:: Smartmontools for Windows package v6.5 erroraction.cmd
 :: http://www.netpower.fr
-:: (L) 2013-2015 by Orsiris "Ozy" de Jong
+:: (L) 2012-2016 by Orsiris de Jong
 
 :: Config can be changed in erroraction_config.cmd
 
@@ -79,10 +79,10 @@ GOTO:EOF
 :CreateSmartOutput
 echo ------------------------------------------------------------------------------------------------- %DATE:~0,2%-%DATE:~3,2%-%DATE:~6,4% %TIME:~0,2%H%TIME:~3,2%m%TIME:~6,2%s >> "%SMART_LOG_FILE%"
 IF "%DEVICE_LIST%"=="DEVICESCAN" (
-	for /F "delims= " %%i in ('"%PROGRAM_PATH%\bin\smartctl" --scan') do "%PROGRAM_PATH%\bin\smartctl.exe" -a %%i >> "%SMART_LOG_FILE%"
+	for /F "delims= " %%i in ('"%PROGRAM_PATH%\smartctl" --scan') do "%PROGRAM_PATH%\smartctl.exe" -a %%i >> "%SMART_LOG_FILE%"
 	
 ) ELSE (
-	for /F %%i in ("%DEVICE_LIST: =!newline!%") do "%PROGRAM_PATH%\bin\smartctl.exe" -a %%i >> "%SMART_LOG_FILE%"
+	for /F %%i in ("%DEVICE_LIST: =!newline!%") do "%PROGRAM_PATH%\smartctl.exe" -a %%i >> "%SMART_LOG_FILE%"
 )
 GOTO:EOF
 
@@ -115,7 +115,7 @@ GOTO:EOF
 :MailerMailSend
 set attachment=
 IF "%COMPRESS_LOGS%"=="yes" (
-	"%PROGRAM_PATH%\bin\gzip" -c "%SMART_LOG_FILE%" > "%SMART_LOG_FILE%.gz"
+	"%PROGRAM_PATH%\gzip" -c "%SMART_LOG_FILE%" > "%SMART_LOG_FILE%.gz"
 	set attachment=-attach "%SMART_LOG_FILE%.gz,application/gzip,a"
 ) ELSE (
 	set attachment=-attach "%SMART_LOG_FILE%"
@@ -127,9 +127,9 @@ IF "%SECURITY%"=="ssl" set encryption=-ssl
 IF NOT "%SMTP_USER%"=="" set smtpuser=-auth -user "%SMTP_USER%"
 IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-pass "%SMTP_PASSWORD%"
 IF %DRY%==1 (
-	echo "%PROGRAM_PATH%\bin\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encryption%
+	echo "%PROGRAM_PATH%\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encryption%
 ) ELSE (
-	"%PROGRAM_PATH%\bin\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encryption%
+	"%PROGRAM_PATH%\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encryption%
 )
 	IF NOT %ERRORLEVEL%==0 (
 	set SCRIPT_ERROR=1
@@ -137,10 +137,11 @@ IF %DRY%==1 (
 )
 GOTO:EOF
 
+:: SendEmail from Brandon Zehm mailer (http://caspian.dotconf.net), kept for compatibility
 :MailerSendEmail
 set attachment=
 IF "%COMPRESS_LOGS%"=="yes" (
-	"%PROGRAM_PATH%\bin\gzip" -c "%SMART_LOG_FILE%" > "%SMART_LOG_FILE%.gz"
+	"%PROGRAM_PATH%\gzip" -c "%SMART_LOG_FILE%" > "%SMART_LOG_FILE%.gz"
 	set attachment=-a "%SMART_LOG_FILE%.gz"
 ) ELSE (
 	set attachment=-a "%SMART_LOG_FILE%"
@@ -152,9 +153,9 @@ IF "%SECURITY%"=="ssl" set encryption=-o tls=auto
 IF NOT "%SMTP_USER%"=="" set smtpuser=-xu "%SMTP_USER%"
 IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-xp "%SMTP_PASSWORD%"
 IF %DRY%==1 (
-	echo "%PROGRAM_PATH%\bin\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
+	echo "%PROGRAM_PATH%\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
 ) ELSE (
-	"%PROGRAM_PATH%\bin\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
+	"%PROGRAM_PATH%\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
 )
 	IF NOT %ERRORLEVEL%==0 (
 	set SCRIPT_ERROR=1
@@ -181,9 +182,9 @@ IF "%LOCAL_ALERT_TYPE%"=="active" set local_alert_type_switch=-a
 IF "%LOCAL_ALERT_TYPE%"=="console" set local_alert_type_switch=-c
 IF "%LOCAL_ALERT_TYPE%"=="connected" set local_alert_type_switch=-s
 IF %DRY%==1 (
-	echo "%PROGRAM_PATH%\bin\wtssendmsg.exe" %local_alert_type_switch% "%WARNING_MESSAGE% [%COMPUTER_FQDN%]"
+	echo "%PROGRAM_PATH%\wtssendmsg.exe" %local_alert_type_switch% "%WARNING_MESSAGE% [%COMPUTER_FQDN%]"
 ) ELSE (
-	"%PROGRAM_PATH%\bin\wtssendmsg.exe" %local_alert_type_switch% "%WARNING_MESSAGE% [%COMPUTER_FQDN%]"
+	"%PROGRAM_PATH%\wtssendmsg.exe" %local_alert_type_switch% "%WARNING_MESSAGE% [%COMPUTER_FQDN%]"
 )
 IF NOT %ERRORLEVEL%==0 (
 	set SCRIPT_ERROR=1

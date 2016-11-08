@@ -1,10 +1,10 @@
-﻿//// General purpose functions (2206201501)
+//// General purpose functions (2016110701)
 
 [code]
-//// Check if 64bit installation is not selected
-function AMD64InstallNotSelected: Boolean;
+//// Returns true if IsWin64 is false
+function IsWin32(): Boolean;
 begin
-  Result := not IsComponentSelected('core\64bits');
+  result := not IsWin64;
 end;
 
 //// Returns last char of a string
