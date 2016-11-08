@@ -4,7 +4,7 @@
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.5"
 #define MinorVersion "1"
-#define SubBuild "5"
+#define SubBuild "6"
 ; Define build type -testing -beta -rc for WIP
 #define BuildType "-testing"
 #define AppPublisher "Orsiris de Jong"
@@ -123,7 +123,7 @@ Filename: {app}\bin\scheduled_send.cmd; Components: core\scheduledtest; StatusMs
 
 [Icons]
 Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd-pyngui.exe"; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui;
-Name: {group}\Reconfigure SMART Alert settings; Filename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.exe"; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui;
+Name: {group}\Reconfigure SMART Alert settings; Filename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.exe"; Parameters: "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui;
 Name: {group}\Visit NetPower.fr; Filename: http://www.netpower.fr; Components: links;
 Name: {group}\Visit smartmontools Site; Filename: http://smartmontools.sourceforge.net; Components: links;
 Name: {group}\Fix Bad sectors (use at own risk!); Filename: "{app}\bin\fix_badsectors.cmd"; Components: fixbadsecttools
@@ -146,7 +146,7 @@ Type: Files; Name: "{app}\bin\erroraction_config.cmd";
 Type: Files; Name: "{app}\bin\smartd.conf";
 Type: Files; Name: "{app}\bin\drivedb.h.old";
 Type: Files; Name: "{app}\bin\scheduled_send.cmd";
-Type: Files; Name: "{app}\{#smartdPynguiDir}\*.log";
+Type: Files; Name: "{app}\bin\{#smartdPynguiDir}\*.log";
 Type: dirifempty; Name: "{app}\bin";
 Type: dirifempty; Name: "{app}";
 
