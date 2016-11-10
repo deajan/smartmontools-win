@@ -10,8 +10,8 @@ class Constants:
 	print(_CONST.NAME)
 	"""
 	APP_NAME="erroraction_config"
-	APP_VERSION="0.1"
-	APP_BUILD="2016110901"
+	APP_VERSION="0.2"
+	APP_BUILD="2016111003"
 	APP_DESCRIPTION="smartmontools for Windows mail config"
 	CONTACT="ozy@netpower.fr - http://www.netpower.fr"
 	AUTHOR="Orsiris de Jong"
@@ -19,7 +19,7 @@ class Constants:
 	ERRORACTION_CMD_FILENAME="erroraction_config.cmd"
 	MAILSEND_BINARY="mailsend.exe"
 	
-	IS_STABLE=False
+	IS_STABLE=True
 
 	LOG_FILE=APP_NAME + ".log"
 
@@ -67,6 +67,7 @@ import re										# Regex handling
 import time										# sleep command
 import codecs									# unicode encoding
 from subprocess import Popen, PIPE				# call to external binaries
+import base64									# Support base64 mail passwords
 
 from datetime import datetime
 
@@ -192,8 +193,6 @@ class Application:
 				self.configDict[key] = self.builder.get_variable(key).get()
 			except:
 				pass
-
-		logger.debug(self.configDict)
 	
 	def onUseAuthentication(self):
 		if self.builder.get_variable('useAuthentication').get() == True:
@@ -218,6 +217,12 @@ class Application:
 			
 		sys.exit(0)
 
+def stringToBase64(s):
+    return base64.b64encode(s.encode('utf-8'))
+
+def base64ToString(b):
+    return base64.b64decode(b).decode('utf-8')
+
 def readErrorConfigFile(fileName):
 	if not os.path.isfile(fileName):
 		logger.info("No suitable [" + _CONSTANT.ERRORACTION_CMD_FILENAME + "] file found, creating new file [" + CONFIG.errorActionCmdPath + "].")
@@ -237,13 +242,15 @@ def readErrorConfigFile(fileName):
 		configDict = {}
 		for line in fileHandle.readlines():
 			if not line[0] == "#" and not line[0] == " " and not line[0] == "\n" and not line[0] == "\r":
-				conf = line.split('=')
+				conf = line.split('=', 1)
+				key = conf[0].replace('SET ', '', 1).replace('set ', '', 1)
 				if len(conf) > 1:
-					if len(conf) > 2:
-						# Handle special case where base 64 encoding uses '=' sign which is also used as separator
-						configDict[conf[0].lstrip('set ')] = conf[1].strip() + '='
-					else:
-						configDict[conf[0].lstrip('set ')] = conf[1].strip()
+					value = conf[1].strip()
+					if key == "SMTP_PASSWORD":
+						value = base64ToString(value)
+					configDict[key] = value
+					
+		logger.debug("Read: " + str(configDict))
 	except Exception as e:
 		msg="Cannot read in config file [" + fileName + "]."
 		logger.error(msg)
@@ -259,9 +266,17 @@ def readErrorConfigFile(fileName):
 		logger.debug(e)
 
 def writeErrorConfigFile(fileName, configDict):
-	configLine = ""
+	logger.debug("Writing " + str(configDict))
+	configLines = ""
 	for key, value in configDict.items():
-		configLine += key + "=" + value + "\n"
+		if key == "SMTP_PASSWORD":
+			try:
+				configLines += "SET " + key + "=" + stringToBase64(value).decode('utf-8') + "\n"
+			except Exception as e:
+				logger.critical("Cannot encode " + key)
+				sys.exit(1)
+		else:
+			configLines += "SET " + key + "=" + value + "\n"
 	
 	try:
 		fileHandle = open(fileName, 'w')
@@ -273,8 +288,8 @@ def writeErrorConfigFile(fileName, configDict):
 		return False
 		
 	try:
-		fileHandle.write("# This file was generated on " + str(datetime.now()) + " by " + _CONSTANT.APP_NAME + " " + _CONSTANT.APP_VERSION  + "\n# http://www.netpower.fr\n")
-		fileHandle.write(configLine)
+		fileHandle.write(":: This file was generated on " + str(datetime.now()) + " by " + _CONSTANT.APP_NAME + " " + _CONSTANT.APP_VERSION  + "\n:: http://www.netpower.fr\n")
+		fileHandle.write(configLines)
 	except Exception as e:
 		msg="Cannot write config file [ " + fileName + "]."
 		logger.error(msg)
@@ -295,7 +310,17 @@ def sendTestEmail(configDict):
 		messagebox.showinfo("Error", msg)
 		return False
 	
-	subject = '\"Smartmontools for Windows setup test mail on %COMPUTERNAME%.%USERDOMAIN% (DNS: %USERDNSDOMAIN%)\"'
+	try:
+		computerName = os.environ['COMPUTERNAME']
+	except:
+		computerName = "[Cannot get name]"
+	
+	try:
+		domain = os.environ['USERDNSDOMAIN']
+	except:
+		domain = os.environ['USERDOMAIN']
+	
+	subject = '\"Smartmontools for Windows setup test mail on '+ computerName + '.' + domain + '\"'
 	message = '\"This is a test message sent by Smartmontools for Windows configure tool to check whether the smart service will be able to send you information about your hard drive health. There is no real alert, please do not respond."'
 	
 	mailsendCommand = [mailsend, '-f', configDict['SOURCE_MAIL'], '-t', configDict['DESTINATION_MAIL'], '-smtp', configDict['SMTP_SERVER'], '-port', configDict['SMTP_PORT'], '-sub', subject, '-M', message]
@@ -315,7 +340,7 @@ def sendTestEmail(configDict):
 	except:
 		logger.debug("Can't figure out mail security settings")
 
-	print(mailsendCommand)
+	logger.debug(mailsendCommand)
 
 	pHandle = Popen(mailsendCommand, stdout=PIPE, stderr=PIPE)
 	output, err = pHandle.communicate()
@@ -357,7 +382,7 @@ def main(argv):
 	global CONFIG
 	
 	if _CONSTANT.IS_STABLE == False:
-		logger.debug("Warning: This is an unstable developpment version.")
+		logger.warn("Warning: This is an unstable developpment version.")
 	
 	configDict={}
 	

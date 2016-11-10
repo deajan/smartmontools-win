@@ -1,8 +1,16 @@
-:: Smartmontools for Windows package v6.5 erroraction.cmd
+:: Smartmontools for Windows package v6.5 erroraction.cmd 2016111003
 :: http://www.netpower.fr
 :: (L) 2012-2016 by Orsiris de Jong
 
 :: Config can be changed in erroraction_config.cmd
+
+:: CHANGELOG:
+:: 10 Nov 2016:
+:: - Added default mailer
+:: - Added admin privileges check
+:: - CreateSmartOutput now uses drive definitions found in smartd.conf in order to get drive status
+:: - Added GetEnvironment function to check for executables before launching
+:: - Better test message
 
 @echo off
 setlocal enabledelayedexpansion
@@ -17,8 +25,11 @@ call "%curdir%\erroraction_config.cmd"
 
 :: Load autgenerated configuration
 call "erroraction_config.cmd"
-set DEBUG=no
+set DEBUG=yes
 set SCRIPT_ERROR=0
+
+set ERROR_LOG_FILE=%curdir%\erroraction.log
+set SMART_LOG_FILE=%curdir%\smart.log
 :: ---------------------------- Main -----------------------------
 :: This variable contains a newline char... Please leave the empty 2 lines below as they're needed for the "newline" symbol.
 :: The newline symbol will be used to parse a space separated list of devices (%DEVICE_LIST%) with the for command.
@@ -29,6 +40,10 @@ set newline=^
 IF "%1"=="--dryrun" ( set DRY=1 ) ELSE ( set DRY=0 )
 IF "%1"=="--test" ( call:Tests ) ELSE ( set TEST=0 )
 
+
+:: GetEnvironment is the only function that triggers premature end of the script as other failures might not interrupt processing
+call:GetEnvironment
+IF "!SCRIPT_ERROR!"=="1" GOTO END
 call:GetComputerName
 call:CreateSmartOutput
 call:Mailer
@@ -43,47 +58,64 @@ GOTO:EOF
 
 :Tests
 set TEST=1
-SC QUERY smartd | FINDSTR "RUNNING" > nul
+SC QUERY smartd | FINDSTR "RUNNING" > nul 2> nul
 IF "%ERRORLEVEL%"=="0" (
 set SERVICE_RUNS=1
-set WARNING_MESSAGE=Smartmontools for Windows test: Service runinng
+set WARNING_MESSAGE=Smartmontools for Windows test: Service smartd is runinng
 ) ELSE (
 set SERVICE_RUNS=0
-set WARNING_MESSAGE=Smartmontools for Windows test: Service not running
+set WARNING_MESSAGE=Alert: Smartmontools for Windows test: Service smartd is not running
 )
+GOTO:EOF
+
+:GetEnvironment
+
+:: Check for PC privileges :)
+net session >nul 2>&1
+IF NOT %ERRORLEVEL%==0 (
+	call:Log "PC checked for insufficient privileges"
+	SET SCRIPT_ERROR=1
+	)
+dir "%curdir%\smartd.conf" > nul 2> nul
+IF NOT %ERRORLEVEL%==0 (
+	call:Log "Missing smartd.conf file"
+	SET SCRIPT_ERROR=1
+	)
+dir "%curdir%\smartctl.exe" > nul 2> nul
+IF NOT %ERRORLEVEL%==0 (
+	call:Log "Missing smartctl.exe file"
+	SET SCRIPT_ERROR=1
+	)
 GOTO:EOF
 
 :CheckMailValues
 echo "%SOURCE_MAIL%" | findstr /I "@" > nul
 IF %ERRORLEVEL%==1 (
 	call:Log "Source mail not set"
-	GOTO End
+	GOTO END
 	)
 echo "%DESTINATION_MAIL%" | findstr /I "@" > nul
 IF %ERRORLEVEL%==1 (
 	call:Log "Destination Mail not Set"
-	GOTO End
+	GOTO END
 	)
 IF "%SUBJECT%"=="" (
 	call:Log "Mail subject not set"
-	GOTO End
+	GOTO END
 	)
 echo "%SMTP_SERVER%" | findstr /I "." > nul
 IF %ERRORLEVEL%==1 (
 	call:Log "Smtp sever not set"
-	GOTO End
+	GOTO END
 	)
 call:Log "Configuration file check success."
 GOTO:EOF
 
 :CreateSmartOutput
 echo ------------------------------------------------------------------------------------------------- %DATE:~0,2%-%DATE:~3,2%-%DATE:~6,4% %TIME:~0,2%H%TIME:~3,2%m%TIME:~6,2%s >> "%SMART_LOG_FILE%"
-IF "%DEVICE_LIST%"=="DEVICESCAN" (
-	for /F "delims= " %%i in ('"%PROGRAM_PATH%\smartctl" --scan') do "%PROGRAM_PATH%\smartctl.exe" -a %%i >> "%SMART_LOG_FILE%"
-	
-) ELSE (
-	for /F %%i in ("%DEVICE_LIST: =!newline!%") do "%PROGRAM_PATH%\smartctl.exe" -a %%i >> "%SMART_LOG_FILE%"
-)
+for /F %%d in ('type "%curdir%\smartd.conf" ^| findstr /R /C:"^/"') do "%curdir%\smartctl.exe" -a %%d >> "%SMART_LOG_FILE%"
+for /F %%d in ('type "%curdir%\smartd.conf" ^| findstr /R /C:"^DEVICESCAN"') do SET DEVICESCAN=yes
+IF "%DEVICESCAN%"=="yes" FOR /F "delims= " %%i in ('"%curdir%\smartctl.exe" --scan') do "%curdir%\smartctl.exe" -a %%i >> "%SMART_LOG_FILE%"
 GOTO:EOF
 
 :GetComputerName
@@ -110,12 +142,13 @@ call:GetPwd
 IF "%MAILER%"=="blat" call:MailerBlat
 IF "%MAILER%"=="sendemail" call:MailerSendEmail
 IF "%MAILER%"=="mailsend" call:MailerMailSend
+IF "%MAILER%"=="" call:MailerMailSend
 GOTO:EOF
 
 :MailerMailSend
 set attachment=
 IF "%COMPRESS_LOGS%"=="yes" (
-	"%PROGRAM_PATH%\gzip" -c "%SMART_LOG_FILE%" > "%SMART_LOG_FILE%.gz"
+	"%curdir%\gzip" -c "%SMART_LOG_FILE%" > "%SMART_LOG_FILE%.gz"
 	set attachment=-attach "%SMART_LOG_FILE%.gz,application/gzip,a"
 ) ELSE (
 	set attachment=-attach "%SMART_LOG_FILE%"
@@ -127,9 +160,9 @@ IF "%SECURITY%"=="ssl" set encryption=-ssl
 IF NOT "%SMTP_USER%"=="" set smtpuser=-auth -user "%SMTP_USER%"
 IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-pass "%SMTP_PASSWORD%"
 IF %DRY%==1 (
-	echo "%PROGRAM_PATH%\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encryption%
+	echo "%curdir%\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encryption%
 ) ELSE (
-	"%PROGRAM_PATH%\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encryption%
+	"%curdir%\mailsend.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -sub "%SUBJECT%" -M "%MAIL_CONTENT%" %attachment% -smtp "%SMTP_SERVER%" -port %SMTP_PORT% %smtpuser% %smtppassword% %encryption%
 )
 	IF NOT %ERRORLEVEL%==0 (
 	set SCRIPT_ERROR=1
@@ -141,7 +174,7 @@ GOTO:EOF
 :MailerSendEmail
 set attachment=
 IF "%COMPRESS_LOGS%"=="yes" (
-	"%PROGRAM_PATH%\gzip" -c "%SMART_LOG_FILE%" > "%SMART_LOG_FILE%.gz"
+	"%curdir%\gzip" -c "%SMART_LOG_FILE%" > "%SMART_LOG_FILE%.gz"
 	set attachment=-a "%SMART_LOG_FILE%.gz"
 ) ELSE (
 	set attachment=-a "%SMART_LOG_FILE%"
@@ -153,9 +186,9 @@ IF "%SECURITY%"=="ssl" set encryption=-o tls=auto
 IF NOT "%SMTP_USER%"=="" set smtpuser=-xu "%SMTP_USER%"
 IF NOT "%SMTP_PASSWORD%"=="" set smtppassword=-xp "%SMTP_PASSWORD%"
 IF %DRY%==1 (
-	echo "%PROGRAM_PATH%\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
+	echo "%curdir%\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
 ) ELSE (
-	"%PROGRAM_PATH%\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
+	"%curdir%\sendemail.exe" -f "%SOURCE_MAIL%" -t "%DESTINATION_MAIL%" -u "%SUBJECT%" -m "%MAIL_CONTENT%" %attachment% -s %SMTP_SERVER%:%SMTP_PORT% %encryption% %smtpuser% %smtppassword%
 )
 	IF NOT %ERRORLEVEL%==0 (
 	set SCRIPT_ERROR=1
@@ -182,9 +215,9 @@ IF "%LOCAL_ALERT_TYPE%"=="active" set local_alert_type_switch=-a
 IF "%LOCAL_ALERT_TYPE%"=="console" set local_alert_type_switch=-c
 IF "%LOCAL_ALERT_TYPE%"=="connected" set local_alert_type_switch=-s
 IF %DRY%==1 (
-	echo "%PROGRAM_PATH%\wtssendmsg.exe" %local_alert_type_switch% "%WARNING_MESSAGE% [%COMPUTER_FQDN%]"
+	echo "%curdir%\wtssendmsg.exe" %local_alert_type_switch% "%WARNING_MESSAGE% [%COMPUTER_FQDN%]"
 ) ELSE (
-	"%PROGRAM_PATH%\wtssendmsg.exe" %local_alert_type_switch% "%WARNING_MESSAGE% [%COMPUTER_FQDN%]"
+	"%curdir%\wtssendmsg.exe" %local_alert_type_switch% "%WARNING_MESSAGE% [%COMPUTER_FQDN%]"
 )
 IF NOT %ERRORLEVEL%==0 (
 	set SCRIPT_ERROR=1
@@ -193,4 +226,5 @@ IF NOT %ERRORLEVEL%==0 (
 GOTO:EOF
 
 :END
-IF NOT %SCRIPT_ERROR%==0 echo Something bad happened while executing this script. Please check log file. You can also check what happens with parameter --dryrun
+:: Keeping the ping part in order to let commandline window open for some seconds after execution
+IF NOT %SCRIPT_ERROR%==0 echo Something bad happened while executing this script. Please check log file. You can also check what happens with parameter --dryrun && ping 127.0.0.1 > nul

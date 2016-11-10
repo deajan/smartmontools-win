@@ -4,9 +4,9 @@
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.5"
 #define MinorVersion "1"
-#define SubBuild "6"
+#define SubBuild "9"
 ; Define build type -testing -beta -rc for WIP
-#define BuildType "-testing"
+#define BuildType "-beta"
 #define AppPublisher "Orsiris de Jong"
 #define AppURL "http://www.netpower.fr"
 #define CopyrightYears="2012-2016"
@@ -47,7 +47,7 @@ ArchitecturesInstallIn64BitMode=x64
 Name: en; MessagesFile: "compiler:Default.isl"; InfoBeforeFile: "{#BaseDir}\README.md";
 Name: fr; MessagesFile: "compiler:Languages\French.isl"; InfoBeforeFile: "{#BaseDir}\README-FR.TXT";
 Name: de; MessagesFile: "compiler:Languages\German.isl"; InfoBeforeFile: "{#BaseDir}\README-DE.TXT";
-Name: ru; MessagesFile: "compiler:Languages\Russian.isl"; InfoBeforeFile: "{#BaseDir}\README-RU.TXT";
+;Name: ru; MessagesFile: "compiler:Languages\Russian.isl"; InfoBeforeFile: "{#BaseDir}\README-RU.TXT";
 
 [CustomMessages]
 #include "smartmontools for windows strings.iss"
@@ -62,20 +62,20 @@ Name: core\service; Description: "{cm:coreservice}"; Types: full custom;
 Name: core\service\gui; Description: "{cm:servicegui}"; Types: full custom;
 Name: core\service\mailsupport; Description: "{cm:mailsupport}"; Types: full custom;
 Name: core\service\localsupport; Description: "{cm:localsupport}"; Types: custom;
-Name: core\scheduledtest; Description: "{cm:scheduledtest}"; Types: full custom;
+Name: core\scheduledtestalerts; Description: "{cm:scheduledtestalerts}"; Types: custom;
 Name: fixbadsecttools; Description: "{cm:fixbadsecttools}"; Types: full custom;
 Name: regext; Description: "{cm:regext}"; Types: full custom;
 Name: regext\info; Description: "{cm:smartinfo}"; Types: Full custom;
 Name: regext\tests; Description: "{cm:smarttests}"; Types: Full custom;
 Name: updatedb; Description: "{cm:updatedb}"; Types: Full custom;
-Name: links; Description: "{cm:authorlinks}"; Types: full custom;
+Name: authorlinks; Description: "{cm:authorlinks}"; Types: full custom;
 
 [Files]
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\drivedb.h"; DestDir: "{app}\bin"; Components: core;
 ;Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\runcmda.exe.manifest"; DestDir: "{app}\bin"; Components: core;
 ;Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\runcmdu.exe.manifest"; DestDir: "{app}\bin"; Components: core;
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\update-smart-drivedb.exe"; DestDir: "{app}\bin"; Components: core;
-Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\smartd_warning.cmd"; DestDir: "{app}\bin"; Components: core;
+Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\smartd_warning.cmd"; DestDir: "{app}\bin"; Components: core\service;
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\smartd.conf"; DestDir: "{app}\bin"; DestName: smartd.conf.example; Components: core; BeforeInstall: UninstallService('{#SmartServiceName}'); Flags: ignoreversion
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\runcmda.exe"; DestDir: "{app}\bin"; Components: core; Check: IsWin32()
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\runcmdu.exe"; DestDir: "{app}\bin"; Components: core; Check: IsWin32()
@@ -88,27 +88,27 @@ Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\runcmdu.exe"; DestDir: "{app}\bin"
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartctl.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartctl-nc.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartd.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
-Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\wtssendmsg.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
+Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\wtssendmsg.exe"; DestDir: "{app}\bin"; Components: core\service\localsupport; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\doc\*"; DestDir: "{app}\doc\smartmontools"; Components: core; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#BaseDir}\{#smartdPynguiDir}\*"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui; Flags: recursesubdirs createallsubdirs
 Source: "{#BaseDir}\{#MailSendDir}\mailsend.exe"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
 Source: "{#BaseDir}\{#MailSendDir}\COPYRIGHT.TXT"; DestDir: "{app}\doc\mailsend"; Components: core\service\mailsupport;
 Source: "{#BaseDir}\{#GzipDir}\bin\gzip.exe"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
 Source: "{#BaseDir}\{#GzipDir}\man\cat1\gzip.1.txt"; DestDir: "{app}\doc\gzip"; Components: core\service\mailsupport;
-Source: "{#BaseDir}\erroraction_config.cmd"; DestDir: "{app}\bin"; Components: core\service\mailsupport; AfterInstall: WriteErrorActionConfig();
+Source: "{#BaseDir}\base64.exe"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
 Source: "{#BaseDir}\{#ddDir}\dd.exe"; DestDir: "{app}\bin"; Components: fixbadsecttools;
 Source: "{#BaseDir}\{#ddDir}\Copying.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
 Source: "{#BaseDir}\{#ddDir}\ddchanges.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
 Source: "{#BaseDir}\fix_badsectors.cmd"; DestDir: "{app}\bin"; Components: fixbadsecttools;
 Source: "{#BaseDir}\README.md"; DestDir: "{app}\doc\Smartmontools for Windows package"; Components: core;
-Source: "{#BaseDir}\README-RU.TXT"; DestDir: "{app}\doc\Smartmontools for Windows package"; Components: core;
+;Source: "{#BaseDir}\README-RU.TXT"; DestDir: "{app}\doc\Smartmontools for Windows package"; Components: core;
 Source: "{#BaseDir}\README-FR.TXT"; DestDir: "{app}\doc\Smartmontools for Windows package"; Components: core;
 Source: "{#BaseDir}\README-DE.TXT"; DestDir: "{app}\doc\Smartmontools for Windows package"; Components: core;
 Source: "{#BaseDir}\LICENSE.TXT"; DestDir: "{app}\doc\Smartmontools for Windows package"; Components: core;
 Source: "{#BaseDir}\erroraction.cmd"; DestDir: "{app}\bin"; Components: core\service;
-Source: "{#BaseDir}\base64.exe"; DestDir: "{app}\bin"; Components: core;
-Source: "{#BaseDir}\ScheduledTask.xml"; DestDir: "{app}\bin"; Components: core\scheduledtest; AfterInstall: WriteScheduledTest();
-Source: "{#BaseDir}\smartd.conf"; DestDir: "{app}\bin"; Components: core\service; Flags: onlyifdoesntexist; Check: NoExternalSmartdfile(); AfterInstall: UpdateSmartdConfFile();
+Source: "{#BaseDir}\erroraction_config.cmd"; DestDir: "{app}\bin"; Components: core\service; AfterInstall: WriteErrorActionConfig(); Check: NoExternalErroractionFile();
+Source: "{#BaseDir}\ScheduledTask.xml"; DestDir: "{app}\bin"; Components: core\scheduledtestalerts; AfterInstall: WriteScheduledTest();
+Source: "{#BaseDir}\smartd.conf"; DestDir: "{app}\bin"; Components: core\service; Flags: onlyifdoesntexist; Check: NoExternalSmartdFile(); AfterInstall: UpdateSmartdConfFile();
 
 
 [Run]
@@ -117,15 +117,15 @@ Source: "{#BaseDir}\smartd.conf"; DestDir: "{app}\bin"; Components: core\service
 Filename: {sys}\sc.exe; Parameters: "delete {#SmartServiceName}"; Components: core\service; Check: IsUpdateInstall(); StatusMSG: "Removing any old smart service instance."; Flags: runhidden waituntilterminated
 Filename: {app}\bin\update-smart-drivedb.exe; Parameters: "/S"; Components: updatedb; StatusMSG: "Updating drive database."; Flags: waituntilterminated
 Filename: {app}\bin\smartd.exe; Parameters: "install -c ""{app}\bin\smartd.conf"""; Components: core\service; StatusMSG: "Setting up smart service."; Flags: runhidden
-Filename: {app}\bin\{#smartdPynguiDir}\smartd-pyngui.exe; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui; StatusMSG: "Setup Smartd service"; Flags: waituntilterminated
-Filename: {app}\bin\{#smartdPynguiDir}\erroraction_config.exe; Parameters: "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui; StatusMSG: "Setup mail support"; Flags: waituntilterminated
-Filename: {app}\bin\scheduled_send.cmd; Components: core\scheduledtest; StatusMsg: "Setting up scheduled test send"; Flags: runhidden
+Filename: {app}\bin\{#smartdPynguiDir}\smartd-pyngui.exe; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui; StatusMSG: "Setup Smartd service"; Flags: waituntilterminated skipifsilent
+Filename: {app}\bin\{#smartdPynguiDir}\erroraction_config.exe; Parameters: "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui; StatusMSG: "Setup mail support"; Flags: waituntilterminated skipifsilent
+Filename: {app}\bin\scheduled_send.cmd; Components: core\scheduledtestalerts; StatusMsg: "Setting up scheduled test send"; Flags: runhidden
 
 [Icons]
 Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd-pyngui.exe"; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui;
-Name: {group}\Reconfigure SMART Alert settings; Filename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.exe"; Parameters: "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui;
-Name: {group}\Visit NetPower.fr; Filename: http://www.netpower.fr; Components: links;
-Name: {group}\Visit smartmontools Site; Filename: http://smartmontools.sourceforge.net; Components: links;
+Name: {group}\Reconfigure SMART Alert settings; Filename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.exe"; Parameters:  "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui;
+Name: {group}\Visit NetPower.fr; Filename: http://www.netpower.fr; Components: authorlinks;
+Name: {group}\Visit smartmontools Site; Filename: http://smartmontools.sourceforge.net; Components: authorlinks;
 Name: {group}\Fix Bad sectors (use at own risk!); Filename: "{app}\bin\fix_badsectors.cmd"; Components: fixbadsecttools
 Name: "{group}\{cm:UninstallProgram, {#=AppName}}"; Filename: {uninstallexe}; 
 
@@ -163,7 +163,7 @@ begin
   FileReplaceString(ExpandConstant('{app}\bin\smartd.conf'), '[PATH]', ExpandConstant('{app}\bin'));
 end;
 
-function NoExternalSmartdfile(): Boolean;
+function NoExternalSmartdFile(): Boolean;
 begin
   if (FileExists(Expandconstant('{src}\smartd.conf'))) then
   begin
@@ -174,14 +174,24 @@ begin
     result := True;
 end;
 
+function NoExternalErroractionFile(): Boolean;
+begin
+  if (FileExists(Expandconstant('{src}\erroraction_config.cmd'))) then
+  begin
+    FileCopy(ExpandConstant('{src}\erroraction_config.cmd'), ExpandConstant('{app}\bin\erroraction_config.cmd'), False);
+    result := False;
+  end else
+    result := True;
+end;
+
 //// Create a file called smart.(version).log including info about all disks
 function CreateInitialLog(): Boolean;
 var
   resultcode: Integer;
 begin
+  ////TODO: detect smartd.conf drives
   InitialLogFile := ExpandConstant('{app}\smartmontools-install-{#MajorVersion}-{#MinorVersion}.log');
   SaveStringToFile(InitialLogFile, '# Smartmontools for Windows installed on ' + GetDateTimeString('dd mmm yyyy hh:nn:ss', #0, #0) + #13#10 + #13#10, False);
-    Exec(ExpandConstant('{cmd}') ,ExpandConstant('/c for /f "delims= " %i in (' + #39 + '"{app}\bin\smartctl" --scan' + #39 +') do "{app}\bin\smartctl.exe" -a %i >> "' + InitialLogFile + '"'), '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
     Exec(ExpandConstant('{cmd}') ,ExpandConstant('/c for /f "delims= " %i in (' + #39 + '"{app}\bin\smartctl" --scan' + #39 +') do "{app}\bin\smartctl.exe" -a %i >> "' + InitialLogFile + '"'), '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
 end;
 
@@ -221,8 +231,6 @@ begin
   if CurStep = ssDone then
   begin
     CreateInitialLog();
-    //if IsComponentSelected('core\scheduledtest') then
-    //  WriteScheduledTest();
     LoadService('{#SmartServiceName}');    
   end;
 end;

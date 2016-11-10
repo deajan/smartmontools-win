@@ -1,17 +1,18 @@
 ﻿## Smartmontools for Windows Package
 (C) 2012-2016 Orsiris de Jong - http://www.netpower.fr
 
-Smartmontools For Windows is an alternate package for smartmontools by Bruce Allen and Christian Franke, and has been created to quickly install smartmontools as service,
-support mail or local alerts, and preconfigure smart monitor options.
+Smartmontools For Windows is an alternate package for smartmontools by Bruce Allen and Christian Franke, that has been created to smoothly install smartmontools as service,
+support out of the box mail or local alerts, and configure smart daemon options with a graphical user interface.
 Installation can be run silently with command line parameters for massive deployments, or with a graphical user interface.
 
 Configuration files are automatically generated (but you can still enjoy manual editing of course).
-A service called "SmartD" is created and launched at system startups. This service will enumerate hard disks smartmontools can monitor and send an email and/or show a local message in case of errors.
-A file called smart.log is created on error, including all smart information, and sent by mail. A error action log is created under erroraction.log.
+A service called "smartd" is created and launched at system startups. This service will enumerate hard disks smartmontools can monitor and send an email and/or show a local message in case of errors.
+Everytime smartd detects an issue, the current states of the drives are written to smart.log and an alert is triggered.
+When mail alert is triggered, all actions regarding that alerts are logged to erroraction.log
 
-Optionally, an initial smart.log file is kept on the disk, in the case you want to keep initial smart infos for warranty issues.
+On install, the current states of all drives smartd can detect are written to smartmontools-install-(version).log for warranty issues.
 
-This software and the software it installs are under GPL licence. No responsibility will be taken for any problems or malfunctions that may occur while using this software.
+No responsibility will be taken for any problems or malfunctions that may occur while using this software.
 
 Anyway,feel free to send a mail to ozy [at] netpower.fr for limited support on my free time.
 
@@ -43,35 +44,39 @@ Compilation works with Inno Setup & Inno Preprocessor 5.5+.
 You'll need to download all the software mentionned above and extract them to the corresponding directories listed in main iss file.
 Python executables are frozen versions with py2exe. Just rename the dist directory provided by the setup scripts and put them in the corresponding directories.
 
-## Command line parameters
+## Useful command line parameters
 
-smartmontools-win-6.5.exe [-c c:\path\to\custom\smartd.conf] [-f source@mail.tld -t destination@mail.tld -s smtp.server.tld] [--port=25] [-u smtpuser] [-p smtppassword] [--security=(none|tls|ssl)]] [--localmessages=(yes|no)] [--warningmessage="Your custom alert message"] [--compresslogs=(yes|no)] [--keepfirstlog=(yes|no)] [--sendtestmessage=(yes|no)] [/silent]
+smartmontools-win-6.5.exe [OPTIONS]
 
--c Provide a custom smartd.conf for mass installation
--f Email address your alert mail will come from
--t destination email address for your alert
--s your smtp server
---port=your smtp server port (defaults to 25)
--u your smtp server username (not mandatory)
--p your smtp server password (not mandatory)
---tls (no|auto|yes) Use of TLS sécurity, is no if not defined
---localmessages=(no|yes) Display local warning messages on errors, is set to no if not defined
---warningmessage="Your custom warning message", if not set, the default warning message will be used
---compresslogs=(yes|no) is activated if not defined
---keepfirstlog=(yes|no) is activated if not defined
---sendtestmessage=(yes|no) is activated if not defined
-/silent or /verysilent are silent switches. Please be aware these are the only switches using a slash, as they are Inno Setup internal logic switches.
+[OPTIONS]
+
+/COMPONENTS="comma separated list of component names"
+
+This setting overrides the default selection.
+
+Valid components are:
+core : 						Basic install, cannot be unselected
+core\service : 				Install smartd service
+core\service\gui			Graphical user interface for smartd and alerts
+core\service\mailsupport	On alerts send an email
+core\service\localsupport	On alerts show messages on screen
+core\scheduledtestalerts	Trigger a test alert every month
+fixbadsecttools				Fix bad sector script
+regext						Register SMART right click actions on drives
+updatedb					Update drive database right after installation
+authorlinks					Include links to the authors websites
+
+/SILENT 					Installs smartmontools-win silently, without showing the configuration GUI.
+
+/HELP						Shows all possible commandline switches
+
+You may want to preconfigure smartd settings or alert setting when making an unattended installation.
+Putting a preconfigured smartd.conf file along with the setup exe will load it automatically.
+Putting a preconfigured erroraction_config.cmd file along with the setup exe will automatically configure alert options.
+Those files can be found at https://github.com/deajan/smartmontools-win/unattended
 
 See examples below
 
 ## Examples
 
-A basic installation script:
-
-smartmontools-win-6.5.exe -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com /silent
-
-This line would silently install smartmontools mail alerts, autodetection of hdds, using all monitor parameters, and schedule a short selftest every day at 08AM and a long selftest every friday at 12AM.
-
-An other example would be that would use tls for mails, authentificate on your ISP's SMTP server, never ignore temperature changes, show local warning messages, disables short tests and schedules a long selftest every tuesday and sunday at 02PM for the drives /dev/pd0 and /dev/csmi0,1 would look like
-
-smartmontools-win-6.5.exe -c c:\smartd.conf -f sourcemail@example.tld -t destination@example.tld -s smtp.of.your.isp.com --port 587 -u username@smtp.server.tld -p pA55W0RD --tls=yes --localmessages=yes /silent
+smartmontools-win-6.5-1.exe /COMPONENTS="core\service,core\service\gui,core\service\mailsupport,updatedb" /SILENT

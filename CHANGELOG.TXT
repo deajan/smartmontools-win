@@ -14,17 +14,20 @@ Changelog
 ! SERVICE NOT RUNNING AFTER INSTALL
 - Brand new and shiny python GUI for smartd.conf
 - New GUI to configure erroraction_config.cmd parameters
-- New commandline options
+- Greatly simplified commandline options
 - Custom smartd.conf file can now be distributed directly with the installer executuable (see README for more info)
+- Custom erroraction_config.cmd file can now be distributed directly with the installer executable  (also see README for more info)
 - Previous smartd.conf files are now kept
 - Updated upstream release to v6.5-1
 - Installer now uses 64 bits binaries on 64 bit systems (following upstream)
 - Updated mailsend to v1.19
+- Improved erroraction.cmd script to detect privileges, and autodetect drives
 - Fixed scheduled tests can be disabled in installer
 - Fixed scheduled_send.cmd didn't get deleted on uninstall
 - Removed a lot of the installer logic from Inno Setup
 - Removed old SendEmail support
 - Removed legacy smart service uninstall from v5.x series
+- Removed russian translation (outdated and not maintained, translators welcome)
 - Re-enconded iss files without UTF BOM (issues with Inno Script Studio 5.5.9)
 
 

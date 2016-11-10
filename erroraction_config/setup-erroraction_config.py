@@ -10,7 +10,7 @@ sys.argv.append("py2exe")
 setup(
     #options = {'py2exe': {'optimize': 2}},
     windows = [{'script': "erroraction_config.py",
-				'icon_resources': [(1, "myicon.ico")]}],
+				'icon_resources': [(1, "erroraction_config.ico")]}],
     
     zipfile = "shared.lib",
     #console=["smartd-pyngui.py"],
