@@ -18,7 +18,7 @@ Anyway,feel free to send a mail to ozy [at] netpower.fr for limited support on m
 
 ## Upgrade path
 
-The configuration from previous installations is now kept (unless a smartd.conf and/or and erroraction_config.cmd file is provided among the installer script).
+The configuration from previous installations is now kept (unless a smartd.conf and/or and erroraction_config.cmd file is provided along with the installer script).
 The commandline options of the installer have heavily changed. Be sure to update your mass installer scripts according to new commandline syntax (see below).
 
 ## Copyrights
@@ -68,15 +68,23 @@ authorlinks					Include links to the authors websites
 
 /SILENT 					Installs smartmontools-win silently, without showing the configuration GUI.
 
+/SUPPRESSMSGBOXES			Removes the configuration files overwrite confirmation and keep the original configuration (unless new config files are supplied along with the installer).
+
 /HELP						Shows all possible commandline switches
+
+See examples below
+
+## Unattended examples
 
 You may want to preconfigure smartd settings or alert setting when making an unattended installation.
 Putting a preconfigured smartd.conf file along with the setup exe will load it automatically.
 Putting a preconfigured erroraction_config.cmd file along with the setup exe will automatically configure alert options.
 Those files can be found at https://github.com/deajan/smartmontools-win/tree/master/unattended
 
-See examples below
+Put the following files in the same directory
+- smartmontools-win-6.5-1.exe
+- smartd.conf
+- erroraction_config.cmd
 
-## Examples
-
-smartmontools-win-6.5-1.exe /COMPONENTS="core\service,core\service\gui,core\service\mailsupport,updatedb" /SILENT
+Then run:
+smartmontools-win-6.5-1.exe /COMPONENTS="core\service,core\service\gui,core\service\mailsupport,updatedb,regext,authorlinks" /SUPPRESSMSGBOXES /SILENT
