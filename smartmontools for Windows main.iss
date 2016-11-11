@@ -4,7 +4,7 @@
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.5"
 #define MinorVersion "1"
-#define SubBuild "9"
+#define SubBuild "14"
 ; Define build type -testing -beta -rc for WIP
 #define BuildType "-beta"
 #define AppPublisher "Orsiris de Jong"
@@ -106,9 +106,9 @@ Source: "{#BaseDir}\README-FR.TXT"; DestDir: "{app}\doc\Smartmontools for Window
 Source: "{#BaseDir}\README-DE.TXT"; DestDir: "{app}\doc\Smartmontools for Windows package"; Components: core;
 Source: "{#BaseDir}\LICENSE.TXT"; DestDir: "{app}\doc\Smartmontools for Windows package"; Components: core;
 Source: "{#BaseDir}\erroraction.cmd"; DestDir: "{app}\bin"; Components: core\service;
-Source: "{#BaseDir}\erroraction_config.cmd"; DestDir: "{app}\bin"; Components: core\service; AfterInstall: WriteErrorActionConfig(); Check: NoExternalErroractionFile();
+Source: "{#BaseDir}\erroraction_config.cmd"; DestDir: "{app}\bin"; Components: core\service; Flags: confirmoverwrite; Check: NoExternalErroractionFile(); AfterInstall: UpdateErroractionConfFile();
 Source: "{#BaseDir}\ScheduledTask.xml"; DestDir: "{app}\bin"; Components: core\scheduledtestalerts; AfterInstall: WriteScheduledTest();
-Source: "{#BaseDir}\smartd.conf"; DestDir: "{app}\bin"; Components: core\service; Flags: onlyifdoesntexist; Check: NoExternalSmartdFile(); AfterInstall: UpdateSmartdConfFile();
+Source: "{#BaseDir}\smartd.conf"; DestDir: "{app}\bin"; Components: core\service; Flags: confirmoverwrite; Check: NoExternalSmartdFile(); AfterInstall: UpdateSmartdConfFile();
 
 
 [Run]
@@ -174,11 +174,19 @@ begin
     result := True;
 end;
 
+procedure UpdateErroractionConfFile();
+begin
+  //// Modify erroraction_config.cmd with app path and warning message
+  FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), '[PATH]', ExpandConstant('{app}\bin'));
+  FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), '[WARNING_MESSAGE]', ExpandConstant('{cm:warningmessage}'));
+end;
+
 function NoExternalErroractionFile(): Boolean;
 begin
   if (FileExists(Expandconstant('{src}\erroraction_config.cmd'))) then
   begin
     FileCopy(ExpandConstant('{src}\erroraction_config.cmd'), ExpandConstant('{app}\bin\erroraction_config.cmd'), False);
+    UpdateErroractionConfFile();
     result := False;
   end else
     result := True;
@@ -207,13 +215,6 @@ begin
 
   //// Modify Scheduled task file with app path
   FileReplaceString(ExpandConstant('{app}\bin\ScheduledTask.xml'), '[PATH]', ExpandConstant('{app}\bin'));
-end;
-
-procedure WriteErrorActionConfig();
-begin
-  //// Modify erroraction_config.cmd with app path and warning message
-  FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), '[PATH]', ExpandConstant('{app}\bin'));
-  FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), '[WARNING_MESSAGE]', ExpandConstant('{cm:warningmessage}'));
 end;
 
 function InitializeSetup(): Boolean;
