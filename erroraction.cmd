@@ -1,10 +1,14 @@
-:: Smartmontools for Windows package v6.5 erroraction.cmd 2016111003
+:: Smartmontools for Windows package v6.5 erroraction.cmd 2016111201
 :: http://www.netpower.fr
 :: (L) 2012-2016 by Orsiris de Jong
 
 :: Config can be changed in erroraction_config.cmd
 
 :: CHANGELOG:
+:: 12 Nov 2016:
+:: - Fixed password cannot contain '!' character
+:: - Added -M environment variables from smartd
+:: - Added date in logs
 :: 10 Nov 2016:
 :: - Added default mailer
 :: - Added admin privileges check
@@ -13,7 +17,8 @@
 :: - Better test message
 
 @echo off
-setlocal enabledelayedexpansion
+:: Needed in order to let password end with '!' character
+setlocal disabledelayedexpansion
 
 :: Get currentdir
 :: Get Script working dir if erroraction.cmd is launched as scheduled task
@@ -30,12 +35,9 @@ set SCRIPT_ERROR=0
 
 set ERROR_LOG_FILE=%curdir%\erroraction.log
 set SMART_LOG_FILE=%curdir%\smart.log
-:: ---------------------------- Main -----------------------------
-:: This variable contains a newline char... Please leave the empty 2 lines below as they're needed for the "newline" symbol.
-:: The newline symbol will be used to parse a space separated list of devices (%DEVICE_LIST%) with the for command.
-set newline=^
 
-
+:: Add SMARTD environment variables to WARNING_MESSAGE
+set WARNING_MESSAGE=%WARNING_MESSAGE% - SMARTD DETAILS: %SMARTD_TFIRST% %SMARTD_FULLMESSAGE% %SMARTD_DEVICE% %SMARTD_DEVICETYPE% %SMARTD_DEVICESTRING% %SMARTD_FAILTYPE%
 
 IF "%1"=="--dryrun" ( set DRY=1 ) ELSE ( set DRY=0 )
 IF "%1"=="--test" ( call:Tests ) ELSE ( set TEST=0 )
@@ -52,7 +54,7 @@ GOTO END
 
 
 :Log
-echo %~1 >> "%ERROR_LOG_FILE%"
+echo %DATE:~0,2%-%DATE:~3,2%-%DATE:~6,4% %TIME:~0,2%H%TIME:~3,2%m%TIME:~6,2%s - %~1 >> "%ERROR_LOG_FILE%"
 IF "%DEBUG%"=="yes" echo %~1
 GOTO:EOF
 
@@ -125,7 +127,9 @@ IF NOT "%USERDNSDOMAIN%"=="" set COMPUTER_FQDN=%COMPUTERNAME%.%USERDNSDOMAIN%
 GOTO:EOF
 
 :GetPwd
-FOR /F "delims=" %%i IN ('"echo %SMTP_PASSWORD% | base64 -d"') DO SET SMTP_PASSWORD=%%i
+:: Disable delayed expansion as there is no way the password can end with an exclamation mark if set
+:: Dear people who invented batch, delayed expansion and those superb %dp~n variable namings, there's a special place in hell (or whatever afwul thing you believe in) for you !
+FOR /F "delims=" %%p IN ('"echo %SMTP_PASSWORD% | base64 -d"') DO SET SMTP_PASSWORD=%%p
 GOTO:EOF
 
 :Mailer
