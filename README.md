@@ -18,8 +18,8 @@ Anyway,feel free to send a mail to ozy [at] netpower.fr for limited support on m
 
 ## Upgrade path
 
-The smartd.conf file from previous installations is now kept (unless a smartd.conf file is provided with the installer script).
-The commandline options of the installer have heavily changed. Be sure to update your mass installer scripts according to new commandline syntax.
+The configuration from previous installations is now kept (unless a smartd.conf and/or and erroraction_config.cmd file is provided among the installer script).
+The commandline options of the installer have heavily changed. Be sure to update your mass installer scripts according to new commandline syntax (see below).
 
 ## Copyrights
 
@@ -73,7 +73,7 @@ authorlinks					Include links to the authors websites
 You may want to preconfigure smartd settings or alert setting when making an unattended installation.
 Putting a preconfigured smartd.conf file along with the setup exe will load it automatically.
 Putting a preconfigured erroraction_config.cmd file along with the setup exe will automatically configure alert options.
-Those files can be found at https://github.com/deajan/smartmontools-win/unattended
+Those files can be found at https://github.com/deajan/smartmontools-win/tree/master/unattended
 
 See examples below
 
