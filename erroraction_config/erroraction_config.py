@@ -11,7 +11,7 @@ class Constants:
 	"""
 	APP_NAME="erroraction_config"
 	APP_VERSION="0.2"
-	APP_BUILD="2016111003"
+	APP_BUILD="2016111102"
 	APP_DESCRIPTION="smartmontools for Windows mail config"
 	CONTACT="ozy@netpower.fr - http://www.netpower.fr"
 	AUTHOR="Orsiris de Jong"
@@ -19,7 +19,7 @@ class Constants:
 	ERRORACTION_CMD_FILENAME="erroraction_config.cmd"
 	MAILSEND_BINARY="mailsend.exe"
 	
-	IS_STABLE=True
+	IS_STABLE=False
 
 	LOG_FILE=APP_NAME + ".log"
 
@@ -176,6 +176,7 @@ class Application:
 			self.onUseAuthentication()
 
 	def prepareConfigDict(self):
+		self.conficDict = {}
 		values = self.configValues
 		if self.builder.get_variable('useAuthentication').get() == True:
 			values.extend(self.authValues)
@@ -204,6 +205,7 @@ class Application:
 			self.builder.get_object(key)['background']=background
 	
 	def onSendTestEmail(self):
+		self.prepareConfigDict()
 		sendTestEmail(self.configDict)
 		
 	def onSaveAndExit(self):
@@ -303,7 +305,8 @@ def writeErrorConfigFile(fileName, configDict):
 		logger.debug(e)
 
 def sendTestEmail(configDict):
-	mailsend = CONFIG.appRoot + os.sep + _CONSTANT.MAILSEND_BINARY
+	# mailsend binary should be one directory above this script
+	mailsend = CONFIG.appRoot + os.sep + ".." + os.sep + _CONSTANT.MAILSEND_BINARY
 	if not os.path.isfile(mailsend):
 		msg="Cannot find [" + mailsend + "]."
 		logger.error(msg)
@@ -326,19 +329,21 @@ def sendTestEmail(configDict):
 	mailsendCommand = [mailsend, '-f', configDict['SOURCE_MAIL'], '-t', configDict['DESTINATION_MAIL'], '-smtp', configDict['SMTP_SERVER'], '-port', configDict['SMTP_PORT'], '-sub', subject, '-M', message]
 	
 	try:
-		if len(configDict['SMTP_USER']) > 0 and len(confictDict['SMTP_PASSWORD']) > 0:
-			mailsendCommand.append(['-auth', '-user', configDict['SMTP_USER'], '-pass', configDict['SMTP_PASSWORD']])
-	except:
-		logger.debug("Can't add mail authentication")
+		if (len(configDict['SMTP_USER']) > 0) and (len(configDict['SMTP_PASSWORD']) > 0):
+			mailsendCommand += ['-auth', '-user', configDict['SMTP_USER'], '-pass', configDict['SMTP_PASSWORD']]
+	except Exception as e:
+		logger.error("Can't add mail authentication")
+		logger.debug(e)
 
 	try:
-		if len(configDict['SMTP_USER']) > 0 and len(confictDict['SMTP_PASSWORD']) > 0:
+		if len(configDict['SMTP_USER']) > 0 and len(configDict['SMTP_PASSWORD']) > 0:
 			if configDict['SECURITY'] == "tls":
 				mailsendCommand.append(['-starttls'])
 			elif configDict['SECURITY'] == "ssl":
 				mailsendCommand.append(['-ssl'])
-	except:
-		logger.debug("Can't figure out mail security settings")
+	except Exception as e:
+		logger.error("Can't figure out mail security settings")
+		logger.debug(e)
 
 	logger.debug(mailsendCommand)
 
@@ -350,7 +355,7 @@ def sendTestEmail(configDict):
 		messagebox.showinfo('Error', msg)
 		return False
 		
-	messagebox.showinfo('Sending mail succeed. Please check your inbox.')	
+	messagebox.showinfo('Information', 'Sending mail succeed. Please check your inbox.')	
 				
 def usage():
 	print(_CONSTANT.APP_NAME + " v" + _CONSTANT.APP_VERSION + " " + _CONSTANT.APP_BUILD)
