@@ -8,10 +8,8 @@ Known issues
 Changelog
 ---------
 
-[v6.5-1] from DD Mmm YYYY
+[v6.5-1] from DD Mmm YYYY (currently beta)
 
-! Check py2exe for name & author inclusion
-! SERVICE NOT RUNNING AFTER INSTALL
 - Brand new and shiny python GUI for smartd.conf
 - New GUI to configure erroraction_config.cmd parameters
 - Greatly simplified commandline options
