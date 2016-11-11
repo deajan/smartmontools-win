@@ -37,6 +37,7 @@ Additionnaly, it uses the following free software:
 ## Binaries
 
 You'll find the latest binaries at http://www.netpower.fr/smartmontools-win
+
 Current beta binary is found at https://github.com/deajan/smartmontools-win/releases/tag/v6.5-1-beta
 
 ## Compilation
