@@ -3,14 +3,14 @@
 
 Known issues
 
-- Parameters from command line are ignored in GUI when not in silent mode (anyway, seems unnecessary)
-- Mailsend does not support multibyte chars when sending emails, so no accents and special chars can be printed in email.
+- Mailsend does not support multibyte chars when sending emails under Windows, so not all special characters can be used in warning emails
 
 Changelog
 ---------
 
 [v6.5-1] from DD Mmm YYYY
 
+! Check py2exe for name & author inclusion
 ! SERVICE NOT RUNNING AFTER INSTALL
 - Brand new and shiny python GUI for smartd.conf
 - New GUI to configure erroraction_config.cmd parameters
@@ -21,7 +21,8 @@ Changelog
 - Updated upstream release to v6.5-1
 - Installer now uses 64 bits binaries on 64 bit systems (following upstream)
 - Updated mailsend to v1.19
-- Improved erroraction.cmd script to detect privileges, and autodetect drives
+- Improved erroraction.cmd script to detect privileges, and autodetect drives, and add smartd error diagnostics
+- Fixed mail password cannot contain exclamation mark (batch hell)
 - Fixed scheduled tests can be disabled in installer
 - Fixed scheduled_send.cmd didn't get deleted on uninstall
 - Removed a lot of the installer logic from Inno Setup
