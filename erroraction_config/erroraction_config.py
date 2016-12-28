@@ -11,7 +11,7 @@ class Constants:
 	"""
 	APP_NAME="erroraction_config"
 	APP_VERSION="0.2"
-	APP_BUILD="2016111102"
+	APP_BUILD="2016122801"
 	APP_DESCRIPTION="smartmontools for Windows mail config"
 	CONTACT="ozy@netpower.fr - http://www.netpower.fr"
 	AUTHOR="Orsiris de Jong"
@@ -78,7 +78,16 @@ try:
 except:
 	import Tkinter as tk		# Python 2
 	import tkMessageBox as messagebox
-import pygubu					# GUI builder
+
+try:
+	import pygubu					# GUI builder
+except:
+	logger.critical("Cannot find pygubu module. Try installing it with python -m pip install pygubu")
+	sys.exit(1)
+	
+# Manually resolve dependancies from pygubu with nuitka (Thanks to pygubu author Alejandro https://github.com/alejandroautalan)
+# As a side effect, show various messages in console on startup
+import nuitkahelper
 
 logger.info("Running on python " + platform.python_version() + " / " + str(platform.uname()))
 
@@ -148,7 +157,7 @@ class Application:
 		tempDict = self.configDict
 		self.configDict = readErrorConfigFile(CONFIG.errorActionCmdPath)
 		self.configDict.update(tempDict)
-		
+			
 		# Populate values in GUI
 		for key, value in self.configDict.items():
 			try:
@@ -375,7 +384,8 @@ def usage():
 	print("-p [..]              SMTP server password")
 	print("--security=[..]      SMTP server security. Valid values are: none, ssl, tls")
 	print("-z                   Compress log files before sending")
-	print("-l                   Show smart warnings on screen")
+	print("-m                   Enable mail warnings (automatically enabled if destination mail provided)")
+	print("-l                   Enable smart warnings on screen")
 	print("--warning=\"[..]\"     Specify a warning message that will be used for alerts")
 	print("--help, -h, -?       Will show this message")
 	print("")
@@ -392,7 +402,7 @@ def main(argv):
 	configDict={}
 	
 	try:
-		opts, args = getopt.getopt(argv, "hlz?c:?f:?t:?s:u:?p:?P:?", [ 'security=', 'warning=' ])
+		opts, args = getopt.getopt(argv, "hmlz?c:?f:?t:?s:u:?p:?P:?", [ 'security=', 'warning=' ])
 	except getopt.GetoptError:
 		usage()
 	for opt, arg in opts:
@@ -400,6 +410,8 @@ def main(argv):
 			usage()
 		elif opt == '-c':
 			confFile = arg
+		elif opt == '-m':
+			configDict['MAIL_ALERT'] = "yes"
 		elif opt == '-f':
 			configDict['SOURCE_MAIL'] = arg
 		elif opt == '-t':

@@ -1,7 +1,7 @@
 :: erroraction_config.cmd file for smartmontools for Windows v6.5+
 
 :: Valid values are: yes, no
-set MAIL_ALERT=yes
+set MAIL_ALERT=no
 
 
 set SOURCE_MAIL=
