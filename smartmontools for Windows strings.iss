@@ -25,17 +25,13 @@ en.servicegui=Graphical user interface
 fr.servicegui=Interface graphique
 de.servicegui=Grafische Benutzeroberfläche
 
-en.mailsupport=Send mails on errors
-fr.mailsupport=Envoi d'emails en cas d'erreurs
-de.mailsupport=E-Mail senden falls Fehler auftreten
+en.alertsupport=Provide mail or local alert support
+fr.alertsupport=Support des mails ou alerts locales
+de.alertsupport=E-Mail oder lokale Alarm unterschtützen
 
 en.scheduledtestalerts=Schedule a test alert every month
 fr.scheduledtestalerts=Planifier une alerte de test chaque mois
 de.scheduledTestalerts=Jeden Monat ein test Alarm planifizieren
-
-en.localsupport=Show local messages on errors
-fr.localsupport=Afficher messages locaux en cas d'erreurs
-de.localsupport=Lokale Nachricht anzeigen falls Fehler auftreten
 
 en.fixbadsecttools=Fix bad sector script
 fr.fixbadsecttools=Script de réparation secteurs défectueux

@@ -4,9 +4,9 @@
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.5"
 #define MinorVersion "1"
-#define SubBuild "14"
+#define SubBuild "1"
 ; Define build type -testing -beta -rc for WIP
-#define BuildType "-beta"
+#define BuildType "-rc1+dev"
 #define AppPublisher "Orsiris de Jong"
 #define AppURL "http://www.netpower.fr"
 #define CopyrightYears="2012-2016"
@@ -60,8 +60,7 @@ Name: custom; Description: "{cm:CustomInstall}"; Flags: iscustom;
 Name: core; Description: "{cm:coredescription}"; Types: full custom; Flags: fixed
 Name: core\service; Description: "{cm:coreservice}"; Types: full custom;
 Name: core\service\gui; Description: "{cm:servicegui}"; Types: full custom;
-Name: core\service\mailsupport; Description: "{cm:mailsupport}"; Types: full custom;
-Name: core\service\localsupport; Description: "{cm:localsupport}"; Types: custom;
+Name: core\service\alertsupport; Description: "{cm:alertsupport}"; Types: full custom;
 Name: core\scheduledtestalerts; Description: "{cm:scheduledtestalerts}"; Types: custom;
 Name: fixbadsecttools; Description: "{cm:fixbadsecttools}"; Types: full custom;
 Name: regext; Description: "{cm:regext}"; Types: full custom;
@@ -88,14 +87,14 @@ Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\runcmdu.exe"; DestDir: "{app}\bin"
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartctl.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartctl-nc.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartd.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
-Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\wtssendmsg.exe"; DestDir: "{app}\bin"; Components: core\service\localsupport; Flags: 64bit; Check: IsWin64
+Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\wtssendmsg.exe"; DestDir: "{app}\bin"; Components: core\service\alertsupport; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\doc\*"; DestDir: "{app}\doc\smartmontools"; Components: core; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#BaseDir}\{#smartdPynguiDir}\*"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui; Flags: recursesubdirs createallsubdirs
-Source: "{#BaseDir}\{#MailSendDir}\mailsend.exe"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
-Source: "{#BaseDir}\{#MailSendDir}\COPYRIGHT.TXT"; DestDir: "{app}\doc\mailsend"; Components: core\service\mailsupport;
-Source: "{#BaseDir}\{#GzipDir}\bin\gzip.exe"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
-Source: "{#BaseDir}\{#GzipDir}\man\cat1\gzip.1.txt"; DestDir: "{app}\doc\gzip"; Components: core\service\mailsupport;
-Source: "{#BaseDir}\base64.exe"; DestDir: "{app}\bin"; Components: core\service\mailsupport;
+Source: "{#BaseDir}\{#MailSendDir}\mailsend.exe"; DestDir: "{app}\bin"; Components: core\service\alertsupport;
+Source: "{#BaseDir}\{#MailSendDir}\COPYRIGHT.TXT"; DestDir: "{app}\doc\mailsend"; Components: core\service\alertsupport;
+Source: "{#BaseDir}\{#GzipDir}\bin\gzip.exe"; DestDir: "{app}\bin"; Components: core\service\alertsupport;
+Source: "{#BaseDir}\{#GzipDir}\man\cat1\gzip.1.txt"; DestDir: "{app}\doc\gzip"; Components: core\service\alertsupport;
+Source: "{#BaseDir}\base64.exe"; DestDir: "{app}\bin"; Components: core\service\alertsupport;
 Source: "{#BaseDir}\{#ddDir}\dd.exe"; DestDir: "{app}\bin"; Components: fixbadsecttools;
 Source: "{#BaseDir}\{#ddDir}\Copying.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
 Source: "{#BaseDir}\{#ddDir}\ddchanges.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
@@ -117,12 +116,12 @@ Source: "{#BaseDir}\smartd.conf"; DestDir: "{app}\bin"; Components: core\service
 Filename: {sys}\sc.exe; Parameters: "delete {#SmartServiceName}"; Components: core\service; Check: IsUpdateInstall(); StatusMSG: "Removing any old smart service instance."; Flags: runhidden waituntilterminated
 Filename: {app}\bin\update-smart-drivedb.exe; Parameters: "/S"; Components: updatedb; StatusMSG: "Updating drive database."; Flags: waituntilterminated
 Filename: {app}\bin\smartd.exe; Parameters: "install -c ""{app}\bin\smartd.conf"""; Components: core\service; StatusMSG: "Setting up smart service."; Flags: runhidden
-Filename: {app}\bin\{#smartdPynguiDir}\smartd-pyngui.exe; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui; StatusMSG: "Setup Smartd service"; Flags: waituntilterminated skipifsilent
-Filename: {app}\bin\{#smartdPynguiDir}\erroraction_config.exe; Parameters: "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui; StatusMSG: "Setup mail support"; Flags: waituntilterminated skipifsilent
+Filename: {app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui; StatusMSG: "Setup Smartd service"; Flags: waituntilterminated skipifsilent
+Filename: {app}\bin\{#smartdPynguiDir}\erroraction_config.exe; Parameters: "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\alertsupport; StatusMSG: "Setup alert settings"; Flags: waituntilterminated skipifsilent
 Filename: {app}\bin\scheduled_send.cmd; Components: core\scheduledtestalerts; StatusMsg: "Setting up scheduled test send"; Flags: runhidden
 
 [Icons]
-Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd-pyngui.exe"; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui;
+Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe"; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui;
 Name: {group}\Reconfigure SMART Alert settings; Filename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.exe"; Parameters:  "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui;
 Name: {group}\Visit NetPower.fr; Filename: http://www.netpower.fr; Components: authorlinks;
 Name: {group}\Visit smartmontools Site; Filename: http://smartmontools.sourceforge.net; Components: authorlinks;
