@@ -4,12 +4,12 @@
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.5"
 #define MinorVersion "1"
-#define SubBuild "1"
+#define SubBuild "2"
 ; Define build type -testing -beta -rc for WIP
-#define BuildType "-rc1+dev"
+#define BuildType "-rc1+dev2"
 #define AppPublisher "Orsiris de Jong"
 #define AppURL "http://www.netpower.fr"
-#define CopyrightYears="2012-2016"
+#define CopyrightYears="2012-2017"
 
 #define BaseDir "C:\ODJ\BTC\Smartmontools for Windows"
 #define SmartmonToolsDir "smartmontools-6.5-1.win32-setup"
@@ -18,6 +18,7 @@
 #define MailsendDir "mailsend1.19"
 #define GzipDir "gzip-1.3.12-1-bin"
 #define ddDir "dd-0.6beta3"
+#define vcRedistDir "VCREDIST"
 #define SmartServiceName "smartd"
 #define AppGUID "{487E2D86-AB76-467B-8EC0-0AF89EC38F5C}"
 
@@ -60,7 +61,8 @@ Name: custom; Description: "{cm:CustomInstall}"; Flags: iscustom;
 Name: core; Description: "{cm:coredescription}"; Types: full custom; Flags: fixed
 Name: core\service; Description: "{cm:coreservice}"; Types: full custom;
 Name: core\service\gui; Description: "{cm:servicegui}"; Types: full custom;
-Name: core\service\alertsupport; Description: "{cm:alertsupport}"; Types: full custom;
+Name: core\service\mailalert; Description: "{cm:mailsupport}"; Types: full custom;
+Name: core\service\localalert; Description: "{cm:localsupport}"; Types: custom;
 Name: core\scheduledtestalerts; Description: "{cm:scheduledtestalerts}"; Types: custom;
 Name: fixbadsecttools; Description: "{cm:fixbadsecttools}"; Types: full custom;
 Name: regext; Description: "{cm:regext}"; Types: full custom;
@@ -87,14 +89,15 @@ Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\runcmdu.exe"; DestDir: "{app}\bin"
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartctl.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartctl-nc.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartd.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
-Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\wtssendmsg.exe"; DestDir: "{app}\bin"; Components: core\service\alertsupport; Flags: 64bit; Check: IsWin64
+Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\wtssendmsg.exe"; DestDir: "{app}\bin"; Components: core\service\localalert; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\doc\*"; DestDir: "{app}\doc\smartmontools"; Components: core; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#BaseDir}\{#smartdPynguiDir}\*"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui; Flags: recursesubdirs createallsubdirs
-Source: "{#BaseDir}\{#MailSendDir}\mailsend.exe"; DestDir: "{app}\bin"; Components: core\service\alertsupport;
-Source: "{#BaseDir}\{#MailSendDir}\COPYRIGHT.TXT"; DestDir: "{app}\doc\mailsend"; Components: core\service\alertsupport;
-Source: "{#BaseDir}\{#GzipDir}\bin\gzip.exe"; DestDir: "{app}\bin"; Components: core\service\alertsupport;
-Source: "{#BaseDir}\{#GzipDir}\man\cat1\gzip.1.txt"; DestDir: "{app}\doc\gzip"; Components: core\service\alertsupport;
-Source: "{#BaseDir}\base64.exe"; DestDir: "{app}\bin"; Components: core\service\alertsupport;
+Source: "{#BaseDir}\{#vcRedistDir}\msvcr100.dll"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui;
+Source: "{#BaseDir}\{#MailSendDir}\mailsend.exe"; DestDir: "{app}\bin"; Components: core\service\mailalert;
+Source: "{#BaseDir}\{#MailSendDir}\COPYRIGHT.TXT"; DestDir: "{app}\doc\mailsend"; Components: core\service\mailalert;
+Source: "{#BaseDir}\{#GzipDir}\bin\gzip.exe"; DestDir: "{app}\bin"; Components: core\service\mailalert;
+Source: "{#BaseDir}\{#GzipDir}\man\cat1\gzip.1.txt"; DestDir: "{app}\doc\gzip"; Components: core\service\mailalert;
+Source: "{#BaseDir}\base64.exe"; DestDir: "{app}\bin"; Components: core\service\mailalert;
 Source: "{#BaseDir}\{#ddDir}\dd.exe"; DestDir: "{app}\bin"; Components: fixbadsecttools;
 Source: "{#BaseDir}\{#ddDir}\Copying.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
 Source: "{#BaseDir}\{#ddDir}\ddchanges.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
@@ -117,7 +120,7 @@ Filename: {sys}\sc.exe; Parameters: "delete {#SmartServiceName}"; Components: co
 Filename: {app}\bin\update-smart-drivedb.exe; Parameters: "/S"; Components: updatedb; StatusMSG: "Updating drive database."; Flags: waituntilterminated
 Filename: {app}\bin\smartd.exe; Parameters: "install -c ""{app}\bin\smartd.conf"""; Components: core\service; StatusMSG: "Setting up smart service."; Flags: runhidden
 Filename: {app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui; StatusMSG: "Setup Smartd service"; Flags: waituntilterminated skipifsilent
-Filename: {app}\bin\{#smartdPynguiDir}\erroraction_config.exe; Parameters: "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\alertsupport; StatusMSG: "Setup alert settings"; Flags: waituntilterminated skipifsilent
+Filename: {app}\bin\{#smartdPynguiDir}\erroraction_config.exe; Parameters: "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui; StatusMSG: "Setup alert settings"; Flags: waituntilterminated skipifsilent
 Filename: {app}\bin\scheduled_send.cmd; Components: core\scheduledtestalerts; StatusMsg: "Setting up scheduled test send"; Flags: runhidden
 
 [Icons]
@@ -178,6 +181,24 @@ begin
   //// Modify erroraction_config.cmd with app path and warning message
   FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), '[PATH]', ExpandConstant('{app}\bin'));
   FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), '[WARNING_MESSAGE]', ExpandConstant('{cm:warningmessage}'));
+
+  //// Depending on options selected, set MAIL_ALERT=yes/no and LOCAL_ALERT=yes/no in erroraction_config.cmd
+  //// To lazy to find out how to use wildcards with FileReplaceString --> old disgusting way
+  if (IsComponentSelected('core\service\mailalert')) then
+  begin
+    FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'MAIL_ALERT=no', 'MAIL_ALERT=yes');
+    FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'MAIL_ALERT=' + #13#10, 'MAIL_ALERT=yes');
+  end else
+    FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'MAIL_ALERT=yes', 'MAIL_ALERT=no');  
+    FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'MAIL_ALERT=' + #13#10, 'MAIL_ALERT=no');
+
+  if (IsComponentSelected('core\service\localalert')) then
+  begin
+    FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'LOCAL_ALERT=no', 'LOCAL_ALERT=yes');
+    FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'LOCAL_ALERT=' + #13#10, 'LOCAL_ALERT=yes');
+  end else
+    FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'LOCAL_ALERT=yes', 'LOCAL_ALERT=no');
+    FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'LOCAL_ALERT=' + #13#10, 'LOCAL_ALERT=no');   
 end;
 
 function NoExternalErroractionFile(): Boolean;
@@ -218,6 +239,7 @@ end;
 
 function InitializeSetup(): Boolean;
 begin
+
   // Stop the smartd service before upgrading
   if (IsUpdateInstall() = true) then
     UnloadService('{#SmartServiceName}');
