@@ -1,5 +1,5 @@
 ﻿## Smartmontools for Windows Package
-(C) 2012-2016 Orsiris de Jong - http://www.netpower.fr
+(C) 2012-2017 Orsiris de Jong - http://www.netpower.fr
 
 Smartmontools For Windows is an alternate package for smartmontools by Bruce Allen and Christian Franke, that has been created to smoothly install smartmontools as service,
 support out of the box mail or local alerts, and configure smart daemon options with a graphical user interface.
@@ -38,7 +38,7 @@ Additionnaly, it uses the following free software:
 
 You'll find the latest binaries at http://www.netpower.fr/smartmontools-win
 
-Current beta binary is found at https://github.com/deajan/smartmontools-win/releases/tag/v6.5-1-beta
+Current beta binary is found at https://github.com/deajan/smartmontools-win/releases/tag/v6.5-1-rc1
 
 ## Compilation
 
