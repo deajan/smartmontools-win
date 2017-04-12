@@ -2,19 +2,35 @@
 
 # setup.py
 import sys
-from distutils.core import setup
-import py2exe
+try:
+	from distutils.core import setup
+except:
+	print("Missing distutils.core module")
+	sys.exit(1)
+
+try:
+	import py2exe
+except:
+	print("Missing py2exe module")
+	sys.exit(1)
 
 sys.argv.append("py2exe")
 
+APP_NAME='erroraction_config'
+
 setup(
-    #options = {'py2exe': {'optimize': 2}},
-    windows = [{'script': "erroraction_config.py",
-				'icon_resources': [(1, "erroraction_config.ico")]}],
-    
+    name=APP_NAME,
+	version='0.2',
+	description='smartmontools-win alert GUI',
+	author='Orsiris de Jong',
+	#console=[APP_NAME + ".py"],
+    windows = [{'script': APP_NAME + ".py",
+				'icon_resources': [(1, APP_NAME + ".ico")],
+				'uac_info': "requireAdministrator",
+				}],
+				
     zipfile = "shared.lib",
-    #console=["smartd-pyngui.py"],
-    data_files=[("", ["erroraction_config.ui"])],
+    data_files=[("", [APP_NAME + ".ui"])],
     options= {
         "py2exe": { 
             "includes" : ["sys",
@@ -33,8 +49,17 @@ setup(
                           "doctest",
                           "locale",
                           "optparse",
-                          "calendar",],
+                          "calendar",
+						  "doctest",
+						  "pdb",
+						  "unittest",
+						  "difflib",
+						  "inspect",
+						  ],
             "compressed" : True,
+			"optimize": 2,
                           
                     }},
         )
+
+#TODO: remove tcl\tcl8.5\{encoding,demos,tzdata}
