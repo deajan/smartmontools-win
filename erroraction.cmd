@@ -1,10 +1,14 @@
-:: Smartmontools for Windows package v6.5 erroraction.cmd 2016111201
+:: Smartmontools for Windows package v6.5 erroraction.cmd 2017041201
 :: http://www.netpower.fr
-:: (L) 2012-2016 by Orsiris de Jong
+:: (L) 2012-2017 by Orsiris de Jong
 
 :: Config can be changed in erroraction_config.cmd
 
 :: CHANGELOG:
+:: 12 Avr 2017:
+:: - Added more preflight checks
+:: - Fixed syntax in smartctl device erxpansion
+:: - Added exit code
 :: 12 Nov 2016:
 :: - Fixed password cannot contain '!' character
 :: - Added -M environment variables from smartd
@@ -28,8 +32,6 @@ set curdir=%curdir:~0,-1%
 :: Load autgenerated configuration
 call "%curdir%\erroraction_config.cmd"
 
-:: Load autgenerated configuration
-call "erroraction_config.cmd"
 set DEBUG=yes
 set SCRIPT_ERROR=0
 
@@ -41,7 +43,6 @@ set WARNING_MESSAGE=%WARNING_MESSAGE% - SMARTD DETAILS: %SMARTD_TFIRST% %SMARTD_
 
 IF "%1"=="--dryrun" ( set DRY=1 ) ELSE ( set DRY=0 )
 IF "%1"=="--test" ( call:Tests ) ELSE ( set TEST=0 )
-
 
 :: GetEnvironment is the only function that triggers premature end of the script as other failures might not interrupt processing
 call:GetEnvironment
@@ -55,7 +56,7 @@ GOTO END
 
 :Log
 echo %DATE:~0,2%-%DATE:~3,2%-%DATE:~6,4% %TIME:~0,2%H%TIME:~3,2%m%TIME:~6,2%s - %~1 >> "%ERROR_LOG_FILE%"
-IF "%DEBUG%"=="yes" echo %~1
+echo %~1
 GOTO:EOF
 
 :Tests
@@ -88,7 +89,39 @@ IF NOT %ERRORLEVEL%==0 (
 	call:Log "Missing smartctl.exe file"
 	SET SCRIPT_ERROR=1
 	)
-GOTO:EOF
+
+IF "%LOCAL_ALERT%"=="yes" (	
+	dir "%curdir%\wtssendmsg.exe" > nul 2> nul
+	IF NOT !ERRORLEVEL!==0 (
+		call:Log "Missing wtssendmsg.exe file. Did you install without local alert support ?"
+		SET SCRIPT_ERROR=1
+		)
+	GOTO:EOF
+)
+
+IF "%MAIL_ALERT%"=="yes" (
+	dir "%curdir%\mailsend.exe" > nul 2> nul
+	IF NOT !ERRORLEVEL!==0 (
+		call:Log "Missing mailsend.exe file. Did you install without  mail alert support ?"
+		SET SCRIPT_ERROR=1
+		)
+	GOTO:EOF
+	
+	dir "%curdir%\base64.exe" > nul 2> nul
+	IF NOT !ERRORLEVEL!==0 (
+		call:Log "Missing base64.exe file. Did you install without  mail alert support ?"
+		SET SCRIPT_ERROR=1
+		)
+	GOTO:EOF
+	
+	dir "%curdir%\gzip.exe" > nul 2> nul
+	IF NOT !ERRORLEVEL!==0 (
+		call:Log "Missing gzip.exe file. Did you install without  mail alert support ?"
+		SET SCRIPT_ERROR=1
+		)
+	GOTO:EOF
+)
+	
 
 :CheckMailValues
 echo "%SOURCE_MAIL%" | findstr /I "@" > nul
@@ -118,6 +151,7 @@ echo ---------------------------------------------------------------------------
 for /F %%d in ('type "%curdir%\smartd.conf" ^| findstr /R /C:"^/"') do "%curdir%\smartctl.exe" -a %%d >> "%SMART_LOG_FILE%"
 for /F %%d in ('type "%curdir%\smartd.conf" ^| findstr /R /C:"^DEVICESCAN"') do SET DEVICESCAN=yes
 IF "%DEVICESCAN%"=="yes" FOR /F "delims= " %%i in ('"%curdir%\smartctl.exe" --scan') do "%curdir%\smartctl.exe" -a %%i >> "%SMART_LOG_FILE%"
+IF %ERRORLEVEL%==1 call:Log "Cannot extract smartctl data."
 GOTO:EOF
 
 :GetComputerName
@@ -129,7 +163,7 @@ GOTO:EOF
 :GetPwd
 :: Disable delayed expansion as there is no way the password can end with an exclamation mark if set
 :: Dear people who invented batch, delayed expansion and those superb %dp~n variable namings, there's a special place in hell (or whatever afwul thing you believe in) for you !
-FOR /F "delims=" %%p IN ('"echo %SMTP_PASSWORD% | base64 -d"') DO SET SMTP_PASSWORD=%%p
+FOR /F "delims=" %%p IN ('"echo %SMTP_PASSWORD% | "%curdir%\base64.exe" -d"') DO SET SMTP_PASSWORD=%%p
 GOTO:EOF
 
 :Mailer
@@ -231,4 +265,5 @@ GOTO:EOF
 
 :END
 :: Keeping the ping part in order to let commandline window open for some seconds after execution
-IF NOT %SCRIPT_ERROR%==0 echo Something bad happened while executing this script. Please check log file. You can also check what happens with parameter --dryrun && ping 127.0.0.1 > nul
+IF NOT %SCRIPT_ERROR%==0 echo Something bad happened while executing this script. Please check log file. You can also check what happens with parameter --dryrun && ping 127.0.0.1 > nul && exit /b 1
+exit /b 0
