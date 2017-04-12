@@ -4,9 +4,9 @@
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.5"
 #define MinorVersion "1"
-#define SubBuild "2"
+#define SubBuild "3"
 ; Define build type -testing -beta -rc for WIP
-#define BuildType "-rc1+dev2"
+#define BuildType "-rc1"
 #define AppPublisher "Orsiris de Jong"
 #define AppURL "http://www.netpower.fr"
 #define CopyrightYears="2012-2017"
