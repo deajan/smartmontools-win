@@ -11,12 +11,13 @@ class Constants:
 	"""
 	APP_NAME="erroraction_config"
 	APP_VERSION="0.2"
-	APP_BUILD="2016122801"
+	APP_BUILD="2017041201"
 	APP_DESCRIPTION="smartmontools for Windows mail config"
 	CONTACT="ozy@netpower.fr - http://www.netpower.fr"
 	AUTHOR="Orsiris de Jong"
 	
-	ERRORACTION_CMD_FILENAME="erroraction_config.cmd"
+	ERRORACTION_CMD_FILENAME="erroraction.cmd"
+	ERRORACTION_CONFIG_FILENAME="erroraction_config.cmd"
 	MAILSEND_BINARY="mailsend.exe"
 	
 	IS_STABLE=False
@@ -148,7 +149,7 @@ class Application:
 		self.builder.connect_callbacks(self)
 		callbacks = {
 			'onUseAuthentication': self.onUseAuthentication,
-			'onSendTestEmail': self.onSendTestEmail,
+			'onTriggerAlert': self.onTriggerAlert,
 			'onSaveAndExit': self.onSaveAndExit,
 		}
 		self.builder.connect_callbacks(callbacks)
@@ -213,9 +214,10 @@ class Application:
 		for key in self.authValues:
 			self.builder.get_object(key)['background']=background
 	
-	def onSendTestEmail(self):
+	def onTriggerAlert(self):
 		self.prepareConfigDict()
-		sendTestEmail(self.configDict)
+		writeErrorConfigFile(CONFIG.errorActionCmdPath, self.configDict)
+		TriggerAlert(self.configDict)
 		
 	def onSaveAndExit(self):
 		try:
@@ -236,7 +238,7 @@ def base64ToString(b):
 
 def readErrorConfigFile(fileName):
 	if not os.path.isfile(fileName):
-		logger.info("No suitable [" + _CONSTANT.ERRORACTION_CMD_FILENAME + "] file found, creating new file [" + CONFIG.errorActionCmdPath + "].")
+		logger.info("No suitable [" + _CONSTANT.ERRORACTION_CONFIG_FILENAME + "] file found, creating new file [" + CONFIG.errorActionCmdPath + "].")
 		
 		return False
 	
@@ -313,6 +315,29 @@ def writeErrorConfigFile(fileName, configDict):
 		logger.error("Cannot close file [" + fileName + "].")
 		logger.debug(e)
 
+def TriggerAlert(configDict):
+	erroraction_cmd = CONFIG.appRoot + os.sep + ".." + os.sep + _CONSTANT.ERRORACTION_CMD_FILENAME
+
+	if not os.path.isfile(erroraction_cmd):
+		erroraction_cmd = CONFIG.appRoot + os.sep + _CONSTANT.ERRORACTION_CMD_FILENAME
+		if not os.path.isfile(erroraction_cmd):
+			msg="Cannot find [ " + erroraction_cmd + "]."
+			logger.error(msg)
+			messagebox.showinfo("Error", msg)
+			return False
+
+	command=[erroraction_cmd, '--test']
+
+	pHandle = Popen(command, stdout=PIPE, stderr=PIPE)
+	output, err = pHandle.communicate()
+	if not pHandle.returncode == 0:
+		msg="Cannot execute test action:\r\n" + output.decode('iso-8859-1') + "\r\n" + err.decode('iso-8859-1')
+		logger.error(msg)
+		messagebox.showinfo('Error', msg)
+		return False
+		
+	messagebox.showinfo('Information', 'Finished testing alert action.')
+
 def sendTestEmail(configDict):
 	# mailsend binary should be one directory above this script
 	mailsend = CONFIG.appRoot + os.sep + ".." + os.sep + _CONSTANT.MAILSEND_BINARY
@@ -373,7 +398,7 @@ def usage():
 	print("")
 	print("Works on Windows only")
 	print("Usage:\n")
-	print(_CONSTANT.APP_NAME + " -c [c:\\path\\to\\" + _CONSTANT.ERRORACTION_CMD_FILENAME + "] [OPTIONS]")
+	print(_CONSTANT.APP_NAME + " -c [c:\\path\\to\\" + _CONSTANT.ERRORACTION_CONFIG_FILENAME + "] [OPTIONS]")
 	print("")
 	print("[OPTIONS]")
 	print("-f [..]              Specify a source email for alerts")

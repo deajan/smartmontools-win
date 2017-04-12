@@ -283,9 +283,9 @@
       </object>
     </child>
     <child>
-      <object class="tk.Button" id="SendTestEmail">
-        <property name="command">onSendTestEmail</property>
-        <property name="text" translatable="yes">Send Test Email</property>
+      <object class="tk.Button" id="Trigger test alert">
+        <property name="command">onTriggerAlert</property>
+        <property name="text" translatable="yes">Save &amp; Trigger test alert</property>
         <layout>
           <property name="column">0</property>
           <property name="propagate">True</property>
