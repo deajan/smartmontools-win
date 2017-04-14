@@ -5,6 +5,8 @@
 :: Config can be changed in erroraction_config.cmd
 
 :: CHANGELOG:
+:: 13 Avr 2017:
+:: - Fixed preflight checks because of ambiguous batch syntax
 :: 12 Avr 2017:
 :: - Added more preflight checks
 :: - Fixed syntax in smartctl device erxpansion
@@ -90,37 +92,28 @@ IF NOT %ERRORLEVEL%==0 (
 	SET SCRIPT_ERROR=1
 	)
 
-IF "%LOCAL_ALERT%"=="yes" (	
-	dir "%curdir%\wtssendmsg.exe" > nul 2> nul
-	IF NOT !ERRORLEVEL!==0 (
-		call:Log "Missing wtssendmsg.exe file. Did you install without local alert support ?"
-		SET SCRIPT_ERROR=1
-		)
-	GOTO:EOF
-)
+:: Incoherent %ERRORLEVEL% and !ERRORLEVEL!... Get your shit toghether cmd
+dir "%curdir%\wtssendmsg.exe" > nul 2> nul
+IF NOT %ERRORLEVEL%==0 (
+	IF "%LOCAL_ALERT%"=="yes" call:Log "Missing wtssendmsg.exe file. Did you install without local alert support ?" && SET SCRIPT_ERROR=1
+	)
 
-IF "%MAIL_ALERT%"=="yes" (
-	dir "%curdir%\mailsend.exe" > nul 2> nul
-	IF NOT !ERRORLEVEL!==0 (
-		call:Log "Missing mailsend.exe file. Did you install without  mail alert support ?"
-		SET SCRIPT_ERROR=1
-		)
-	GOTO:EOF
+dir "%curdir%\mailsend.exe" > nul 2> nul
+IF NOT %ERRORLEVEL%==0 (
+	IF "%MAIL_ALERT%"=="yes" call:Log "Missing mailsend.exe file. Did you install without  mail alert support ?" && SET SCRIPT_ERROR=1
+	)
 	
-	dir "%curdir%\base64.exe" > nul 2> nul
-	IF NOT !ERRORLEVEL!==0 (
-		call:Log "Missing base64.exe file. Did you install without  mail alert support ?"
+dir "%curdir%\base64.exe" > nul 2> nul
+IF NOT %ERRORLEVEL%==0 (
+	IF "%MAIL_ALERT%"=="yes" call:Log "Missing base64.exe file. Did you install without  mail alert support ?"
 		SET SCRIPT_ERROR=1
 		)
-	GOTO:EOF
 	
-	dir "%curdir%\gzip.exe" > nul 2> nul
-	IF NOT !ERRORLEVEL!==0 (
-		call:Log "Missing gzip.exe file. Did you install without  mail alert support ?"
+dir "%curdir%\gzip.exe" > nul 2> nul
+IF NOT %ERRORLEVEL%==0 (
+	IF "%MAIL_ALERT%"=="yes" call:Log "Missing gzip.exe file. Did you install without  mail alert support ?" && SET SCRIPT_ERROR=1
 		SET SCRIPT_ERROR=1
 		)
-	GOTO:EOF
-)
 	
 
 :CheckMailValues
