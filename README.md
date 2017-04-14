@@ -23,7 +23,7 @@ The commandline options of the installer have heavily changed. Be sure to update
 
 ## Copyrights
 
-The package itself and it's source code is licensed under GPLv2.
+The package itself, the python interfaces and it's source code is licensed under GPLv2.
 Additionnaly, it uses the following free software:
 
 - smartmontools by Bruce Allen & Christian Franke, http://smartmontools.sourceforge.net
@@ -38,8 +38,6 @@ Additionnaly, it uses the following free software:
 
 You'll find the latest binaries at http://www.netpower.fr/smartmontools-win
 
-Current beta binary is found at https://github.com/deajan/smartmontools-win/releases/tag/v6.5-1-rc1
-
 ## Compilation
 
 Compilation works with Inno Setup & Inno Preprocessor 5.5+.
@@ -48,7 +46,7 @@ Python executables are frozen versions with py2exe. Just rename the dist directo
 
 ## Useful command line parameters
 
-smartmontools-win-6.5.exe [OPTIONS]
+smartmontools-win-6.5-x.exe [OPTIONS]
 
 [OPTIONS]
 
@@ -57,16 +55,17 @@ smartmontools-win-6.5.exe [OPTIONS]
 This setting overrides the default selection.
 
 Valid components are:
-core : 						Basic install, cannot be unselected
-core\service : 				Install smartd service
+core 						Basic install, cannot be unselected
+core\service 				Install smartd service
 core\service\gui			Graphical user interface for smartd and alerts
-core\service\mailsupport	On alerts send an email
-core\service\localsupport	On alerts show messages on screen
+core\service\mailalert		On alerts send an email
+core\service\localalert		On alerts show messages on screen
 core\scheduledtestalerts	Trigger a test alert every month
 fixbadsecttools				Fix bad sector script
 regext						Register SMART right click actions on drives
 updatedb					Update drive database right after installation
 authorlinks					Include links to the authors websites
+statistics					Send anonymous install statistics
 
 /SILENT 					Installs smartmontools-win silently, without showing the configuration GUI.
 
@@ -89,4 +88,4 @@ Put the following files in the same directory
 - erroraction_config.cmd
 
 Then run:
-smartmontools-win-6.5-1.exe /COMPONENTS="core\service,core\service\gui,core\service\mailsupport,updatedb,regext,authorlinks" /SUPPRESSMSGBOXES /SILENT
+smartmontools-win-6.5-1.exe /COMPONENTS="core\service,core\service\gui,core\service\mailsupport,updatedb,regext,authorlinks,statistics" /SUPPRESSMSGBOXES /SILENT
