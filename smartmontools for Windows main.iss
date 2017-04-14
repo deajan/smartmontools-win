@@ -4,9 +4,9 @@
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.5"
 #define MinorVersion "1"
-#define SubBuild "3"
+#define SubBuild "5"
 ; Define build type -testing -beta -rc for WIP
-#define BuildType "-rc1"
+#define BuildType "-rc2"
 #define AppPublisher "Orsiris de Jong"
 #define AppURL "http://www.netpower.fr"
 #define CopyrightYears="2012-2017"
@@ -19,6 +19,7 @@
 #define GzipDir "gzip-1.3.12-1-bin"
 #define ddDir "dd-0.6beta3"
 #define vcRedistDir "VCREDIST"
+#define wgetDir "wget"
 #define SmartServiceName "smartd"
 #define AppGUID "{487E2D86-AB76-467B-8EC0-0AF89EC38F5C}"
 
@@ -70,6 +71,7 @@ Name: regext\info; Description: "{cm:smartinfo}"; Types: Full custom;
 Name: regext\tests; Description: "{cm:smarttests}"; Types: Full custom;
 Name: updatedb; Description: "{cm:updatedb}"; Types: Full custom;
 Name: authorlinks; Description: "{cm:authorlinks}"; Types: full custom;
+Name: statistics; Description: "{cm:statistics}"; Types: full custom;
 
 [Files]
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\drivedb.h"; DestDir: "{app}\bin"; Components: core;
@@ -101,6 +103,7 @@ Source: "{#BaseDir}\base64.exe"; DestDir: "{app}\bin"; Components: core\service\
 Source: "{#BaseDir}\{#ddDir}\dd.exe"; DestDir: "{app}\bin"; Components: fixbadsecttools;
 Source: "{#BaseDir}\{#ddDir}\Copying.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
 Source: "{#BaseDir}\{#ddDir}\ddchanges.txt"; DestDir: "{app}\doc\dd"; Components: fixbadsecttools;
+Source: "{#BaseDir}\{#wgetDir}\wget-1.14.exe"; DestDir: "{tmp}"; Components: statistics; AfterInstall: SendInstallerStats();
 Source: "{#BaseDir}\fix_badsectors.cmd"; DestDir: "{app}\bin"; Components: fixbadsecttools;
 Source: "{#BaseDir}\README.md"; DestDir: "{app}\doc\Smartmontools for Windows package"; Components: core;
 ;Source: "{#BaseDir}\README-RU.TXT"; DestDir: "{app}\doc\Smartmontools for Windows package"; Components: core;
@@ -122,6 +125,7 @@ Filename: {app}\bin\smartd.exe; Parameters: "install -c ""{app}\bin\smartd.conf"
 Filename: {app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui; StatusMSG: "Setup Smartd service"; Flags: waituntilterminated skipifsilent
 Filename: {app}\bin\{#smartdPynguiDir}\erroraction_config.exe; Parameters: "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui; StatusMSG: "Setup alert settings"; Flags: waituntilterminated skipifsilent
 Filename: {app}\bin\scheduled_send.cmd; Components: core\scheduledtestalerts; StatusMsg: "Setting up scheduled test send"; Flags: runhidden
+;Filename: {app}\bin\wget-1.14.exe; Parameters: " -qO- ""http://instcount.netpower.fr?program={#AppShortName}&version={#MajorVersion}-{#MinorVersion}.{#SubBuild}{#BuildType}&os=Windows&action=install"" > nul 2> nul && del ""{app}\bin\wget-1.14.exe"" /S /Q"; StatusMsg: "Sending anonymous install statistics"; Components: statistics; Flags: waituntilterminated runhidden
 
 [Icons]
 Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe"; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui;
@@ -235,6 +239,57 @@ begin
 
   //// Modify Scheduled task file with app path
   FileReplaceString(ExpandConstant('{app}\bin\ScheduledTask.xml'), '[PATH]', ExpandConstant('{app}\bin'));
+end;
+
+procedure SendInstallerStats();
+var
+  Version: TWindowsVersion;
+  WindowsString: String;
+  Parameters: String;
+  ResultCode: Integer;
+
+begin
+  GetWindowsVersionEx(Version);
+  WindowsString := IntToStr(Version.Major) + '.' + IntToStr(Version.Minor) + ' build ' + IntToStr(Version.Build) + ' SP ' + IntToStr(Version.ServicePackMajor) + '.' + IntToStr(Version.ServicePackMinor)
+  
+  if (Version.NTPlatform = True) then
+    WindowsString := WindowsString + ' NT'
+
+  if (Version.ProductType = VER_NT_WORKSTATION) then
+    WindowsString := WindowsString + ' NT_WORKSTATION'
+  else if (Version.ProductType = VER_NT_DOMAIN_CONTROLLER) then
+    WindowsString := WindowsString + ' NT_DOMAIN_CONTROLLER'
+  else if (Version.ProductType = VER_NT_SERVER) then
+    WindowsString := WindowsString + ' NT_SERVER'
+
+  if (Version.SuiteMask = VER_SUITE_BACKOFFICE) then
+     WindowsString := WindowsString + ' SUITE_BACKOFFICE'
+   else if (Version.SuiteMask = VER_SUITE_BLADE) then
+     WindowsString := WindowsString + ' SUITE_BLADE'
+   else if (Version.SuiteMask = VER_SUITE_DATACENTER) then
+     WindowsString := WindowsString + ' SUITE_DATACENTER'
+   else if (Version.SuiteMask = VER_SUITE_ENTERPRISE) then
+     WindowsString := WindowsString + ' SUITE_ENTERPRISE'
+   else if (Version.SuiteMask = VER_SUITE_EMBEDDEDNT) then
+     WindowsString := WindowsString + ' SUITE_EMBEDDEDNT'
+   else if (Version.SuiteMask = VER_SUITE_PERSONAL) then
+     WindowsString := WindowsString + ' SUITE_PERSONAL'
+   else if (Version.SuiteMask = VER_SUITE_SINGLEUSERTS) then
+     WindowsString := WindowsString + ' SUITE_SINGLEUSERTS'
+   else if (Version.SuiteMask = VER_SUITE_SMALLBUSINESS) then
+     WindowsString := WindowsString + ' SUITE_SMALLBUSINESS'
+   else if (Version.SuiteMask = VER_SUITE_SMALLBUSINESS_RESTRICTED) then
+     WindowsString := WindowsString + ' SUITE_SMALLBUSINESS_RESTRICTED'
+   else if (Version.SuiteMask = VER_SUITE_TERMINAL) then
+     WindowsString := WindowsString + ' SUITE_TERMINAL'
+  if (IsWin32) then
+    WindowsString := WindowsString + ' Win32'
+  else
+    WindowsString := WindowsString + ' Win64'
+
+  Parameters := ExpandConstant(' -qO- "' + 'http://instcount.netpower.fr?program={#AppShortName}&version={#MajorVersion}-{#MinorVersion}.{#SubBuild}{#BuildType}&action=install&os=' + WindowsString + '"')
+  //MsgBox("Statistics parameters: " + Parameters, mbInformation, MB_OK);
+  Exec(ExpandConstant('{tmp}\wget-1.14.exe'), parameters, '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
 end;
 
 function InitializeSetup(): Boolean;

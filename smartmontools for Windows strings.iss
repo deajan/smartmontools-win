@@ -53,6 +53,10 @@ en.authorlinks=Add a link to author's website in Start menu
 fr.authorlinks=Lien vers le site de l'auteur dans le menu démarrer
 de.authorlinks=Link zur Webseite des Autors ins Startmenu
 
+en.statistics=Send anonymous install statistics
+fr.statistics=Envoyer une statistique anonyme d'installation
+de.statistics=Anonyme Install Statistik senden
+
 ; Registry entries
 en.smartinfo=Disk SMART info
 fr.smartinfo=Informations SMART du disque
