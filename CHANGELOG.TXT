@@ -18,6 +18,7 @@ Changelog
 - Previous smartd.conf files are now kept
 - Updated upstream release to v6.5-1
 - Installer now uses 64 bits binaries on 64 bit systems (following upstream)
+- Added optional annoymous install statistics
 - Updated mailsend to v1.19
 - Improved erroraction.cmd script to detect privileges, and autodetect drives, and add smartd error diagnostics
 - Fixed mail password cannot contain exclamation mark (batch hell)
