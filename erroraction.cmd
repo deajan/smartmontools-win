@@ -107,15 +107,13 @@ IF NOT %ERRORLEVEL%==0 (
 	
 dir "%curdir%\base64.exe" > nul 2> nul
 IF NOT %ERRORLEVEL%==0 (
-	IF "%MAIL_ALERT%"=="yes" call:Log "Missing base64.exe file. Did you install without  mail alert support ?"
-		SET SCRIPT_ERROR=1
-		)
+	IF "%MAIL_ALERT%"=="yes" call:Log "Missing base64.exe file. Did you install without  mail alert support ?" && SET SCRIPT_ERROR=1
+	)
 	
 dir "%curdir%\gzip.exe" > nul 2> nul
 IF NOT %ERRORLEVEL%==0 (
 	IF "%MAIL_ALERT%"=="yes" call:Log "Missing gzip.exe file. Did you install without  mail alert support ?" && SET SCRIPT_ERROR=1
-		SET SCRIPT_ERROR=1
-		)
+	)
 GOTO:EOF
 
 :CheckMailValues
