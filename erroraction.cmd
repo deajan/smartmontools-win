@@ -5,6 +5,8 @@
 :: Config can be changed in erroraction_config.cmd
 
 :: CHANGELOG:
+:: 17 Avr 2017:
+:: - Fixed bogus preflight function end
 :: 13 Avr 2017:
 :: - Fixed preflight checks because of ambiguous batch syntax
 :: 12 Avr 2017:
@@ -114,7 +116,7 @@ IF NOT %ERRORLEVEL%==0 (
 	IF "%MAIL_ALERT%"=="yes" call:Log "Missing gzip.exe file. Did you install without  mail alert support ?" && SET SCRIPT_ERROR=1
 		SET SCRIPT_ERROR=1
 		)
-	
+GOTO:EOF
 
 :CheckMailValues
 echo "%SOURCE_MAIL%" | findstr /I "@" > nul
@@ -144,7 +146,7 @@ echo ---------------------------------------------------------------------------
 for /F %%d in ('type "%curdir%\smartd.conf" ^| findstr /R /C:"^/"') do "%curdir%\smartctl.exe" -a %%d >> "%SMART_LOG_FILE%"
 for /F %%d in ('type "%curdir%\smartd.conf" ^| findstr /R /C:"^DEVICESCAN"') do SET DEVICESCAN=yes
 IF "%DEVICESCAN%"=="yes" FOR /F "delims= " %%i in ('"%curdir%\smartctl.exe" --scan') do "%curdir%\smartctl.exe" -a %%i >> "%SMART_LOG_FILE%"
-IF %ERRORLEVEL%==1 call:Log "Cannot extract smartctl data."
+IF %ERRORLEVEL%==1 call:Log "Cannot extract some or all smartctl data."
 GOTO:EOF
 
 :GetComputerName
