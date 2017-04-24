@@ -23,6 +23,7 @@ Changelog
 - Improved erroraction.cmd script to detect privileges, and autodetect drives, and add smartd error diagnostics
 - Fixed mail password cannot contain exclamation mark (batch hell)
 - Added more preflight checks on erroraction script
+- Added smartd details to smart log
 - Fixed scheduled tests can be disabled in installer
 - Fixed scheduled_send.cmd didn't get deleted on uninstall
 - Removed a lot of the installer logic from Inno Setup
