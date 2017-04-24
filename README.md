@@ -77,10 +77,10 @@ See examples below
 ## Unattended examples
 
 You may want to preconfigure smartd settings or alert setting when making an unattended installation.
-You may also install the package on a test computer, use the GUI to configure the service and alerts, and use the generated configuration files for a mass installation.
+In that case you can install the package on a test computer, use the GUI to configure the service and alerts, and use the generated configuration files for a mass installation.
 Putting a preconfigured smartd.conf file along with the setup exe will load it automatically.
 Putting a preconfigured erroraction_config.cmd file along with the setup exe will automatically configure alert options.
-Those files can be found at https://github.com/deajan/smartmontools-win/tree/master/unattended
+Example files can be found at https://github.com/deajan/smartmontools-win/tree/master/unattended
 
 Put the following files in the same directory
 - smartmontools-win-6.5-1.exe
