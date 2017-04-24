@@ -1,10 +1,12 @@
-:: Smartmontools for Windows package v6.5 erroraction.cmd 2017041201
+:: Smartmontools for Windows package v6.5 erroraction.cmd 2017042401
 :: http://www.netpower.fr
 :: (L) 2012-2017 by Orsiris de Jong
 
 :: Config can be changed in erroraction_config.cmd
 
 :: CHANGELOG:
+:: 24 Avr 2017:
+:: - smart.log now also includes the original error message from smartd service
 :: 17 Avr 2017:
 :: - Fixed bogus preflight function end
 :: 13 Avr 2017:
@@ -43,7 +45,8 @@ set ERROR_LOG_FILE=%curdir%\erroraction.log
 set SMART_LOG_FILE=%curdir%\smart.log
 
 :: Add SMARTD environment variables to WARNING_MESSAGE
-set WARNING_MESSAGE=%WARNING_MESSAGE% - SMARTD DETAILS: %SMARTD_TFIRST% %SMARTD_FULLMESSAGE% %SMARTD_DEVICE% %SMARTD_DEVICETYPE% %SMARTD_DEVICESTRING% %SMARTD_FAILTYPE%
+set SMARTD_WARNING_MESSAGE=SMARTD DETAILS: %SMARTD_TFIRST% %SMARTD_FULLMESSAGE% %SMARTD_DEVICE% %SMARTD_DEVICETYPE% %SMARTD_DEVICESTRING% %SMARTD_FAILTYPE%
+set WARNING_MESSAGE=%WARNING_MESSAGE% - %SMARTD_WARNING_MESSAGE%
 
 IF "%1"=="--dryrun" ( set DRY=1 ) ELSE ( set DRY=0 )
 IF "%1"=="--test" ( call:Tests ) ELSE ( set TEST=0 )
@@ -140,7 +143,10 @@ call:Log "Configuration file check success."
 GOTO:EOF
 
 :CreateSmartOutput
-echo ------------------------------------------------------------------------------------------------- %DATE:~0,2%-%DATE:~3,2%-%DATE:~6,4% %TIME:~0,2%H%TIME:~3,2%m%TIME:~6,2%s >> "%SMART_LOG_FILE%"
+echo ------------------------------------------------------------------------------------------------- >> "%SMART_LOG_FILE%"
+echo %DATE:~0,2%-%DATE:~3,2%-%DATE:~6,4% %TIME:~0,2%H%TIME:~3,2%m%TIME:~6,2%s >> "%SMART_LOG_FILE%"
+echo %SMARTD_WARNING_MESSAGE% >> "%SMART_LOG_FILE%"
+echo ------------------------------------------------------------------------------------------------- >> "%SMART_LOG_FILE%"
 for /F %%d in ('type "%curdir%\smartd.conf" ^| findstr /R /C:"^/"') do "%curdir%\smartctl.exe" -a %%d >> "%SMART_LOG_FILE%"
 for /F %%d in ('type "%curdir%\smartd.conf" ^| findstr /R /C:"^DEVICESCAN"') do SET DEVICESCAN=yes
 IF "%DEVICESCAN%"=="yes" FOR /F "delims= " %%i in ('"%curdir%\smartctl.exe" --scan') do "%curdir%\smartctl.exe" -a %%i >> "%SMART_LOG_FILE%"
