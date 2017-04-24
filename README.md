@@ -8,13 +8,12 @@ Installation can be run silently with command line parameters for massive deploy
 Configuration files are automatically generated (but you can still enjoy manual editing of course).
 A service called "smartd" is created and launched at system startups. This service will enumerate hard disks smartmontools can monitor and send an email and/or show a local message in case of errors.
 Everytime smartd detects an issue, the current states of the drives are written to smart.log and an alert is triggered.
-When mail alert is triggered, all actions regarding that alerts are logged to erroraction.log
+When mail / local alerts are triggered, all actions regarding alerts are logged to erroraction.log.
 
 On install, the current states of all drives smartd can detect are written to smartmontools-install-(version).log for warranty issues.
 
-No responsibility will be taken for any problems or malfunctions that may occur while using this software.
-
-Anyway,feel free to send a mail to ozy [at] netpower.fr for limited support on my free time.
+The software has been tested on multiple platforms, nevertheless no responsibility will be taken for any problems or malfunctions that may occur while using this software.
+Anyway, feel free to send a mail to ozy [at] netpower.fr for support on my free time.
 
 ## Upgrade path
 
@@ -78,6 +77,7 @@ See examples below
 ## Unattended examples
 
 You may want to preconfigure smartd settings or alert setting when making an unattended installation.
+You may also install the package on a test computer, use the GUI to configure the service and alerts, and use the generated configuration files for a mass installation.
 Putting a preconfigured smartd.conf file along with the setup exe will load it automatically.
 Putting a preconfigured erroraction_config.cmd file along with the setup exe will automatically configure alert options.
 Those files can be found at https://github.com/deajan/smartmontools-win/tree/master/unattended
