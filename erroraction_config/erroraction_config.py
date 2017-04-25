@@ -20,7 +20,7 @@ class Constants:
 	ERRORACTION_CONFIG_FILENAME="erroraction_config.cmd"
 	MAILSEND_BINARY="mailsend.exe"
 	
-	IS_STABLE=False
+	IS_STABLE=True
 
 	LOG_FILE=APP_NAME + ".log"
 
@@ -43,7 +43,8 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+# Disable forced debug logging after developpment
+#logger.setLevel(logging.DEBUG)
 
 # Set file log
 logFileHandler = RotatingFileHandler(_CONSTANT.LOG_FILE, mode='a', encoding='utf-8', maxBytes=1000000, backupCount=1)
@@ -336,60 +337,7 @@ def TriggerAlert(configDict):
 		messagebox.showinfo('Error', msg)
 		return False
 		
-	messagebox.showinfo('Information', 'Finished testing alert action.')
-
-def sendTestEmail(configDict):
-	# mailsend binary should be one directory above this script
-	mailsend = CONFIG.appRoot + os.sep + ".." + os.sep + _CONSTANT.MAILSEND_BINARY
-	if not os.path.isfile(mailsend):
-		msg="Cannot find [" + mailsend + "]."
-		logger.error(msg)
-		messagebox.showinfo("Error", msg)
-		return False
-	
-	try:
-		computerName = os.environ['COMPUTERNAME']
-	except:
-		computerName = "[Cannot get name]"
-	
-	try:
-		domain = os.environ['USERDNSDOMAIN']
-	except:
-		domain = os.environ['USERDOMAIN']
-	
-	subject = '\"Smartmontools for Windows setup test mail on '+ computerName + '.' + domain + '\"'
-	message = '\"This is a test message sent by Smartmontools for Windows configure tool to check whether the smart service will be able to send you information about your hard drive health. There is no real alert, please do not respond."'
-	
-	mailsendCommand = [mailsend, '-f', configDict['SOURCE_MAIL'], '-t', configDict['DESTINATION_MAIL'], '-smtp', configDict['SMTP_SERVER'], '-port', configDict['SMTP_PORT'], '-sub', subject, '-M', message]
-	
-	try:
-		if (len(configDict['SMTP_USER']) > 0) and (len(configDict['SMTP_PASSWORD']) > 0):
-			mailsendCommand += ['-auth', '-user', configDict['SMTP_USER'], '-pass', configDict['SMTP_PASSWORD']]
-	except Exception as e:
-		logger.error("Can't add mail authentication")
-		logger.debug(e)
-
-	try:
-		if len(configDict['SMTP_USER']) > 0 and len(configDict['SMTP_PASSWORD']) > 0:
-			if configDict['SECURITY'] == "tls":
-				mailsendCommand.append(['-starttls'])
-			elif configDict['SECURITY'] == "ssl":
-				mailsendCommand.append(['-ssl'])
-	except Exception as e:
-		logger.error("Can't figure out mail security settings")
-		logger.debug(e)
-
-	logger.debug(mailsendCommand)
-
-	pHandle = Popen(mailsendCommand, stdout=PIPE, stderr=PIPE)
-	output, err = pHandle.communicate()
-	if not pHandle.returncode == 0:
-		msg="Sending mail failed:\r\n" + output.decode() + "\r\n" + err.decode()
-		logger.error(msg)
-		messagebox.showinfo('Error', msg)
-		return False
-		
-	messagebox.showinfo('Information', 'Sending mail succeed. Please check your inbox.')	
+	messagebox.showinfo('Information', 'Finished testing alert action.')	
 				
 def usage():
 	print(_CONSTANT.APP_NAME + " v" + _CONSTANT.APP_VERSION + " " + _CONSTANT.APP_BUILD)
