@@ -8,7 +8,7 @@ Known issues
 Changelog
 ---------
 
-[v6.5-1] from DD Mmm YYYY (currently beta)
+[v6.5-1] 25 Avr 2017
 
 - Brand new and shiny python GUI for smartd.conf
 - New GUI to configure erroraction_config.cmd parameters
