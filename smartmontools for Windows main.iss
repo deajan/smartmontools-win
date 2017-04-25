@@ -4,9 +4,9 @@
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.5"
 #define MinorVersion "1"
-#define SubBuild "5"
-; Define build type -testing -beta -rc for WIP
-#define BuildType "-rc2"
+#define SubBuild "7"
+; Define build type -testing -beta -rc for WIP, leave empty for RTM
+#define BuildType ""
 #define AppPublisher "Orsiris de Jong"
 #define AppURL "http://www.netpower.fr"
 #define CopyrightYears="2012-2017"
@@ -128,8 +128,8 @@ Filename: {app}\bin\scheduled_send.cmd; Components: core\scheduledtestalerts; St
 ;Filename: {app}\bin\wget-1.14.exe; Parameters: " -qO- ""http://instcount.netpower.fr?program={#AppShortName}&version={#MajorVersion}-{#MinorVersion}.{#SubBuild}{#BuildType}&os=Windows&action=install"" > nul 2> nul && del ""{app}\bin\wget-1.14.exe"" /S /Q"; StatusMsg: "Sending anonymous install statistics"; Components: statistics; Flags: waituntilterminated runhidden
 
 [Icons]
-Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe"; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui;
-Name: {group}\Reconfigure SMART Alert settings; Filename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.exe"; Parameters:  "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui;
+Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe"; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui; IconFilename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.ico"
+Name: {group}\Reconfigure SMART Alert settings; Filename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.exe"; Parameters:  "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui; IconFilename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.ico"
 Name: {group}\Visit NetPower.fr; Filename: http://www.netpower.fr; Components: authorlinks;
 Name: {group}\Visit smartmontools Site; Filename: http://smartmontools.sourceforge.net; Components: authorlinks;
 Name: {group}\Fix Bad sectors (use at own risk!); Filename: "{app}\bin\fix_badsectors.cmd"; Components: fixbadsecttools
