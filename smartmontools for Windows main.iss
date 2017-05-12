@@ -1,19 +1,21 @@
 ; smartmontools for Windows package
 
+#define BuildNumber "2017050301"
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
 #define MajorVersion "6.5"
-#define MinorVersion "1"
-#define SubBuild "7"
-; Define build type -testing -beta -rc for WIP, leave empty for RTM
-#define BuildType ""
+#define MinorVersion "2"
+#define SubBuild "2"
+; Define build type -dev -beta -rc for WIP, leave empty for RTM
+#define BuildType "-dev"
 #define AppPublisher "Orsiris de Jong"
 #define AppURL "http://www.netpower.fr"
 #define CopyrightYears="2012-2017"
 
 #define BaseDir "C:\ODJ\BTC\Smartmontools for Windows"
 #define SmartmonToolsDir "smartmontools-6.5-1.win32-setup"
-#define smartdPynguiDir "smartd-pyngui-erroraction"
+#define smartdPynguiDir "smartd-pyngui"
+#define erroractionGuiDir "erroraction-gui"
 #define SendEmailDir "sendEmail-v156"
 #define MailsendDir "mailsend1.19"
 #define GzipDir "gzip-1.3.12-1-bin"
@@ -35,7 +37,7 @@ AppUpdatesURL={#AppURL}
 DefaultDirName={pf}\{#AppName}
 DefaultGroupName=smartmontools for Windows
 LicenseFile={#BaseDir}\LICENSE.TXT
-OutputDir={#BaseDir}
+OutputDir={#BaseDir}\Build
 OutputBaseFilename={#AppShortName}-{#MajorVersion}-{#MinorVersion}{#BuildType}
 Compression=lzma2/max
 SolidCompression=yes
@@ -56,22 +58,24 @@ Name: de; MessagesFile: "compiler:Languages\German.isl"; InfoBeforeFile: "{#Base
 
 [Types]
 Name: full; Description: "{cm:FullInstall}";
-Name: custom; Description: "{cm:CustomInstall}"; Flags: iscustom; 
+Name: custom; Description: "{cm:CustomInstall}"; Flags: iscustom;
+Name: smartd-pyngui; Description: "{cm:SmartdPynguiInstall}";
 
 [Components]
-Name: core; Description: "{cm:coredescription}"; Types: full custom; Flags: fixed
-Name: core\service; Description: "{cm:coreservice}"; Types: full custom;
-Name: core\service\gui; Description: "{cm:servicegui}"; Types: full custom;
-Name: core\service\mailalert; Description: "{cm:mailsupport}"; Types: full custom;
-Name: core\service\localalert; Description: "{cm:localsupport}"; Types: custom;
+Name: core; Description: "{cm:coredescription}"; Types: full; Flags: exclusive
+Name: core\service; Description: "{cm:coreservice}"; Types: full;
+Name: core\service\gui; Description: "{cm:servicegui}"; Types: full;
+Name: core\service\mailalert; Description: "{cm:mailsupport}"; Types: full;
+Name: core\service\localalert; Description: "{cm:localsupport}"; Types: full;
 Name: core\scheduledtestalerts; Description: "{cm:scheduledtestalerts}"; Types: custom;
-Name: fixbadsecttools; Description: "{cm:fixbadsecttools}"; Types: full custom;
-Name: regext; Description: "{cm:regext}"; Types: full custom;
-Name: regext\info; Description: "{cm:smartinfo}"; Types: Full custom;
-Name: regext\tests; Description: "{cm:smarttests}"; Types: Full custom;
-Name: updatedb; Description: "{cm:updatedb}"; Types: Full custom;
-Name: authorlinks; Description: "{cm:authorlinks}"; Types: full custom;
-Name: statistics; Description: "{cm:statistics}"; Types: full custom;
+Name: core\regext; Description: "{cm:regext}"; Types: full;
+Name: core\regext\info; Description: "{cm:smartinfo}"; Types: Full;
+Name: core\regext\tests; Description: "{cm:smarttests}"; Types: Full;
+Name: core\updatedb; Description: "{cm:updatedb}"; Types: Full;
+Name: smartdpyngui; Description: "{cm:smartdpyngui}"; Types: smartd-pyngui; Flags: exclusive
+Name: fixbadsecttools; Description: "{cm:fixbadsecttools}"; Types: custom;
+Name: authorlinks; Description: "{cm:authorlinks}"; Types: full;
+Name: statistics; Description: "{cm:statistics}"; Types: full smartd-pyngui;
 
 [Files]
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\drivedb.h"; DestDir: "{app}\bin"; Components: core;
@@ -79,21 +83,22 @@ Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\drivedb.h"; DestDir: "{app}\bin"; Co
 ;Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\runcmdu.exe.manifest"; DestDir: "{app}\bin"; Components: core;
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\update-smart-drivedb.exe"; DestDir: "{app}\bin"; Components: core;
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\smartd_warning.cmd"; DestDir: "{app}\bin"; Components: core\service;
-Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\smartd.conf"; DestDir: "{app}\bin"; DestName: smartd.conf.example; Components: core; BeforeInstall: UninstallService('{#SmartServiceName}'); Flags: ignoreversion
+Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\smartd.conf"; DestDir: "{app}\bin"; DestName: smartd.conf.example; Components: core; Flags: ignoreversion
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\runcmda.exe"; DestDir: "{app}\bin"; Components: core; Check: IsWin32()
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\runcmdu.exe"; DestDir: "{app}\bin"; Components: core; Check: IsWin32()
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\smartctl.exe"; DestDir: "{app}\bin"; Components: core; Check: IsWin32()
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\smartctl-nc.exe"; DestDir: "{app}\bin"; Components: core; Check: IsWin32()
-Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\smartd.exe"; DestDir: "{app}\bin"; Components: core; Check: IsWin32()
+Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\smartd.exe"; DestDir: "{app}\bin"; Components: core; Check: IsWin32(); AfterInstall: TestForExistingSmartdUpstream();
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin\wtssendmsg.exe"; DestDir: "{app}\bin"; Components: core; Check: IsWin32()
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\runcmda.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\runcmdu.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartctl.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartctl-nc.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
-Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartd.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64
+Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartd.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64; AfterInstall: TestForExistingSmartdUpstream();
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\wtssendmsg.exe"; DestDir: "{app}\bin"; Components: core\service\localalert; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\doc\*"; DestDir: "{app}\doc\smartmontools"; Components: core; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#BaseDir}\{#smartdPynguiDir}\*"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui; Flags: recursesubdirs createallsubdirs
+Source: "{#BaseDir}\{#erroractionGuiDir}\*"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui; Flags: recursesubdirs createallsubdirs
 Source: "{#BaseDir}\{#vcRedistDir}\msvcr100.dll"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui;
 Source: "{#BaseDir}\{#MailSendDir}\mailsend.exe"; DestDir: "{app}\bin"; Components: core\service\mailalert;
 Source: "{#BaseDir}\{#MailSendDir}\COPYRIGHT.TXT"; DestDir: "{app}\doc\mailsend"; Components: core\service\mailalert;
@@ -114,21 +119,22 @@ Source: "{#BaseDir}\erroraction.cmd"; DestDir: "{app}\bin"; Components: core\ser
 Source: "{#BaseDir}\erroraction_config.cmd"; DestDir: "{app}\bin"; Components: core\service; Flags: confirmoverwrite; Check: NoExternalErroractionFile(); AfterInstall: UpdateErroractionConfFile();
 Source: "{#BaseDir}\ScheduledTask.xml"; DestDir: "{app}\bin"; Components: core\scheduledtestalerts; AfterInstall: WriteScheduledTest();
 Source: "{#BaseDir}\smartd.conf"; DestDir: "{app}\bin"; Components: core\service; Flags: confirmoverwrite; Check: NoExternalSmartdFile(); AfterInstall: UpdateSmartdConfFile();
-
+Source: "{#BaseDir}\{#smartdPynguiDir}\*"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: smartdpyngui; Flags: recursesubdirs createallsubdirs
 
 [Run]
 ;Filename: {sys}\sc.exe; Parameters: "create ""{#SmartServiceName}"" binPath= ""\""{app}\bin\smartd.exe\"" --service -c \""{app}\bin\smartd.conf\"""" start= auto DisplayName= ""S.M.A.R.T. Harddisk lifeguard for Windows service"""; Components: core\service; OnlyBelowVersion: 6.0; Flags: runhidden
 ;Filename: {sys}\sc.exe; Parameters: "create ""{#SmartServiceName}"" binPath= ""\""{app}\bin\smartd.exe\"" --service -c \""{app}\bin\smartd.conf\"""" start= delayed-auto DisplayName= ""S.M.A.R.T. Harddisk lifeguard for Windows service"""; Components: core\service; MinVersion: 6.0; Flags: runhidden
-Filename: {sys}\sc.exe; Parameters: "delete {#SmartServiceName}"; Components: core\service; Check: IsUpdateInstall(); StatusMSG: "Removing any old smart service instance."; Flags: runhidden waituntilterminated
-Filename: {app}\bin\update-smart-drivedb.exe; Parameters: "/S"; Components: updatedb; StatusMSG: "Updating drive database."; Flags: waituntilterminated
-Filename: {app}\bin\smartd.exe; Parameters: "install -c ""{app}\bin\smartd.conf"""; Components: core\service; StatusMSG: "Setting up smart service."; Flags: runhidden
+;Filename: {sys}\sc.exe; Parameters: "delete {#SmartServiceName}"; Components: core\service; Check: IsUpdateInstall(); StatusMSG: "Removing any old smart service instance."; Flags: runhidden waituntilterminated
+Filename: {app}\bin\update-smart-drivedb.exe; Parameters: "/S"; Components: core\updatedb; StatusMSG: "Updating drive database."; Flags: waituntilterminated
+;Filename: {app}\bin\smartd.exe; Parameters: "install -c ""{app}\bin\smartd.conf"""; Components: core\service; StatusMSG: "Setting up smart service."; Flags: runhidden
 Filename: {app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui; StatusMSG: "Setup Smartd service"; Flags: waituntilterminated skipifsilent
+Filename: {app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe; Components: smartdpyngui; StatusMSG: "Setup Smartd service"; Flags: waituntilterminated skipifsilent
 Filename: {app}\bin\{#smartdPynguiDir}\erroraction_config.exe; Parameters: "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui; StatusMSG: "Setup alert settings"; Flags: waituntilterminated skipifsilent
 Filename: {app}\bin\scheduled_send.cmd; Components: core\scheduledtestalerts; StatusMsg: "Setting up scheduled test send"; Flags: runhidden
-;Filename: {app}\bin\wget-1.14.exe; Parameters: " -qO- ""http://instcount.netpower.fr?program={#AppShortName}&version={#MajorVersion}-{#MinorVersion}.{#SubBuild}{#BuildType}&os=Windows&action=install"" > nul 2> nul && del ""{app}\bin\wget-1.14.exe"" /S /Q"; StatusMsg: "Sending anonymous install statistics"; Components: statistics; Flags: waituntilterminated runhidden
 
 [Icons]
 Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe"; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui; IconFilename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.ico"
+Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe"; Components: smartdpyngui; IconFilename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.ico"
 Name: {group}\Reconfigure SMART Alert settings; Filename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.exe"; Parameters:  "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui; IconFilename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.ico"
 Name: {group}\Visit NetPower.fr; Filename: http://www.netpower.fr; Components: authorlinks;
 Name: {group}\Visit smartmontools Site; Filename: http://smartmontools.sourceforge.net; Components: authorlinks;
@@ -136,15 +142,16 @@ Name: {group}\Fix Bad sectors (use at own risk!); Filename: "{app}\bin\fix_badse
 Name: "{group}\{cm:UninstallProgram, {#=AppName}}"; Filename: {uninstallexe}; 
 
 [Registry]
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlinfo\; ValueType: String; ValueData: {cm:smartinfo}; Components: regext\info; Flags: uninsdeletekey
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlinfo\command; ValueType: String; ValueData: """{app}\bin\runcmda.exe"" ""{app}\bin\smartctl.exe"" -d auto -a %L"; Components: regext\info; Flags: uninsdeletevalue
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlshorttest\; ValueType: String; ValueData: {cm:smarttestshort}; Components: regext\tests; Flags: uninsdeletekey
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlshorttest\command; ValueType: String; ValueData: """{app}\bin\runcmda.exe"" ""{app}\bin\smartctl.exe"" -d auto -t short %L"; Components: regext\tests; Flags: uninsdeletevalue
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctllongtest\; ValueType: String; ValueData: {cm:smarttestlong}; Components: regext\tests; Flags: uninsdeletekey
-Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctllongtest\command; ValueType: String; ValueData: """{app}\bin\runcmda.exe"" ""{app}\bin\smartctl.exe"" -d auto -t long %L"; Components: regext\tests; Flags: uninsdeletevalue
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlinfo\; ValueType: String; ValueData: {cm:smartinfo}; Components: core\regext\info; Flags: uninsdeletekey
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlinfo\command; ValueType: String; ValueData: """{app}\bin\runcmda.exe"" ""{app}\bin\smartctl.exe"" -d auto -a %L"; Components: core\regext\info; Flags: uninsdeletevalue
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlshorttest\; ValueType: String; ValueData: {cm:smarttestshort}; Components: core\regext\tests; Flags: uninsdeletekey
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctlshorttest\command; ValueType: String; ValueData: """{app}\bin\runcmda.exe"" ""{app}\bin\smartctl.exe"" -d auto -t short %L"; Components: core\regext\tests; Flags: uninsdeletevalue
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctllongtest\; ValueType: String; ValueData: {cm:smarttestlong}; Components: core\regext\tests; Flags: uninsdeletekey
+Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctllongtest\command; ValueType: String; ValueData: """{app}\bin\runcmda.exe"" ""{app}\bin\smartctl.exe"" -d auto -t long %L"; Components: core\regext\tests; Flags: uninsdeletevalue
 
 [UninstallRun]
-Filename: {sys}\sc.exe; Parameters: "delete ""{#SmartServiceName}"""; Components: core\service; Flags: runhidden
+; TODO: check if smartd should remain because of upstream package
+;Filename: {sys}\sc.exe; Parameters: "delete ""{#SmartServiceName}"""; Components: core\service; Flags: runhidden
 
 [UninstallDelete]
 Type: Files; Name: "{app}\bin\erroraction.cmd";
@@ -159,7 +166,7 @@ Type: dirifempty; Name: "{app}";
 [Code]
 var 
   InitialLogFile: String;
-  pageid: integer;
+  //pageid: integer;
 
 #include "smartmontools for Windows includes.iss"
 
@@ -175,9 +182,9 @@ begin
   begin
     FileCopy(ExpandConstant('{src}\smartd.conf'), ExpandConstant('{app}\bin\smartd.conf'), False);
     UpdateSmartdConfFile();
-    result := False;
+    result := false;
   end else
-    result := True;
+    result := true;
 end;
 
 procedure UpdateErroractionConfFile();
@@ -211,20 +218,24 @@ begin
   begin
     FileCopy(ExpandConstant('{src}\erroraction_config.cmd'), ExpandConstant('{app}\bin\erroraction_config.cmd'), False);
     UpdateErroractionConfFile();
-    result := False;
-  end else
-    result := True;
+    Result := false;
+  end
+  else
+    Result := true;
 end;
 
 //// Create a file called smart.(version).log including info about all disks
 function CreateInitialLog(): Boolean;
 var
   resultcode: Integer;
+
 begin
   ////TODO: detect smartd.conf drives
   InitialLogFile := ExpandConstant('{app}\smartmontools-install-{#MajorVersion}-{#MinorVersion}.log');
-  SaveStringToFile(InitialLogFile, '# Smartmontools for Windows installed on ' + GetDateTimeString('dd mmm yyyy hh:nn:ss', #0, #0) + #13#10 + #13#10, False);
-    Exec(ExpandConstant('{cmd}') ,ExpandConstant('/c for /f "delims= " %i in (' + #39 + '"{app}\bin\smartctl" --scan' + #39 +') do "{app}\bin\smartctl.exe" -a %i >> "' + InitialLogFile + '"'), '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
+  SaveStringToFile(InitialLogFile, '# Smartmontools for Windows installed on ' + GetDateTimeString('dd mmm yyyy hh:nn:ss', #0, #0) + #13#10 + #13#10, True);
+    ShellExec('', ExpandConstant('{cmd}') ,ExpandConstant('/c for /f "delims= " %i in (' + #39 + '"{app}\bin\smartctl" --scan' + #39 +') do "{app}\bin\smartctl.exe" -a %i >> "' + InitialLogFile + '"'), '', SW_HIDE, ewWaitUntilTerminated, resultcode)
+    if resultcode <> 0 then
+      MsgBox('Cannot create initial log file in [' + InitialLogFile + '].', mbError, MB_OK);
 end;
 
 //// ScheduledTask command file
@@ -241,6 +252,26 @@ begin
   FileReplaceString(ExpandConstant('{app}\bin\ScheduledTask.xml'), '[PATH]', ExpandConstant('{app}\bin'));
 end;
 
+// TODO
+procedure TestForExistingSmartdUpstream();
+begin
+  if ((FileExists(ExpandConstant('{pf32}\smartmontools\bin\smartd.exe'))) or (FileExists(ExpandConstant('{pf}\smartmontools\bin\smartd.exe')))) then
+  begin
+     if (ServiceExists('{#SmartServiceName}') = true) then
+     begin
+       if (MsgBox('Upstream smartd service is installed. Do you want to replace the upstream service ?', mbConfirmation, MB_YESNO) = IDYES) then
+       begin
+         UninstallService('{#SmartServiceName}');
+         InstallService;
+       end
+     end
+     else
+       InstallService; 
+  end 
+  else
+    InstallService;     
+end;
+
 procedure SendInstallerStats();
 var
   Version: TWindowsVersion;
@@ -252,7 +283,7 @@ begin
   GetWindowsVersionEx(Version);
   WindowsString := IntToStr(Version.Major) + '.' + IntToStr(Version.Minor) + ' build ' + IntToStr(Version.Build) + ' SP ' + IntToStr(Version.ServicePackMajor) + '.' + IntToStr(Version.ServicePackMinor)
   
-  if (Version.NTPlatform = True) then
+  if (Version.NTPlatform = true) then
     WindowsString := WindowsString + ' NT'
 
   if (Version.ProductType = VER_NT_WORKSTATION) then
@@ -303,7 +334,7 @@ end;
 
 //// After installation execution hook
 procedure CurStepChanged(CurStep: TSetupStep);
-var Sender: TObject;
+//var Sender: TObject;
 begin
   if CurStep = ssDone then
   begin
@@ -316,5 +347,13 @@ end;
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
   if CurUninstallStep = usUninstall then
-    UnloadService('{#SmartServiceName}');
+    if (IsSmartWinService('{#SmartServiceName}') = true) then
+    begin
+      UninstallService('{#SmartServiceName}');
+    end
+    else
+    begin
+      if (MsgBox('There is a smartd service is installed which does not seem to belong to smartmontools-win. Do you want to uninstall it ?', mbConfirmation, MB_YESNO) = IDYES) then
+        UninstallService('{#SmartServiceName}');
+    end
 end;
