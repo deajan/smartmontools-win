@@ -4,9 +4,26 @@
 Known issues
 
 - Mailsend does not support multibyte chars when sending emails under Windows, so not all special characters can be used in warning emails
+- Unattended installations are not possible when upstream package is installed
+
+Todo:
+
+- check for smartd upstream service before upgrading
+- check if smartd needs uninstall, launch uninstall function instead of sc
+
 
 Changelog
 ---------
+
+
+[v6.5-2-dev] 12 May 2017
+- General work to render smartmontools-win upstream friendly
+	- Improved smartd-pyngui to allow saving settings without reloading the service
+	- Allow smartd-pyngui solo installation for usage with upstream package, with smartd.conf file detection
+	- Check for upstream service presence before installing smartd service
+	- Uninstallation checks if current smartd service belongs to smartmontools-win, if not asks if it should be uninstalled
+- Initial log file is not overwritten by new installations
+- Added more explicit error messages on service failures
 
 [v6.5-1] 25 Avr 2017
 
