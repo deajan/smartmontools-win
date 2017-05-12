@@ -1,13 +1,16 @@
-// String file for smartmontools for Windows installer v6.5+
+// String file for smartmontools for Windows installer v6.5-2+
 
 ; Installation dialog
 
 en.FullInstall=Full installation
+en.SmartdPynguiInstall=Only install Smartd GUI
 en.CustomInstall=Customized installation
 fr.FullInstall=Installation complète
+fr.SmartdPynguiInstall=Installation de l'interface Smartd Uniquement
 fr.CustomInstall=Installation personnalisée
 de.FullInstall=Komplette Installation
-de.CustomInstall=Benutzerdefinierte Installation
+de.SmartdPynguiInstall=Nur Smartd Benützeroberfläche Installieren
+de.CustomInstall=Benützerdefinierte Installation
 
 en.coredescription=smartmontools Core
 fr.coredescription=smartmontools Core
@@ -23,7 +26,7 @@ de.coreservice=smartmontools Service
 
 en.servicegui=Graphical user interface
 fr.servicegui=Interface graphique
-de.servicegui=Grafische Benutzeroberfläche
+de.servicegui=Grafische Benützeroberfläche
 
 en.mailsupport=Send mails on errors
 fr.mailsupport=Envoi d'emails en cas d'erreurs
@@ -56,6 +59,10 @@ de.authorlinks=Link zur Webseite des Autors ins Startmenu
 en.statistics=Send anonymous install statistics
 fr.statistics=Envoyer une statistique anonyme d'installation
 de.statistics=Anonyme Install Statistik senden
+
+en.smartdpyngui=Smartd GUI only
+fr.smartdpyngui=Interface utilisateur Smartd seulement
+de.smartdpyngui=Nur Smartd Benützeroberfläche
 
 ; Registry entries
 en.smartinfo=Disk SMART info
