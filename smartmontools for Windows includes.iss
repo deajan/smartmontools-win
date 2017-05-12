@@ -1,4 +1,4 @@
-//// General purpose functions (2016110701)
+//// General purpose functions (2017051201)
 
 [code]
 //// Returns true if IsWin64 is false
@@ -13,13 +13,47 @@ begin
   result := copy(str, Length(str), 1);
 end; 
 
+//// Checks if given service exists
+function ServiceExists(srv: String): Boolean;
+var resultcode: Integer;
+
+begin
+  ShellExec('', ExpandConstant('{sys}\sc.exe'), 'query ' + srv, '', SW_HIDE, ewWaitUntilTerminated, resultcode);
+  if resultcode = 0 then
+    Result := true
+  else
+    Result := false
+end;
+
+//// Checks if given service runs
+function ServiceIsRunning(srv: String): Boolean;
+var resultcode: Integer;
+
+begin
+  ShellExec('', ExpandConstant('{cmd}'), ExpandConstant(' /C {sys}\sc.exe query ' + srv + ' | findstr "RUNNING"'), '', SW_HIDE, ewWaitUntilTerminated, resultcode);
+  if resultcode = 0 then
+    Result := true
+  else
+    Result := false
+end;
+
 //// Starts service after installation
 function LoadService(srv: String): Integer;
 var resultcode: Integer;
 
 begin
-  Exec(ExpandConstant('{sys}\sc.exe'), 'start '+ srv, '', SW_HIDE, ewWaitUntilTerminated, resultcode);
-  result := resultcode;
+  if (ServiceExists(srv)) then
+  begin
+    if (ServiceIsRunning(srv) = false) then
+    begin
+      ShellExec('', ExpandConstant('{sys}\sc.exe'), 'start '+ srv, '', SW_HIDE, ewWaitUntilTerminated, resultcode);
+      if resultcode <> 0 then
+        MsgBox('Cannot load service [' + srv + '], exit code = ' + IntToStr(resultcode), mbError, MB_OK);
+      result := resultcode;
+    end
+  end
+  else
+   MsgBox('Service [' + srv + '] cannot be loaded because it does not exist.', mbError, MB_OK);
 end;
 
 //// Stops service and wait 2000ms before removing file to be sure it's not in use anymore
@@ -27,17 +61,51 @@ function UnloadService(srv: String): Integer;
 var resultcode: Integer;
 
 begin
-  Exec(ExpandConstant('{sys}\sc.exe'), 'stop ' + srv, '', SW_HIDE, ewWaitUntilTerminated, resultcode);
-  sleep(2000);
-  result := resultcode;
+  if (ServiceIsRunning(srv) = true) then
+  begin
+    ShellExec('', ExpandConstant('{sys}\sc.exe'), 'stop ' + srv, '', SW_HIDE, ewWaitUntilTerminated, resultcode);
+    sleep(2000);
+    if resultcode <> 0 then
+      MsgBox('Cannot unload service [' + srv + '], exit code = ' + IntToStr(resultcode), mbError, MB_OK);
+    result := resultcode;
+  end
+  else
+    result := 0;
+
 end;
 
-procedure Uninstallservice(srv: String);
+//// Checks if binary path of service belongs to smartmontools-win
+function IsSmartWinService(srv: String): Boolean;
+var resultcode: Integer;
+
+begin
+  ShellExec('', ExpandConstant('{cmd}'), ExpandConstant('/C {sys}\sc.exe qc ' + srv + ' | findstr "BINARY_PATH_NAME" | findstr /C:"\\smartmontools for Windows\\"'), '', SW_HIDE, ewWaitUntilTerminated, resultcode);
+  if resultcode = 0 then
+    result := true
+  else
+    result := false
+end;
+
+//// Installs smartd service
+procedure InstallService();
+var resultCode: Integer;
+
+begin                               
+  Exec(ExpandConstant('{app}\bin\smartd.exe'), ExpandConstant('install -c "{app}\bin\smartd.conf"'), '', SW_HIDE, ewWaitUntilTerminated, resultcode);
+  if resultcode <> 0 then
+    MsgBox('Cannot install service via [' + ExpandConstant('{app}\bin\smartd') + ' install], exit code = ' + IntToStr(resultcode), mbError, MB_OK);
+end;
+
+
+//// Uninstalls given service
+procedure UninstallService(srv: String);
 var resultcode: Integer;
 
 begin
   UnloadService(srv);
-  Exec(ExpandConstant('{sys}\sc.exe'), 'delete ' + srv, '', SW_HIDE, ewWaitUntilTerminated, resultcode);
+  ShellExec('', ExpandConstant('{sys}\sc.exe'), 'delete ' + srv, '', SW_HIDE, ewWaitUntilTerminated, resultcode);
+  if resultcode <> 0 then
+    MsgBox('Cannot uninstall service [' + srv + '], exit code = ' + IntToStr(resultcode), mbError, MB_OK); 
 end;
 
 //// Explode a string into an array using passed delimeter
