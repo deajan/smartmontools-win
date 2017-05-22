@@ -1,4 +1,6 @@
-﻿## Smartmontools for Windows Package
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+
+## Smartmontools for Windows Package
 (C) 2012-2017 Orsiris de Jong - http://www.netpower.fr
 
 Smartmontools For Windows is an alternate package for smartmontools by Bruce Allen and Christian Franke, that has been created to smoothly install smartmontools as service,
