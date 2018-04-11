@@ -1,6 +1,4 @@
-[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-
-## Smartmontools for Windows Package
+﻿## Smartmontools for Windows Package
 (C) 2012-2017 Orsiris de Jong - http://www.netpower.fr
 
 Smartmontools For Windows is an alternate package for smartmontools by Bruce Allen and Christian Franke, that has been created to smoothly install smartmontools as service,
@@ -39,15 +37,9 @@ Additionnaly, it uses the following free software:
 
 You'll find the latest binaries at http://www.netpower.fr/smartmontools-win
 
-## Compilation
-
-Compilation works with Inno Setup & Inno Preprocessor 5.5+.
-You'll need to download all the software mentionned above and extract them to the corresponding directories listed in main iss file.
-Python executables are frozen versions with py2exe. Just rename the dist directory provided by the setup scripts and put them in the corresponding directories.
-
 ## Useful command line parameters
 
-smartmontools-win-6.5-x.exe [OPTIONS]
+smartmontools-win-6.6-x.exe [OPTIONS]
 
 [OPTIONS]
 
@@ -85,9 +77,22 @@ Putting a preconfigured erroraction_config.cmd file along with the setup exe wil
 Example files can be found at https://github.com/deajan/smartmontools-win/tree/master/unattended
 
 Put the following files in the same directory
-- smartmontools-win-6.5-1.exe
+- smartmontools-win-6.6-1.exe
 - smartd.conf
 - erroraction_config.cmd
 
 Then run:
-smartmontools-win-6.5-1.exe /COMPONENTS="core\service,core\service\gui,core\service\mailsupport,updatedb,regext,authorlinks,statistics" /SUPPRESSMSGBOXES /SILENT
+smartmontools-win-6.6-1.exe /COMPONENTS="core\service,core\service\gui,core\service\mailsupport,updatedb,regext,authorlinks,statistics" /SUPPRESSMSGBOXES /SILENT
+
+## Compilation
+
+Compilation works with Inno Setup & Inno Preprocessor 5.5+.
+You'll need to download all the software mentionned above and extract them to the corresponding directories listed in main iss file.
+
+## Build python executables
+
+In order to build python executables from source, you'll need:
+
+pip install pygubu pywin32 cx_freeze
+
+You may then run cxsetup.py in order to create executable versions of smartd-pyngui and erroraction_config
