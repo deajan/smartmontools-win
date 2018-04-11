@@ -1,4 +1,4 @@
-// String file for smartmontools for Windows installer v6.5-2+
+// String file for smartmontools for Windows installer v6.6-1+
 
 ; Installation dialog
 
@@ -80,4 +80,4 @@ de.smarttestlong=Langen SMART-Test durchführen
 
 en.warningmessage=WARNING: One of your hard disks has SMART errors. Please write down this message and contact your technical support as soon as possible.
 fr.warningmessage=ATTENTION: Un de vos disques durs rencontre des erreurs SMART. Merci de bien vouloir noter ce message et contacter votre support technique aussi rapidement que possible.
-de.warningmessage=WARNUNG: Eine Ihrer Festplatten hat SMART-Fehler. Bitte schreiben Sie diese Nachricht auf und kontaktieren Sie Ihren technischen Support so schnell wie möglich.
+de.warningmessage=WARNUNG: Eine Ihrer Festplatten hat SMART-Fehler. Bitte schreiben Sie diese Nachricht auf und kontaktieren Sie Ihren technischen Support.

@@ -1,21 +1,21 @@
 ; smartmontools for Windows package
 
-#define BuildNumber "2017050301"
+#define BuildNumber "2018032701"
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
-#define MajorVersion "6.5"
-#define MinorVersion "2"
-#define SubBuild "2"
+#define MajorVersion "6.6"
+#define MinorVersion "1"
+#define SubBuild "3"
 ; Define build type -dev -beta -rc for WIP, leave empty for RTM
-#define BuildType "-dev"
+#define BuildType ""
 #define AppPublisher "Orsiris de Jong"
 #define AppURL "http://www.netpower.fr"
-#define CopyrightYears="2012-2017"
+#define CopyrightYears="2012-2018"
 
 #define BaseDir "C:\ODJ\BTC\Smartmontools for Windows"
-#define SmartmonToolsDir "smartmontools-6.5-1.win32-setup"
+#define SmartmonToolsDir "smartmontools-6.6-1.win32-setup"
 #define smartdPynguiDir "smartd-pyngui"
-#define erroractionGuiDir "erroraction-gui"
+;#define erroractionGuiDir "erroraction-gui"
 #define SendEmailDir "sendEmail-v156"
 #define MailsendDir "mailsend1.19"
 #define GzipDir "gzip-1.3.12-1-bin"
@@ -97,8 +97,8 @@ Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartctl-nc.exe"; DestDir: "{app}\
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\smartd.exe"; DestDir: "{app}\bin"; Components: core; Flags: 64bit; Check: IsWin64; AfterInstall: TestForExistingSmartdUpstream();
 Source: "{#BaseDir}\{#SmartmontoolsDir}\bin64\wtssendmsg.exe"; DestDir: "{app}\bin"; Components: core\service\localalert; Flags: 64bit; Check: IsWin64
 Source: "{#BaseDir}\{#SmartmontoolsDir}\doc\*"; DestDir: "{app}\doc\smartmontools"; Components: core; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#BaseDir}\{#smartdPynguiDir}\*"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui; Flags: recursesubdirs createallsubdirs
-Source: "{#BaseDir}\{#erroractionGuiDir}\*"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui; Flags: recursesubdirs createallsubdirs
+Source: "{#BaseDir}\{#smartdPynguiDir}\*"; Excludes: "tzdata,demos,msgs,images"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui; Flags: recursesubdirs createallsubdirs
+;Source: "{#BaseDir}\{#erroractionGuiDir}\*"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui; Flags: recursesubdirs createallsubdirs
 Source: "{#BaseDir}\{#vcRedistDir}\msvcr100.dll"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: core\service\gui;
 Source: "{#BaseDir}\{#MailSendDir}\mailsend.exe"; DestDir: "{app}\bin"; Components: core\service\mailalert;
 Source: "{#BaseDir}\{#MailSendDir}\COPYRIGHT.TXT"; DestDir: "{app}\doc\mailsend"; Components: core\service\mailalert;
@@ -119,26 +119,22 @@ Source: "{#BaseDir}\erroraction.cmd"; DestDir: "{app}\bin"; Components: core\ser
 Source: "{#BaseDir}\erroraction_config.cmd"; DestDir: "{app}\bin"; Components: core\service; Flags: confirmoverwrite; Check: NoExternalErroractionFile(); AfterInstall: UpdateErroractionConfFile();
 Source: "{#BaseDir}\ScheduledTask.xml"; DestDir: "{app}\bin"; Components: core\scheduledtestalerts; AfterInstall: WriteScheduledTest();
 Source: "{#BaseDir}\smartd.conf"; DestDir: "{app}\bin"; Components: core\service; Flags: confirmoverwrite; Check: NoExternalSmartdFile(); AfterInstall: UpdateSmartdConfFile();
-Source: "{#BaseDir}\{#smartdPynguiDir}\*"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: smartdpyngui; Flags: recursesubdirs createallsubdirs
+Source: "{#BaseDir}\{#smartdPynguiDir}\*"; Excludes: "tzdata,demos,msgs,images"; DestDir: "{app}\bin\{#smartdPynguiDir}"; Components: smartdpyngui; Flags: recursesubdirs createallsubdirs
 
 [Run]
-;Filename: {sys}\sc.exe; Parameters: "create ""{#SmartServiceName}"" binPath= ""\""{app}\bin\smartd.exe\"" --service -c \""{app}\bin\smartd.conf\"""" start= auto DisplayName= ""S.M.A.R.T. Harddisk lifeguard for Windows service"""; Components: core\service; OnlyBelowVersion: 6.0; Flags: runhidden
-;Filename: {sys}\sc.exe; Parameters: "create ""{#SmartServiceName}"" binPath= ""\""{app}\bin\smartd.exe\"" --service -c \""{app}\bin\smartd.conf\"""" start= delayed-auto DisplayName= ""S.M.A.R.T. Harddisk lifeguard for Windows service"""; Components: core\service; MinVersion: 6.0; Flags: runhidden
-;Filename: {sys}\sc.exe; Parameters: "delete {#SmartServiceName}"; Components: core\service; Check: IsUpdateInstall(); StatusMSG: "Removing any old smart service instance."; Flags: runhidden waituntilterminated
 Filename: {app}\bin\update-smart-drivedb.exe; Parameters: "/S"; Components: core\updatedb; StatusMSG: "Updating drive database."; Flags: waituntilterminated
-;Filename: {app}\bin\smartd.exe; Parameters: "install -c ""{app}\bin\smartd.conf"""; Components: core\service; StatusMSG: "Setting up smart service."; Flags: runhidden
 Filename: {app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui; StatusMSG: "Setup Smartd service"; Flags: waituntilterminated skipifsilent
 Filename: {app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe; Components: smartdpyngui; StatusMSG: "Setup Smartd service"; Flags: waituntilterminated skipifsilent
 Filename: {app}\bin\{#smartdPynguiDir}\erroraction_config.exe; Parameters: "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui; StatusMSG: "Setup alert settings"; Flags: waituntilterminated skipifsilent
 Filename: {app}\bin\scheduled_send.cmd; Components: core\scheduledtestalerts; StatusMsg: "Setting up scheduled test send"; Flags: runhidden
 
 [Icons]
-Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe"; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui; IconFilename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.ico"
-Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe"; Components: smartdpyngui; IconFilename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.ico"
-Name: {group}\Reconfigure SMART Alert settings; Filename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.exe"; Parameters:  "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui; IconFilename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.ico"
+Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe"; Parameters: "-c ""{app}\bin\smartd.conf"""; Components: core\service\gui;
+Name: {group}\Reconfigure SMART service; Filename: "{app}\bin\{#smartdPynguiDir}\smartd_pyngui.exe"; Components: smartdpyngui;
+Name: {group}\Reconfigure SMART Alert settings; Filename: "{app}\bin\{#smartdPynguiDir}\erroraction_config.exe"; Parameters:  "-c ""{app}\bin\erroraction_config.cmd"""; Components: core\service\gui;
 Name: {group}\Visit NetPower.fr; Filename: http://www.netpower.fr; Components: authorlinks;
 Name: {group}\Visit smartmontools Site; Filename: http://smartmontools.sourceforge.net; Components: authorlinks;
-Name: {group}\Fix Bad sectors (use at own risk!); Filename: "{app}\bin\fix_badsectors.cmd"; Components: fixbadsecttools
+;Name: {group}\Fix Bad sectors (use at own risk!); Filename: "{app}\bin\fix_badsectors.cmd"; Components: fixbadsecttools
 Name: "{group}\{cm:UninstallProgram, {#=AppName}}"; Filename: {uninstallexe}; 
 
 [Registry]
@@ -152,6 +148,10 @@ Root: HKLM; Subkey: SOFTWARE\Classes\Drive\shell\smartctllongtest\command; Value
 [UninstallRun]
 ; TODO: check if smartd should remain because of upstream package
 ;Filename: {sys}\sc.exe; Parameters: "delete ""{#SmartServiceName}"""; Components: core\service; Flags: runhidden
+
+; Remove earlier versions of smartd-pyngui in order to avoid python conflicts
+[InstallDelete]
+Type: filesandordirs; Name: "{app}\bin\{#smartdPynguiDir}";
 
 [UninstallDelete]
 Type: Files; Name: "{app}\bin\erroraction.cmd";
@@ -234,8 +234,6 @@ begin
   InitialLogFile := ExpandConstant('{app}\smartmontools-install-{#MajorVersion}-{#MinorVersion}.log');
   SaveStringToFile(InitialLogFile, '# Smartmontools for Windows installed on ' + GetDateTimeString('dd mmm yyyy hh:nn:ss', #0, #0) + #13#10 + #13#10, True);
     ShellExec('', ExpandConstant('{cmd}') ,ExpandConstant('/c for /f "delims= " %i in (' + #39 + '"{app}\bin\smartctl" --scan' + #39 +') do "{app}\bin\smartctl.exe" -a %i >> "' + InitialLogFile + '"'), '', SW_HIDE, ewWaitUntilTerminated, resultcode)
-    if resultcode <> 0 then
-      MsgBox('Cannot create initial log file in [' + InitialLogFile + '].', mbError, MB_OK);
 end;
 
 //// ScheduledTask command file
@@ -269,6 +267,8 @@ begin
        InstallService; 
   end 
   else
+    if (ServiceExists('{#SmartServiceName}') = true) then
+      UninstallService('{#SmartServiceName}')
     InstallService;     
 end;
 

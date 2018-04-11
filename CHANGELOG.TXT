@@ -6,15 +6,20 @@ Known issues
 - Mailsend does not support multibyte chars when sending emails under Windows, so not all special characters can be used in warning emails
 - Unattended installations are not possible when upstream package is installed
 
-Todo:
-
-- check for smartd upstream service before upgrading
-- check if smartd needs uninstall, launch uninstall function instead of sc
-
-
 Changelog
 ---------
 
+[v6.6-1] 10 Apr 2018
+- Updated default configuration to include temperature warnings
+- UI now asks for UAC privileges
+- Various installer and UI fixes
+- Updated upstream release to v6.6
+- Updated python from 3.4 to 3.6.4
+	- Switched from py2exe to cx_freeze
+	- Resolved issue where special characters like 'ö' could make erroraction_config.py fail
+	- Prevent earlier python versions to interfere with current installation
+- Updated pygubu from 0.9.8.1 to 0.9.8.2
+- Faster installation process
 
 [v6.5-2-dev] 12 May 2017
 - General work to render smartmontools-win upstream friendly
@@ -22,8 +27,18 @@ Changelog
 	- Allow smartd-pyngui solo installation for usage with upstream package, with smartd.conf file detection
 	- Check for upstream service presence before installing smartd service
 	- Uninstallation checks if current smartd service belongs to smartmontools-win, if not asks if it should be uninstalled
+- Multiple improvements and fixes in smartd_pyngui
+	- Made uncorrectable sectors monitoring options more precise
+	- Made current pending sectors monitoring options more precise
+	- Added temperature monitoring options
+	- Fix selftest regexes weren't corretly generated
+	- Fix script for -M exec needs singlequotes instead of doublequotes to make smartd -q showtests happy
+	- Made scrollbars follow resized window
+	- Updated UI text for disambigution about enery saving
 - Initial log file is not overwritten by new installations
 - Added more explicit error messages on service failures
+- Updated pygubu from 0.9.7.8 to 0.9.8.1
+- Updated py2exe to 0.9.2.2
 
 [v6.5-1] 25 Avr 2017
 
