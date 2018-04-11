@@ -10,8 +10,8 @@ class Constants:
 	print(_CONST.NAME)
 	"""
 	APP_NAME="erroraction_config"
-	APP_VERSION="0.2"
-	APP_BUILD="2017041201"
+	APP_VERSION="0.3"
+	APP_BUILD="2018032901"
 	APP_DESCRIPTION="smartmontools for Windows mail config"
 	CONTACT="ozy@netpower.fr - http://www.netpower.fr"
 	AUTHOR="Orsiris de Jong"
@@ -39,15 +39,18 @@ try:
 except:
 	_DEBUG = False
 
+import tempfile
 import logging
 from logging.handlers import RotatingFileHandler
 
 logger = logging.getLogger()
-# Disable forced debug logging after developpment
-#logger.setLevel(logging.DEBUG)
 
-# Set file log
-logFileHandler = RotatingFileHandler(_CONSTANT.LOG_FILE, mode='a', encoding='utf-8', maxBytes=1000000, backupCount=1)
+# Set file log (try temp log file if not allowed to write to current dir)
+try:
+	logFileHandler = RotatingFileHandler(_CONSTANT.LOG_FILE, mode='a', encoding='utf-8', maxBytes=1000000, backupCount=1)
+except:
+	logFileHandler = RotatingFileHandler(tempfile.gettempdir() + os.sep + _CONSTANT.LOG_FILE, mode='a', encoding='utf-8', maxBytes=1000000, backupCount=1)
+
 logFileHandler.setLevel(logging.DEBUG)
 logFileHandler.setFormatter(logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s'))
 logger.addHandler(logFileHandler)
@@ -62,8 +65,8 @@ logger.addHandler(logStdoutHandler)
 
 #### IMPORTS ################################################################################################
 
-import sys, getopt
-
+import sys
+import getopt
 import platform									# Detect OS
 import re										# Regex handling
 import time										# sleep command
@@ -87,9 +90,12 @@ except:
 	logger.critical("Cannot find pygubu module. Try installing it with python -m pip install pygubu")
 	sys.exit(1)
 	
-# Manually resolve dependancies from pygubu with nuitka (Thanks to pygubu author Alejandro https://github.com/alejandroautalan)
+# Manually resolve dependancies from pygubu with nuitka / other freezers like cx_freeze (Thanks to pygubu author Alejandro https://github.com/alejandroautalan)
 # As a side effect, show various messages in console on startup
 import nuitkahelper
+
+if platform.system() == "Windows":
+	import ctypes			# In order to perform UAC call
 
 logger.info("Running on python " + platform.python_version() + " / " + str(platform.uname()))
 
@@ -421,12 +427,39 @@ def main(argv):
 		root.title(_CONSTANT.APP_NAME)
 		app = Application(root, configDict)
 		root.mainloop()
+
 	except Exception as e:
 		logger.critical("Cannot instanciate main tk app.")
 		logger.debug(e)
 		sys.exit(1)
 
+# Modification of https://stackoverflow.com/questions/130763/request-uac-elevation-from-within-a-python-script
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        logger.critical("Cannot get admin privileges.")
+        lgger.debug(e)
+        raise False
 
 if __name__ == '__main__':
-	main(sys.argv[1:])
-	
+	if platform.system() == "Windows":
+		if is_admin():
+			# Detect if running frozen version invoked as ShellExecuteW, where filename argument exists twice
+			if os.path.basename(sys.argv[0]) == os.path.basename(sys.argv[1]):
+				main(sys.argv[2:])
+			else:
+				main(sys.argv[1:])
+		else:
+			# Re-run the program with admin rights, don't use __file__ since py2exe won't know about it
+			# Use sys.argv[0] as script path and sys.argv[1:] as arguments, join them as lpstr, quoting each parameter or spaces will divide parameters
+			#lpParameters = sys.argv[0] + " "
+			lpParameters = ""
+			for i, item in enumerate(sys.argv[0:]):
+				lpParameters += '"' + item + '" '
+			try:
+				ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, lpParameters , None, 1)
+			except:
+				sys.exit(1)
+	else:
+		main(sys.argv[1:])
