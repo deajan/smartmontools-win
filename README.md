@@ -15,6 +15,14 @@ On install, the current states of all drives smartd can detect are written to sm
 The software has been tested on multiple platforms, nevertheless no responsibility will be taken for any problems or malfunctions that may occur while using this software.
 Anyway, feel free to send a mail to ozy [at] netpower.fr for support on my free time.
 
+## Announcement
+
+I am currently working on implementing a new GUI based on the incredible PySimpleGUI project.
+This will make configuration steps easier, as well as provide encrypted mail passwords.
+Also, external dependencies like mailsend / gzip or others won't be needed anymore.
+My current work involves Nuitka dependencies improvements I made, and better Tcl/Tk integration.
+See Smartmontools-win-7.x issue for a roadmap.
+
 ## Upgrade path
 
 The configuration from previous installations is now kept (unless a smartd.conf and/or and erroraction_config.cmd file is provided along with the installer script).
