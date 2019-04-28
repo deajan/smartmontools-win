@@ -21,7 +21,7 @@ I am currently working on implementing a new GUI based on the incredible PySimpl
 This will make configuration steps easier, as well as provide encrypted mail passwords.
 Also, external dependencies like mailsend / gzip or others won't be needed anymore.
 My current work involves Nuitka dependencies improvements I made, and better Tcl/Tk integration.
-See Smartmontools-win-7.x issue for a roadmap.
+See Smartmontools-win-7.x issue #26 for a roadmap.
 
 ## Upgrade path
 
