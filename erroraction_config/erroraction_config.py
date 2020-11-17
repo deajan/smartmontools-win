@@ -10,28 +10,29 @@ class Constants:
 	print(_CONST.NAME)
 	"""
 	APP_NAME="erroraction_config"
-	APP_VERSION="0.3"
-	APP_BUILD="2018032901"
+	APP_VERSION="0.3a"
+	APP_BUILD="2020111701"
 	APP_DESCRIPTION="smartmontools for Windows mail config"
 	CONTACT="ozy@netpower.fr - http://www.netpower.fr"
 	AUTHOR="Orsiris de Jong"
-	
+
 	ERRORACTION_CMD_FILENAME="erroraction.cmd"
 	ERRORACTION_CONFIG_FILENAME="erroraction_config.cmd"
 	MAILSEND_BINARY="mailsend.exe"
-	
+
 	IS_STABLE=True
 
 	LOG_FILE=APP_NAME + ".log"
 
 	def __setattr__(self, *_):
 		pass
-    
+
 _CONSTANT = Constants
 
 #### LOGGING & DEBUG CODE ####################################################################################
 
 import os
+from command_runner.elevate import elevate
 
 try:
 	os.environ["_DEBUG"]
@@ -89,7 +90,7 @@ try:
 except:
 	logger.critical("Cannot find pygubu module. Try installing it with python -m pip install pygubu")
 	sys.exit(1)
-	
+
 # Manually resolve dependancies from pygubu with nuitka / other freezers like cx_freeze (Thanks to pygubu author Alejandro https://github.com/alejandroautalan)
 # As a side effect, show various messages in console on startup
 import nuitkahelper
@@ -105,16 +106,16 @@ CONFIG = "" # Contains full config as Configuration class
 
 class Configuration:
 	errorActionCmdPath = ""
-	
+
 	def __init__(self, filePath= ''):
 		"""Determine smartd configuration file path"""
-		
+
 		# __file__ variable doesn't exist in frozen py2exe mode, get appRoot
 		try:
 			self.appRoot = os.path.dirname(os.path.abspath(__file__))
 		except:
 			self.appRoot = os.path.dirname(os.path.abspath(sys.argv[0]))
-		
+
 		try:
 			#TODO: undo double checked, here and in readconf
 			if not os.path.isfile(filePath):
@@ -130,12 +131,12 @@ class Configuration:
 
 class Application:
 	"""pygubu tkinter GUI class"""
-	
+
 	configValues = ['MAIL_ALERT', 'SOURCE_MAIL', 'DESTINATION_MAIL', 'SMTP_SERVER', 'SMTP_PORT',
 	'LOCAL_ALERT', 'WARNING_MESSAGE', 'COMPRESS_LOGS', 'DEVICE_LIST', 'SMART_LOG_FILE', 'ERROR_LOG_FILE', 'PROGRAM_PATH']
-					
+
 	authValues = ['SMTP_USER', 'SMTP_PASSWORD', 'SECURITY']
-	
+
 	def __init__(self, master, configDict):
 		self.master = master
 		self.configDict = configDict
@@ -151,7 +152,7 @@ class Application:
 			sys.exit(1)
 
 		self.mainwindow = builder.get_object('MainFrame', master)
-		
+
 		# Bind GUI actions to functions
 		self.builder.connect_callbacks(self)
 		callbacks = {
@@ -165,7 +166,7 @@ class Application:
 		tempDict = self.configDict
 		self.configDict = readErrorConfigFile(CONFIG.errorActionCmdPath)
 		self.configDict.update(tempDict)
-			
+
 		# Populate values in GUI
 		for key, value in self.configDict.items():
 			try:
@@ -197,7 +198,7 @@ class Application:
 		values = self.configValues
 		if self.builder.get_variable('useAuthentication').get() == True:
 			values.extend(self.authValues)
-			
+
 		for key in values:
 			try:
 				self.configDict[key] = self.builder.get_object(key, self.master).get()
@@ -211,21 +212,21 @@ class Application:
 				self.configDict[key] = self.builder.get_variable(key).get()
 			except:
 				pass
-	
+
 	def onUseAuthentication(self):
 		if self.builder.get_variable('useAuthentication').get() == True:
 			background = "#aaffaa"
 		else:
 			background = "#aaaaaa"
-		
+
 		for key in self.authValues:
 			self.builder.get_object(key)['background']=background
-	
+
 	def onTriggerAlert(self):
 		self.prepareConfigDict()
 		writeErrorConfigFile(CONFIG.errorActionCmdPath, self.configDict)
 		TriggerAlert(self.configDict)
-		
+
 	def onSaveAndExit(self):
 		try:
 			self.prepareConfigDict()
@@ -234,7 +235,7 @@ class Application:
 		except:
 			messagebox.showinfo('Error', 'Guru meditation failure !')
 			return False
-			
+
 		sys.exit(0)
 
 def stringToBase64(s):
@@ -246,9 +247,9 @@ def base64ToString(b):
 def readErrorConfigFile(fileName):
 	if not os.path.isfile(fileName):
 		logger.info("No suitable [" + _CONSTANT.ERRORACTION_CONFIG_FILENAME + "] file found, creating new file [" + CONFIG.errorActionCmdPath + "].")
-		
+
 		return False
-	
+
 	try:
 		fileHandle = open(fileName, 'r')
 	except Exception as e:
@@ -257,7 +258,7 @@ def readErrorConfigFile(fileName):
 		logger.debug(e)
 		messagebox.showinfo("Error", msg)
 		return False
-		
+
 	try:
 		configDict = {}
 		for line in fileHandle.readlines():
@@ -269,7 +270,7 @@ def readErrorConfigFile(fileName):
 					if key == "SMTP_PASSWORD":
 						value = base64ToString(value)
 					configDict[key] = value
-					
+
 		logger.debug("Read: " + str(configDict))
 	except Exception as e:
 		msg="Cannot read in config file [" + fileName + "]."
@@ -277,7 +278,7 @@ def readErrorConfigFile(fileName):
 		logger.debug(e)
 		messagebox.showinfo("Error", msg)
 		return False
-		
+
 	try:
 		fileHandle.close()
 		return configDict
@@ -297,7 +298,7 @@ def writeErrorConfigFile(fileName, configDict):
 				sys.exit(1)
 		else:
 			configLines += "SET " + key + "=" + value + "\n"
-	
+
 	try:
 		fileHandle = open(fileName, 'w')
 	except Exception as e:
@@ -306,7 +307,7 @@ def writeErrorConfigFile(fileName, configDict):
 		logger.debug(e)
 		messagebox.showinfo("Error", msg)
 		return False
-		
+
 	try:
 		fileHandle.write(":: This file was generated on " + str(datetime.now()) + " by " + _CONSTANT.APP_NAME + " " + _CONSTANT.APP_VERSION  + "\n:: http://www.netpower.fr\n")
 		fileHandle.write(configLines)
@@ -342,9 +343,9 @@ def TriggerAlert(configDict):
 		logger.error(msg)
 		messagebox.showinfo('Error', msg)
 		return False
-		
-	messagebox.showinfo('Information', 'Finished testing alert action.')	
-				
+
+	messagebox.showinfo('Information', 'Finished testing alert action.')
+
 def usage():
 	print(_CONSTANT.APP_NAME + " v" + _CONSTANT.APP_VERSION + " " + _CONSTANT.APP_BUILD)
 	print(_CONSTANT.AUTHOR)
@@ -374,16 +375,19 @@ def usage():
 
 def main(argv):
 	global CONFIG
-	
+
 	if _CONSTANT.IS_STABLE == False:
 		logger.warn("Warning: This is an unstable developpment version.")
-	
+
 	configDict={}
-	
+
 	try:
-		opts, args = getopt.getopt(argv, "hmlz?c:?f:?t:?s:u:?p:?P:?", [ 'security=', 'warning=' ])
+		opts, args = getopt.getopt(argv[1:], "hmlz?c:?f:?t:?s:u:?p:?P:?", [ 'security=', 'warning=' ])
 	except getopt.GetoptError:
 		usage()
+		sys.exit()
+
+	confFile = None
 	for opt, arg in opts:
 		if opt == '-h' or opt == "--help" or opt == "-?":
 			usage()
@@ -412,12 +416,12 @@ def main(argv):
 			configDict['WARNING_MESSAGE'] = arg
 		elif opt == '-z':
 			configDict['COMPRESS_LOGS'] = "yes"
-	
+
 	# Mailer variable for compat
 	configDict['MAILER'] = 'mailsend'
 
 
-	if 'confFile' in locals():
+	if confFile:
 		CONFIG = Configuration(confFile)
 	else:
 		CONFIG = Configuration('')
@@ -433,33 +437,7 @@ def main(argv):
 		logger.debug(e)
 		sys.exit(1)
 
-# Modification of https://stackoverflow.com/questions/130763/request-uac-elevation-from-within-a-python-script
-def is_admin():
-    try:
-        return ctypes.windll.shell32.IsUserAnAdmin()
-    except:
-        logger.critical("Cannot get admin privileges.")
-        lgger.debug(e)
-        raise False
 
 if __name__ == '__main__':
-	if platform.system() == "Windows":
-		if is_admin():
-			# Detect if running frozen version invoked as ShellExecuteW, where filename argument exists twice
-			if os.path.basename(sys.argv[0]) == os.path.basename(sys.argv[1]):
-				main(sys.argv[2:])
-			else:
-				main(sys.argv[1:])
-		else:
-			# Re-run the program with admin rights, don't use __file__ since py2exe won't know about it
-			# Use sys.argv[0] as script path and sys.argv[1:] as arguments, join them as lpstr, quoting each parameter or spaces will divide parameters
-			#lpParameters = sys.argv[0] + " "
-			lpParameters = ""
-			for i, item in enumerate(sys.argv[0:]):
-				lpParameters += '"' + item + '" '
-			try:
-				ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, lpParameters , None, 1)
-			except:
-				sys.exit(1)
-	else:
-		main(sys.argv[1:])
+	elevate(main, sys.argv)
+
