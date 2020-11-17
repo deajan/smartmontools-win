@@ -1,5 +1,5 @@
 ﻿## Smartmontools for Windows Package
-(C) 2012-2017 Orsiris de Jong - http://www.netpower.fr
+(C) 2012-2020 Orsiris de Jong - http://www.netpower.fr
 
 Smartmontools For Windows is an alternate package for smartmontools by Bruce Allen and Christian Franke, that has been created to smoothly install smartmontools as service,
 support out of the box mail or local alerts, and configure smart daemon options with a graphical user interface.
@@ -14,14 +14,6 @@ On install, the current states of all drives smartd can detect are written to sm
 
 The software has been tested on multiple platforms, nevertheless no responsibility will be taken for any problems or malfunctions that may occur while using this software.
 Anyway, feel free to send a mail to ozy [at] netpower.fr for support on my free time.
-
-## Announcement
-
-I am currently working on implementing a new GUI based on the incredible PySimpleGUI project.
-This will make configuration steps easier, as well as provide encrypted mail passwords.
-Also, external dependencies like mailsend / gzip or others won't be needed anymore.
-My current work involves Nuitka dependencies improvements I made, and better Tcl/Tk integration.
-See Smartmontools-win-7.x issue https://github.com/deajan/smartmontools-win/issues/26 for a roadmap.
 
 ## Upgrade path
 

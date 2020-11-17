@@ -1,5 +1,5 @@
 ﻿Smartmontools for Windows Package
-(C) 2012-2017 Orsiris de Jong - http://www.netpower.fr
+(C) 2012-2020 Orsiris de Jong - http://www.netpower.fr
 
 Smartmontools for Windows ist ein alternatives Package für "Smartmontools" von Bruce Allen und Christian Franke.
 Er wurde programmiert, um smartmontools als Dienst zu installieren, Warnungen per email versenden zu können oder Lokal anzeigen, und um die S.M.A.R.T-Überwachung zu konfigurieren.
