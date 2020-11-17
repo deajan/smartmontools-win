@@ -93,7 +93,7 @@ var resultCode: Integer;
 begin                               
   Exec(ExpandConstant('{app}\bin\smartd.exe'), ExpandConstant('install -c "{app}\bin\smartd.conf"'), '', SW_HIDE, ewWaitUntilTerminated, resultcode);
   if resultcode <> 0 then
-    MsgBox('Cannot install service via [' + ExpandConstant('{app}\bin\smartd') + ' install], exit code = ' + IntToStr(resultcode), mbError, MB_OK);
+    MsgBox('Cannot install service via [' + ExpandConstant('{app}\bin\smartd.exe') + ' ' + ExpandConstant('install -c "{app}\bin\smartd.conf"') + '], exit code = ' + IntToStr(resultcode), mbError, MB_OK);
 end;
 
 

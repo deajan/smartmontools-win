@@ -213,3 +213,11 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+#################
+## project files
+#################
+
+/smartd-pyngui/*
+/smartmontools-*.win32-setup*
+/VCREDIST
