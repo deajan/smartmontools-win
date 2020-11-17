@@ -1,19 +1,19 @@
 ; smartmontools for Windows package
 
-#define BuildNumber "2018032701"
+#define BuildNumber "2020111701"
 #define AppName "smartmontools for Windows"
 #define AppShortName "smartmontools-win"
-#define MajorVersion "6.6"
+#define MajorVersion "7.1"
 #define MinorVersion "1"
 #define SubBuild "3"
 ; Define build type -dev -beta -rc for WIP, leave empty for RTM
 #define BuildType ""
 #define AppPublisher "Orsiris de Jong"
 #define AppURL "http://www.netpower.fr"
-#define CopyrightYears="2012-2018"
+#define CopyrightYears="2012-2020"
 
-#define BaseDir "C:\ODJ\BTC\Smartmontools for Windows"
-#define SmartmonToolsDir "smartmontools-6.6-1.win32-setup"
+#define BaseDir "C:\GIT\smartmontools-win"
+#define SmartmonToolsDir "smartmontools-7.1-1.win32-setup"
 #define smartdPynguiDir "smartd-pyngui"
 ;#define erroractionGuiDir "erroraction-gui"
 #define SendEmailDir "sendEmail-v156"
@@ -34,7 +34,7 @@ AppPublisher={#AppPublisher}
 AppPublisherURL={#AppURL}
 AppSupportURL={#AppURL}
 AppUpdatesURL={#AppURL}
-DefaultDirName={pf}\{#AppName}
+DefaultDirName={commonpf}\{#AppName}
 DefaultGroupName=smartmontools for Windows
 LicenseFile={#BaseDir}\LICENSE.TXT
 OutputDir={#BaseDir}\Build
@@ -43,7 +43,7 @@ Compression=lzma2/max
 SolidCompression=yes
 VersionInfoCopyright=Written in {#CopyrightYears} by {#AppPublisher} {#AppURL}
 VersionInfoVersion="{#MajorVersion}.{#MinorVersion}.{#SubBuild}"
-MinVersion=0,5.0
+MinVersion=0,6.1sp1
 CloseApplications=no
 ArchitecturesInstallIn64BitMode=x64
 
@@ -195,7 +195,7 @@ begin
 
   //// Depending on options selected, set MAIL_ALERT=yes/no and LOCAL_ALERT=yes/no in erroraction_config.cmd
   //// To lazy to find out how to use wildcards with FileReplaceString --> old disgusting way
-  if (IsComponentSelected('core\service\mailalert')) then
+  if (WizardIsComponentSelected('core\service\mailalert')) then
   begin
     FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'MAIL_ALERT=no', 'MAIL_ALERT=yes');
     FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'MAIL_ALERT=' + #13#10, 'MAIL_ALERT=yes');
@@ -203,7 +203,7 @@ begin
     FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'MAIL_ALERT=yes', 'MAIL_ALERT=no');  
     FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'MAIL_ALERT=' + #13#10, 'MAIL_ALERT=no');
 
-  if (IsComponentSelected('core\service\localalert')) then
+  if (WizardIsComponentSelected('core\service\localalert')) then
   begin
     FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'LOCAL_ALERT=no', 'LOCAL_ALERT=yes');
     FileReplaceString(ExpandConstant('{app}\bin\erroraction_config.cmd'), 'LOCAL_ALERT=' + #13#10, 'LOCAL_ALERT=yes');
@@ -233,7 +233,11 @@ begin
   ////TODO: detect smartd.conf drives
   InitialLogFile := ExpandConstant('{app}\smartmontools-install-{#MajorVersion}-{#MinorVersion}.log');
   SaveStringToFile(InitialLogFile, '# Smartmontools for Windows installed on ' + GetDateTimeString('dd mmm yyyy hh:nn:ss', #0, #0) + #13#10 + #13#10, True);
-    ShellExec('', ExpandConstant('{cmd}') ,ExpandConstant('/c for /f "delims= " %i in (' + #39 + '"{app}\bin\smartctl" --scan' + #39 +') do "{app}\bin\smartctl.exe" -a %i >> "' + InitialLogFile + '"'), '', SW_HIDE, ewWaitUntilTerminated, resultcode)
+  ShellExec('', ExpandConstant('{cmd}') ,ExpandConstant('/c for /f "delims= " %i in (' + #39 + '"{app}\bin\smartctl" --scan' + #39 +') do "{app}\bin\smartctl.exe" -a %i >> "' + InitialLogFile + '"'), '', SW_HIDE, ewWaitUntilTerminated, resultcode)
+  if resultcode = 0 then
+    Result := true
+  else
+    Result := false
 end;
 
 //// ScheduledTask command file
@@ -268,7 +272,7 @@ begin
   end 
   else
     if (ServiceExists('{#SmartServiceName}') = true) then
-      UninstallService('{#SmartServiceName}')
+      UninstallService('{#SmartServiceName}');
     InstallService;     
 end;
 
@@ -284,14 +288,14 @@ begin
   WindowsString := IntToStr(Version.Major) + '.' + IntToStr(Version.Minor) + ' build ' + IntToStr(Version.Build) + ' SP ' + IntToStr(Version.ServicePackMajor) + '.' + IntToStr(Version.ServicePackMinor)
   
   if (Version.NTPlatform = true) then
-    WindowsString := WindowsString + ' NT'
+    WindowsString := WindowsString + ' NT';
 
   if (Version.ProductType = VER_NT_WORKSTATION) then
     WindowsString := WindowsString + ' NT_WORKSTATION'
   else if (Version.ProductType = VER_NT_DOMAIN_CONTROLLER) then
     WindowsString := WindowsString + ' NT_DOMAIN_CONTROLLER'
   else if (Version.ProductType = VER_NT_SERVER) then
-    WindowsString := WindowsString + ' NT_SERVER'
+    WindowsString := WindowsString + ' NT_SERVER';
 
   if (Version.SuiteMask = VER_SUITE_BACKOFFICE) then
      WindowsString := WindowsString + ' SUITE_BACKOFFICE'
@@ -312,11 +316,11 @@ begin
    else if (Version.SuiteMask = VER_SUITE_SMALLBUSINESS_RESTRICTED) then
      WindowsString := WindowsString + ' SUITE_SMALLBUSINESS_RESTRICTED'
    else if (Version.SuiteMask = VER_SUITE_TERMINAL) then
-     WindowsString := WindowsString + ' SUITE_TERMINAL'
+     WindowsString := WindowsString + ' SUITE_TERMINAL';
   if (IsWin32) then
     WindowsString := WindowsString + ' Win32'
   else
-    WindowsString := WindowsString + ' Win64'
+    WindowsString := WindowsString + ' Win64';
 
   Parameters := ExpandConstant(' -qO- "' + 'http://instcount.netpower.fr?program={#AppShortName}&version={#MajorVersion}-{#MinorVersion}.{#SubBuild}{#BuildType}&action=install&os=' + WindowsString + '"')
   //MsgBox("Statistics parameters: " + Parameters, mbInformation, MB_OK);
