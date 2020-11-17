@@ -1,4 +1,4 @@
-//// General purpose functions (2017051201)
+//// General purpose functions (2020111701)
 
 [code]
 //// Returns true if IsWin64 is false
@@ -79,7 +79,7 @@ function IsSmartWinService(srv: String): Boolean;
 var resultcode: Integer;
 
 begin
-  ShellExec('', ExpandConstant('{cmd}'), ExpandConstant('/C {sys}\sc.exe qc ' + srv + ' | findstr "BINARY_PATH_NAME" | findstr /C:"\\smartmontools for Windows\\"'), '', SW_HIDE, ewWaitUntilTerminated, resultcode);
+  ShellExec('', ExpandConstant('{cmd}'), ExpandConstant('/C {sys}\sc.exe qc ' + srv + ' | findstr /C:"\\smartmontools for Windows\\bin\\smartd.exe"'), '', SW_HIDE, ewWaitUntilTerminated, resultcode);
   if resultcode = 0 then
     result := true
   else
