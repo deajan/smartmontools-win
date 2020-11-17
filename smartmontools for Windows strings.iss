@@ -44,7 +44,7 @@ en.fixbadsecttools=Fix bad sector script
 fr.fixbadsecttools=Script de réparation secteurs défectueux
 de.fixbadsecttools=Reparatur-Skript für defekte Sektoren
 
-en.regext=Context menus for drvies
+en.regext=Context menus for drives
 fr.regext=Menus contextuels des lecteurs
 de.regext=Kontextmenü für Laufwerke
 
