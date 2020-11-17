@@ -1,0 +1,12 @@
+pip install pygubu
+pip install pywin32 (serviceutil)
+pip install py2exe (plus utilisé)
+pip instlal cx_freeze
+
+C:\Users\Ozy\AppData\Local\Programs\Python\Python36-32\Scripts\pygubu-designer.exe
+
+
+
+c:\Python38-32\python.exe -m nuitka --standalone --enable-plugin=tk-inter --windows-icon-from-ico=smartd_pyngui.ico --windows-product-version=1.0.3.0 --windows-company-name=NetPOWER smartd_pyngui.py
+
+c:\Python38-32\python.exe -m nuitka --standalone --enable-plugin=tk-inter --windows-icon-from-ico=erroraction_config.ico --windows-product-version=1.0.3.0 --windows-company-name=NetPOWER erroraction_config.py
