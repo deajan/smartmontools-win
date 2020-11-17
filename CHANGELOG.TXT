@@ -9,6 +9,22 @@ Known issues
 Changelog
 ---------
 
+[v7.1-1] 17 Nov 2020
+- Updatem upstream release to v7.1
+- Interim build to fixup issues #23, #25 #27 and #28
+- Updated Python to v3.8.6
+- Using Nuitka as app builder now
+
+[v7.0-1] NEVER RELEASED
+- Redevelopped UI
+	- It is now possible to select a configuration file after the UI has loaded
+	- Got rid of the ugly console windows
+		- Removed commandline arguments for UI
+	- Changed UI developpment from pygubu to PySimpleGUI
+- Updated upstream release to v7.0
+- Updated python from 3.6.4 to 3.7.1 (no XP support with python > 3.4)
+	- Switched from cx_freeze to Nuitka (PyInstaller like distributions are prone to be detected as viruses)
+
 [v6.6-1] 10 Apr 2018
 - Updated default configuration to include temperature warnings
 - UI now asks for UAC privileges
