@@ -77,12 +77,12 @@ Putting a preconfigured erroraction_config.cmd file along with the setup exe wil
 Example files can be found at https://github.com/deajan/smartmontools-win/tree/master/unattended
 
 Put the following files in the same directory
-- smartmontools-win-6.6-1.exe
+- smartmontools-win-7.1-1.exe
 - smartd.conf
 - erroraction_config.cmd
 
 Then run:
-smartmontools-win-6.6-1.exe /COMPONENTS="core\service,core\service\gui,core\service\mailsupport,updatedb,regext,authorlinks,statistics" /SUPPRESSMSGBOXES /SILENT
+smartmontools-win-7.1-1.exe /COMPONENTS="core\service,core\service\gui,core\service\mailsupport,updatedb,regext,authorlinks,statistics" /SUPPRESSMSGBOXES /SILENT
 
 ## Compilation
 
